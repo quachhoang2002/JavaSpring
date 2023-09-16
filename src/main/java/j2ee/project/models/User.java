@@ -1,0 +1,75 @@
+package j2ee.project.models;
+import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
+
+import java.sql.Timestamp;
+
+@Table(name = "user_entity")
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "phone", nullable = true)
+    private String phone;
+
+    @Column(name = "createat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createat;
+
+    @Column(name = "status", nullable = false, columnDefinition = "INT DEFAULT 1")
+    private Integer status;
+
+    public User() {
+    }
+
+    public User(Integer id, String name, String email, String password, String phone, Timestamp createat, Integer status) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.createat = createat;
+        this.status = status;
+    }
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public Timestamp getCreateat() {
+        return this.createat;
+    }
+
+    public Integer getStatus() {
+        return this.status;
+    }
+
+
+}
