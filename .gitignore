@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#database volumn data with current project directory /config/database
+config/database/volumes/*
+config/database/.env
