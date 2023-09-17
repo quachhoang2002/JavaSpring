@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:16
     working_dir: /app
     volumes:
       - ${POSTGRES_VOLUMES}:/var/lib/postgresql/data
