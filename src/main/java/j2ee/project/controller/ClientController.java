@@ -8,15 +8,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class ClientController {
 
-
-    @GetMapping("/login")
+    @GetMapping("/")
     public String home(){
         return "user/home.html";
     }
 
-    @GetMapping("/client")
-    public String index(){
-        return "user/client.html";
+    @GetMapping("/login")
+    public String login(){
+        return "user/login.html";
+    }
+
+    @GetMapping("/register")
+    public String register(){
+        return "user/register.html";
     }
 
 }

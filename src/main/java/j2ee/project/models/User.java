@@ -27,7 +27,7 @@ public class User {
     @Column(name = "createat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createat;
 
-    @Column(name = "status", nullable = false, columnDefinition = "INT DEFAULT 1")
+    @Column(name = "status", nullable = true, columnDefinition = "INT DEFAULT 1")
     private Integer status;
 
     public User() {

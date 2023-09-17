@@ -2,8 +2,11 @@ package j2ee.project.service;
 
 import j2ee.project.models.User;
 import j2ee.project.repository.UserRepository;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -16,6 +19,28 @@ public class UserService {
 
     @SuppressWarnings("unused")
     public User register(User user) {
+        User existedUser = userRepository.findByEmail(user.getEmail());
+        if (existedUser != null) {
+            throw new RuntimeException("Email existed");
+        }
         return userRepository.save(user);
     }
+
+    @SuppressWarnings("unused")
+    public User login(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("Email not found");
+        }
+
+        if (user == null) {
+            throw new RuntimeException("Email not found");
+        }
+        if (!user.getPassword().equals(password)) {
+            throw new RuntimeException("Password is incorrect");
+        }
+
+        return user;
+    }
+
 }

@@ -3,22 +3,41 @@ package j2ee.project.controller;
 import j2ee.project.models.User;
 import j2ee.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user/")
-public class UserController {
+public class UserController extends Controller {
     @Autowired
     private UserService userService;
 
 
     @PostMapping("/register")
-    public ResponseEntity<String>register(@RequestBody User user){
-        userService.register(user);
-        return ResponseEntity.ok("User registered successfully");
+    @ResponseBody
+    public ResponseEntity<String> register(@RequestBody User user) {
+        try {
+            userService.register(user);
+            return successResponse("Register successfully", null);
+        } catch (Exception e) {
+            return errorResponse(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
+        try {
+            String email = body.get("email");
+            String password = body.get("password");
+            System.out.println("email: " + email + " password: " + password);
+            userService.login(email, password);
+            return successResponse("Login successfully", null);
+        } catch (Exception e) {
+            return errorResponse(e.getMessage());
+        }
     }
 }
