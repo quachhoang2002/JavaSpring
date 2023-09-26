@@ -1,17 +1,17 @@
-package j2ee.project.controller;
+package j2ee.project.controller.User;
 
+import j2ee.project.controller.Controller;
 import j2ee.project.models.User;
 import j2ee.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user/")
-public class UserController extends Controller {
+@RequestMapping("/api/login")
+public class LoginController extends Controller {
     @Autowired
     private UserService userService;
 

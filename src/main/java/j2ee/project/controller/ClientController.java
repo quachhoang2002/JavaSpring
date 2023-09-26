@@ -23,4 +23,10 @@ public class ClientController {
         return "user/register.html";
     }
 
+
+    //admin
+    @GetMapping("/admin")
+    public String admin(){
+        return "admin/index.html";
+    }
 }
