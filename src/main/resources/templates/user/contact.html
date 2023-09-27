@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+</head>
+<body>
+<h1>Tìm Thuê Bao</h1>
+<form id="searchForm">
+    <label for="subscriberName">Nhập tên thuê bao:</label>
+    <input
+            type="text"
+            id="subscriberName"
+            value=""
+            name="subscriberName"
+            required
+    />
+    <!-- Sử dụng sự kiện keyup để gọi hàm searchSubscriber khi người dùng gõ -->
+    <button type="button">Tìm Kiếm</button>
+</form>
+<div id="result"></div>
+<script>
+    const inputElement = document.getElementById('subscriberName');
+    const resultElement = document.getElementById('result');
+
+    // Thêm sự kiện keyup vào trường nhập liệu
+    inputElement.addEventListener('keyup', function () {
+        searchSubscriber();
+    });
+
+    function searchSubscriber() {
+        const subscriberName = inputElement.value;
+        fetch(`http://localhost:8081/api/contact/search/${subscriberName}`)
+            .then((response) => response.json())
+            .then((data) => {
+                resultElement.innerHTML = `Kết quả tìm kiếm:
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody id="myTableBody"></tbody>
+        </table>`;
+
+                var tbody = document.getElementById('myTableBody');
+
+                // data = JSON.parse(data);
+                console.log(data);
+                data.forEach(function (subscriber) {
+                    var row = document.createElement('tr');
+                    var idCell = document.createElement('td');
+                    idCell.textContent = subscriber.id;
+                    row.appendChild(idCell);
+
+                    var nameCell = document.createElement('td');
+                    nameCell.textContent = subscriber.name;
+                    row.appendChild(nameCell);
+
+                    var phoneCell = document.createElement('td');
+                    phoneCell.textContent = subscriber.phone;
+                    row.appendChild(phoneCell);
+
+                    var addressCell = document.createElement('td');
+                    addressCell.textContent = subscriber.address;
+                    row.appendChild(addressCell);
+
+                    tbody.appendChild(row);
+                });
+            })
+            .catch((error) => {
+                console.error('Lỗi:', error);
+                resultElement.innerHTML = 'Đã xảy ra lỗi khi tìm kiếm.';
+            });
+    }
+</script>
+</body>
+</html>
