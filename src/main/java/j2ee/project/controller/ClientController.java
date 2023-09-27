@@ -24,9 +24,4 @@ public class ClientController {
     }
 
 
-    //admin
-    @GetMapping("/admin")
-    public String admin(){
-        return "admin/index.html";
-    }
 }

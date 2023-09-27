@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
-@Table(name = "manufactory")
+@Table(name = "manufacture")
 @Entity
-public class Manufactory {
+public class Manufacture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,10 +24,10 @@ public class Manufactory {
     private Timestamp createat;
 
     //get set
-    public Manufactory() {
+    public Manufacture() {
     }
 
-    public Manufactory(Integer id, String name, String address, String phone, Timestamp createat) {
+    public Manufacture(Integer id, String name, String address, String phone, Timestamp createat) {
         this.id = id;
         this.name = name;
         this.address = address;

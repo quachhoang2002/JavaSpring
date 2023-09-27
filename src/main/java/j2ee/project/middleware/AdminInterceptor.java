@@ -16,7 +16,7 @@ public class AdminInterceptor implements HandlerInterceptor  {
         String token = request.getHeader("token");
         if(token == null || !token.equals("admin")){
             response.setStatus(401);
-            return false;
+            return true;
         }
 
         return true;
