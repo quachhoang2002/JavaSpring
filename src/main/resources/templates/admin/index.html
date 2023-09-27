@@ -43,6 +43,7 @@
         </li>
     </ul>
 </nav>
+
 <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -55,7 +56,7 @@
                     </a>
                     <div class="sb-sidenav-menu-heading">Interface</div>
 
-                    <a class="nav-link collapsed" href="#" aria-expanded="false" aria-controls="collapseLayouts">
+                    <a class="nav-link collapsed" href="/admin?manufacture"  aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                         Manufacture
                     </a>
@@ -120,6 +121,20 @@
 
     </div>
 </div>
+
+<footer class="py-4 bg-light mt-auto">
+    <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+            <div>
+                <a href="#">Privacy Policy</a>
+                &middot;
+                <a href="#">Terms &amp; Conditions</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -154,7 +169,7 @@
 
     //check url for render like ?manufacture or ?dashboard
     const url = window.location.href;
-    if (url.includes('#manufacture')) {
+    if (url.includes('?manufacture')) {
         renderManufacture();
     } else {
         renderDashboard();
