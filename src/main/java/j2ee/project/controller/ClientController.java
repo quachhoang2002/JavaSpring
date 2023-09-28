@@ -22,6 +22,18 @@ public class ClientController {
     public String register(){
         return "user/register.html";
     }
+    @GetMapping("/contact")
+    public String contact(){
+        return "user/contact.html";
+    }
+    @GetMapping("/cart")
+    public String cart(){
+        return "user/cart.html";
+    }
+    @GetMapping("/viewcart")
+    public String viewcart(){
+        return "user/viewcart.html";
+    }
 
 
     //admin

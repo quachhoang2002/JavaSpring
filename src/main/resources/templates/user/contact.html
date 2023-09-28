@@ -35,9 +35,9 @@
     function searchSubscriber() {
         const subscriberName = inputElement.value;
         fetch(`http://localhost:8081/api/contact/search/${subscriberName}`)
-            .then((response) => response.json())
-            .then((data) => {
-                resultElement.innerHTML = `Kết quả tìm kiếm:
+    .then((response) => response.json())
+    .then((data) => {
+        resultElement.innerHTML = `Kết quả tìm kiếm:
         <table border="1">
             <thead>
                 <tr>
@@ -50,35 +50,40 @@
             <tbody id="myTableBody"></tbody>
         </table>`;
 
-                var tbody = document.getElementById('myTableBody');
+        var tbody = document.getElementById('myTableBody');
 
-                // data = JSON.parse(data);
-                console.log(data);
-                data.forEach(function (subscriber) {
-                    var row = document.createElement('tr');
-                    var idCell = document.createElement('td');
-                    idCell.textContent = subscriber.id;
-                    row.appendChild(idCell);
+        // Kiểm tra nếu data không phải là null
+        if (data != null) {
+            data.forEach(function (subscriber) {
+                var row = document.createElement('tr');
+                var idCell = document.createElement('td');
+                idCell.textContent = subscriber.id;
+                row.appendChild(idCell);
 
-                    var nameCell = document.createElement('td');
-                    nameCell.textContent = subscriber.name;
-                    row.appendChild(nameCell);
+                var nameCell = document.createElement('td');
+                nameCell.textContent = subscriber.name;
+                row.appendChild(nameCell);
 
-                    var phoneCell = document.createElement('td');
-                    phoneCell.textContent = subscriber.phone;
-                    row.appendChild(phoneCell);
+                var phoneCell = document.createElement('td');
+                phoneCell.textContent = subscriber.phone;
+                row.appendChild(phoneCell);
 
-                    var addressCell = document.createElement('td');
-                    addressCell.textContent = subscriber.address;
-                    row.appendChild(addressCell);
+                var addressCell = document.createElement('td');
+                addressCell.textContent = subscriber.address;
+                row.appendChild(addressCell);
 
-                    tbody.appendChild(row);
-                });
-            })
-            .catch((error) => {
-                console.error('Lỗi:', error);
-                resultElement.innerHTML = 'Đã xảy ra lỗi khi tìm kiếm.';
+                tbody.appendChild(row);
             });
+        } else {
+            // Nếu data là null, hiển thị thông báo không tìm thấy liên lạc
+            resultElement.innerHTML = "Không tìm thấy liên lạc";
+        }
+    })
+    .catch((error) => {
+        console.error('Lỗi:', error);
+        resultElement.innerHTML = 'Đã xảy ra lỗi khi tìm kiếm.';
+    });
+
     }
 </script>
 </body>

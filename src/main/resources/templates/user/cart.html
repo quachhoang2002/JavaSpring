@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+
+    <!-- Danh sách sản phẩm -->
+    <ul id="productList"></ul>
+
+    <!-- Giỏ hàng -->
+    <h2>Cart</h2>
+    <ul id="cartList"></ul>
+
+    <!-- Nút xem giỏ hàng -->
+    <a id="viewCartButton" href="/viewcart">View Cart</a>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const productList = document.getElementById("productList");
+    const cartList = document.getElementById("cartList");
+    const viewCartButton = document.getElementById("viewCartButton");
+    let cart = [];
+
+    // Lấy danh sách sản phẩm từ API
+    fetch("http://localhost:8081/api/product/getAll")
+        .then((response) => response.json())
+        .then((products) => {
+            // Hiển thị danh sách sản phẩm
+            products.forEach((product) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `
+                    ${product.name} - $${product.price}
+                    <input type="number" min="1" value="1" id="quantity_${product.id}">
+                    <button class="addToCartButton" data-id='${product.id}'>Add to Cart</button>
+                `;
+                productList.appendChild(listItem);
+            });
+
+            // Sự kiện khi nút "Add to Cart" được click
+            productList.addEventListener("click", (event) => {
+                if (event.target.classList.contains("addToCartButton")) {
+                    const productId = event.target.getAttribute("data-id");
+                    const quantityInput = document.getElementById(`quantity_${productId}`);
+                    const quantity = parseInt(quantityInput.value); // Lấy số lượng từ ô nhập
+
+                    if (quantity > 0) {
+                        // Tạo đối tượng JSON để gửi lên server
+                        const cartItem = {
+                            product: {
+                                id: parseInt(productId),
+                            },
+                            quantity: quantity,
+                        };
+                        console.log(cartItem)
+                        // Gửi yêu cầu POST để thêm sản phẩm vào giỏ hàng
+                        fetch("http://localhost:8081/api/cart/add", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(cartItem),
+                        })
+                        .then((response) => response.json()) // Chuyển đổi phản hồi thành JSON
+                        .then((data) => {
+                            if(data!=null){
+                                alert("Them thanh cong")
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+                        });
+                    } else {
+                        alert("Vui lòng nhập số lượng hợp lệ (ít nhất là 1).");
+                    }
+                }
+            });
+        });
+
+
+
+
+});
+
+    </script>
+</body>
+</html>
