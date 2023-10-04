@@ -30,6 +30,10 @@ public class User {
     @Column(name = "status", nullable = true, columnDefinition = "INT DEFAULT 1")
     private Integer status;
 
+    //token
+    @Column(name = "token", nullable = true)
+    private String token;
+
     public User() {
     }
 
@@ -69,6 +73,29 @@ public class User {
 
     public Integer getStatus() {
         return this.status;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    //to string
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", name='" + getName() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", createat='" + getCreateat() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", token='" + getToken() + "'" +
+            "}";
     }
 
 

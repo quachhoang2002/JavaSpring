@@ -9,6 +9,7 @@ function postDataToApi(apiUrl, data, onSuccess, onError) {
         body: JSON.stringify(data),
     })
         .then((response) => {
+            console.log(response)
             if (response.ok || response.status === 400 ) {
                 return response.json();
             }
@@ -65,7 +66,7 @@ function getDataFromApi(apiUrl, onSuccess, onError) {
             if (responseData.status === "error" && responseData.message) {
                 // If the response contains an error status and message, call the onError callback
                 if (onError && typeof onError === "function") {
-                    onError(responseData.message);
+                   return onError(responseData.message);
                 }
             } else {
                 // If there is no error, call the onSuccess callback with the response data

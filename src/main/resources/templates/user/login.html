@@ -33,7 +33,15 @@
                                 </div>
 
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login</button>
+                                    <button type="submit"
+                                            class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login
+                                    </button>
+
+
+                                <div class="custom-control custom-checkbox mb-4">
+                                    <input class="custom-control-input" type="checkbox" value="" id="rememberPassword"
+                                           checked/>
+                                    <label class="custom-control-label" for="rememberPassword">Remember password</label>
                                 </div>
 
                                 <p class="text-center text-muted mt-3 mb-0">Don't have an account?
@@ -44,6 +52,7 @@
 
 
                             </form>
+
 
                             <div id="error-message" class="alert alert-danger" style="display:none;"></div>
 
@@ -57,40 +66,51 @@
 </body>
 <script src="/js/fetch.js"></script>
 <script>
-    const loginUrl = API_URL + '/user/login';
+
+    //login scope
+    const loginUrl = API_URL + '/auth/login';
+
+    onSuccessfulLogin = (response) => {
+        console.log(response);
+        if (response.data.token) {
+            console.log(response.data.token);
+            localStorage.setItem('token', response.data.token);
+        }
+        window.location.href = '/';
+    }
+
+    onFailedLogin = (error) => {
+        document.getElementById('error-message').innerHTML = error;
+        document.getElementById('error-message').style.display = 'block';
+    }
+
+    console.log(localStorage.getItem('token'));
+    // check if have token in local storage
+    if (localStorage.getItem('token')) {
+        const data = {
+            token: localStorage.getItem('token')
+        }
+        onTokenLogin = (response) => {}
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
+    }
 
     const loginUser = async (event) => {
         event.preventDefault();
-
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
+        const checkbox = document.getElementById('rememberPassword').checked;
 
         const data = {
             email: email,
             password: password,
+            remember: checkbox
         }
 
-        onSuccessfulLogin = () => {
-            window.location.href = '/';
-        }
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
 
-        onFailedLogin = (error) => {
-            document.getElementById('error-message').innerHTML = error;
-            document.getElementById('error-message').style.display = 'block';
-        }
-
-        const response = postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
-
-        if (response.ok) {
-            onSuccessfulLogin();
-        } else {
-            onFailedLogin(response.error);
-        }
     }
 
     document.getElementById('loginForm').addEventListener('submit', loginUser);
 
-    console.log()
-    console.log("vai loz")
 </script>
 </html>

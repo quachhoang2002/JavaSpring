@@ -31,13 +31,31 @@ public class LoginController extends Controller {
     @ResponseBody
     public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
         try {
+            String token = body.get("token");
+            if (token != null){
+                User user = userService.findByToken(token);
+                if (user != null){
+                    return successResponse("Login successfully", user);
+                }
+            }
+
             String email = body.get("email");
             String password = body.get("password");
+            //if have remember me;
+            boolean remember = Boolean.parseBoolean(body.get("remember"));
             System.out.println("email: " + email + " password: " + password);
-            userService.login(email, password);
-            return successResponse("Login successfully", null);
+            User user = userService.login(email, password);
+            if (remember){
+                //random token
+                String newToken = java.util.UUID.randomUUID().toString();
+                user.setToken(newToken);
+                userService.remember(user);
+            }
+            return successResponse("Login successfully", user);
         } catch (Exception e) {
             return errorResponse(e.getMessage());
         }
     }
+
+
 }

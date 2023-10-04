@@ -43,4 +43,13 @@ public class UserService {
         return user;
     }
 
+    //remember
+    public void remember(User user){
+        userRepository.save(user);
+    }
+
+    public User findByToken(String token){
+        return userRepository.findByToken(token);
+    }
+
 }
