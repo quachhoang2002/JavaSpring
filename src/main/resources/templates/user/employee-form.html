@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Form</title>
+</head>
+<body>
+<h1>Employee Form</h1>
+<form id="employeeForm" enctype=”multipart/form-data”>
+    Họ và tên: <input name="fullname"><br>
+    Ngày sinh: <input name="birthday"><br>
+    Quốc tịch:
+    <select name="country">
+        <option value="VN">Việt Nam</option>
+        <option value="US">United States</option>
+    </select><br>
+    Giới tính:
+    <input name="gender" type="radio" value="true">Nam
+    <input name="gender" type="radio" value="false">Nữ<br>
+    TT hôn nhân:
+    TT hôn nhân:
+    <input name="married" type="checkbox" value="true">Đã có gia đình?<br>
+
+    Sở thích:
+    <input name="hobbies" type="checkbox" value="Đọc sách">Đọc sách
+    <input name="hobbies" type="checkbox" value="Du lịch">Du lịch
+    <input name="hobbies" type="checkbox" value="Âm nhạc">Âm nhạc
+    <input name="hobbies" type="checkbox" value="Khác">Khác<br>
+    Ghi chú: <textarea name="notes" rows="3" cols="30"></textarea>
+    <hr>
+    <button type="submit">Thêm mới</button>
+</form>
+
+<div id="resultContainer">
+    <h2>Kết quả:</h2>
+    <p>Họ và tên: <span id="fullname"></span></p>
+    <p>Ngày sinh: <span id="birthday"></span></p>
+    <p>Giới tính: <span id="gender"></span></p>
+    <p>Quốc tịch: <span id="country"></span></p>
+    <p>TT hôn nhân: <span id="married"></span></p>
+    <p>Sở thích: <span id="hobbies"></span></p>
+    <p>Ghi chú: <span id="notes"></span></p>
+</div>
+
+<script>
+    document.getElementById("employeeForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const birthdayValue = formData.get("birthday");
+
+    // Chuyển đổi định dạng ngày
+    const parts = birthdayValue.split('-');
+    const newBirthdayValue = `${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`;
+
+    // Khai báo biến data và gán giá trị từ biểu mẫu
+    const data = {
+        fullname: formData.get("fullname"),
+        birthday: newBirthdayValue,
+        gender: formData.get("gender"), // Các trường radio button sẽ trả về giá trị của nút được chọn
+        country: formData.get("country"),
+        married: formData.has("married"), // Kiểm tra xem checkbox "Đã có gia đình" có được chọn không
+        hobbies: formData.getAll("hobbies"), // Lấy tất cả giá trị của các checkbox sở thích
+        notes: formData.get("notes"),
+    };
+
+    // Tiếp tục gửi dữ liệu bằng fetch
+    fetch("/employees/create", {
+        method: "POST",
+        body: JSON.stringify(data), // Chuyển đổi dữ liệu thành chuỗi JSON
+        headers: {
+            "Content-Type": "application/json", // Đặt tiêu đề Content-Type cho yêu cầu
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Lấy các giá trị từ đối tượng JSON và kiểm tra trước khi gán vào phần tử HTML
+        document.getElementById("fullname").textContent = data.fullname;
+        // Lấy ngày từ dữ liệu JSON
+        const originalDate = data.birthday;
+
+        // Chuyển đổi thành định dạng ngày mong muốn (dd-mm-yyyy)
+        const dateObject = new Date(originalDate);
+        const day = dateObject.getDate().toString().padStart(2, "0");
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+        const year = dateObject.getFullYear();
+
+        const formattedDate = `${day}-${month}-${year}`;
+
+        // Hiển thị ngày đã được định dạng trong HTML
+        document.getElementById("birthday").textContent = formattedDate;
+
+
+        document.getElementById("gender").textContent = data.gender ? "Nam" : "Nữ";
+
+        // Kiểm tra xem trường "Quốc tịch" có dữ liệu không
+        if (data.country) {
+            document.getElementById("country").textContent = data.country;
+        } else {
+            document.getElementById("country").textContent = "Không có quốc tịch";
+        }
+
+        // Kiểm tra xem trường "TT hôn nhân" có dữ liệu không
+        if (data.married !== undefined) {
+            document.getElementById("married").textContent = data.married ? "Đã có gia đình" : "Chưa có gia đình";
+        } else {
+            document.getElementById("married").textContent = "Không có thông tin hôn nhân";
+        }
+
+        // Kiểm tra xem trường "Sở thích" có dữ liệu không
+        if (data.hobbies && data.hobbies.length > 0) {
+            document.getElementById("hobbies").textContent = data.hobbies.join(", ");
+        } else {
+            document.getElementById("hobbies").textContent = "Không có sở thích";
+        }
+
+        // Kiểm tra xem trường "Ghi chú" có dữ liệu không
+        if (data.notes) {
+            document.getElementById("notes").textContent = data.notes;
+        } else {
+            document.getElementById("notes").textContent = "Không có ghi chú";
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+});
+
+</script>
+</body>
+</html>

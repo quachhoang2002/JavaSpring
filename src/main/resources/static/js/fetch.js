@@ -9,6 +9,8 @@ function postDataToApi(apiUrl, data, onSuccess, onError) {
         body: JSON.stringify(data),
     })
         .then((response) => {
+        console.log("vai loz du ma may")
+            console.log(response.status)
             if (response.ok || response.status === 400 ) {
                 return response.json();
             }
@@ -16,7 +18,7 @@ function postDataToApi(apiUrl, data, onSuccess, onError) {
             if (response.status === 500) {
                 throw new Error("Server error");
             }
-
+           console.log("vai lozz")
             throw new Error("Network error");
         })
         .then((responseData) => {

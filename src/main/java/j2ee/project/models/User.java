@@ -71,5 +71,8 @@ public class User {
         return this.status;
     }
 
-
+    @Override
+    public String toString() {
+        return String.format("id:%d",this.id);
+    }
 }

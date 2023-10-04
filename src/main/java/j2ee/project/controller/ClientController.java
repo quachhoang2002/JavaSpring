@@ -10,7 +10,7 @@ public class ClientController {
 
     @GetMapping("/")
     public String home(){
-        return "user/index.html";
+        return "user/form.html";
     }
 
     @GetMapping("/login")

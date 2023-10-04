@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Upload Form</title>
+</head>
+<body>
+<h1>File Upload Form</h1>
+<form id="fileUploadForm" enctype="multipart/form-data">
+    <label for="imageFile">Select an Image:</label>
+    <input type="file" name="imageFile" id="imageFile" accept="image/*"><br>
+
+    <label for="documentFile">Select a Document:</label>
+    <input type="file" name="documentFile" id="documentFile"><br>
+
+    <input type="button" value="Upload" onclick="uploadFiles()">
+</form>
+
+<div id="resultContainer">
+    <!-- Result will be displayed here -->
+</div>
+
+<!-- Display uploaded image -->
+<div id="imageContainer">
+</div>
+
+<!-- Provide download link for the document -->
+<div id="documentLinkContainer">
+    <!-- Document link will be displayed here -->
+</div>
+
+<script>
+    function uploadFiles() {
+    const formData = new FormData();
+    formData.append("imageFile", document.getElementById("imageFile").files[0]);
+    formData.append("documentFile", document.getElementById("documentFile").files[0]);
+
+    fetch("/upload", {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(result => {
+        // Extract file names from the result text using regular expressions
+        const imageFileNameMatch = result.match(/Image:\s*(\S+)/);
+        const documentFileNameMatch = result.match(/Document:\s*(\S+)/);
+
+        // Check if matches were found
+        if (imageFileNameMatch && documentFileNameMatch) {
+            let imageFileName = imageFileNameMatch[1];
+            let documentFileName = documentFileNameMatch[1];
+
+            // Remove the trailing comma from file names (if present)
+            imageFileName = imageFileName.replace(/,$/, '');
+            documentFileName = documentFileName.replace(/,$/, '');
+
+            // Construct the image and download links
+            const imageUrl = `/assets/images/${imageFileName}`;
+            const documentUrl = `/assets/images/${documentFileName}`;
+
+            document.getElementById("imageContainer").innerHTML = `<img src="${imageUrl}" alt="Uploaded Image">`;
+            document.getElementById("documentLinkContainer").innerHTML = `<a href="${documentUrl}" download="${documentFileName}">Download Document</a>`;
+        } else {
+            console.error("File names not found in the response.");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+function extractFileName(text, prefix) {
+    const startIndex = text.indexOf(prefix);
+    if (startIndex !== -1) {
+        const endIndex = text.indexOf(",", startIndex);
+        if (endIndex !== -1) {
+            return text.substring(startIndex + prefix.length, endIndex).trim();
+        }
+    }
+    return "";
+}
+
+</script>
+</body>
+</html>
