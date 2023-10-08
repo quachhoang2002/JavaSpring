@@ -24,12 +24,12 @@ public class Controller {
         }
     }
 
-    protected ResponseEntity<String> successResponse(String message, Object data, Map<String, Object> page) {
+    protected ResponseEntity<String> successResponse(String message, Object data, Map<String, Object> meta) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonData = objectMapper.writeValueAsString(data);
-            String jsonPage = objectMapper.writeValueAsString(page);
-            String jsonResponse = "{\"status\": \"success\", \"message\": \"" + message + "\", \"data\": " + jsonData + ", \"meta\": " + jsonPage + "}";
+            String jsonMeta = objectMapper.writeValueAsString(meta);
+            String jsonResponse = "{\"status\": \"success\", \"message\": \"" + message + "\", \"data\": " + jsonData + ", \"meta\": " + jsonMeta + "}";
             return ResponseEntity.status(HttpStatus.OK).body(jsonResponse);
         } catch (Exception e) {
             return errorResponse(e.getMessage());
