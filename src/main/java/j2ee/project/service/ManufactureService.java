@@ -2,8 +2,13 @@ package j2ee.project.service;
 
 import j2ee.project.models.Manufacture;
 import j2ee.project.repository.ManufactureRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +27,10 @@ public class ManufactureService {
         return manufactureRepository.save(manufacture);
     }
 
-    // READ - Get all Manufactories
-    public List<Manufacture> getAllManufacture() {
-        return manufactureRepository.findAll();
+    // READ - Get all Manufactories with pagination
+    public List<Manufacture> getAllManufacture(int page, long limit, String sortBy, String sortType) {
+        //get and sort by id
+        return manufactureRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit).toList();
     }
 
     // READ - Get a Manufactory by ID
@@ -39,6 +45,8 @@ public class ManufactureService {
         if (existingManufactory.isPresent()) {
             Manufacture manufacture = existingManufactory.get();
             manufacture.setName(updatedManufacture.getName());
+            manufacture.setAddress(updatedManufacture.getAddress());
+            manufacture.setPhone(updatedManufacture.getPhone());
 
             return manufactureRepository.save(manufacture);
         } else {
@@ -49,6 +57,10 @@ public class ManufactureService {
     // DELETE
     public void deleteManufacture(Integer id) {
         manufactureRepository.deleteById(id);
+    }
+
+    public long countAllManufacture(){
+        return manufactureRepository.count();
     }
 
 

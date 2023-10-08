@@ -3,11 +3,16 @@ package j2ee.project.controller.Admin;
 import j2ee.project.controller.Controller;
 import j2ee.project.models.Manufacture;
 import j2ee.project.service.ManufactureService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -19,54 +24,70 @@ public class ManufactureController extends Controller {
 
     @GetMapping("")
     @ResponseBody
-    public ResponseEntity<String> getAllManufacture() {
-        try{
-            List<Manufacture> listManufacture = manufactureService.getAllManufacture();
-            return successResponse("List all manufacture.js", listManufacture);
-        }catch (Exception e){
+    public ResponseEntity<String> getAllManufacture(@RequestParam(defaultValue = "1") int page,
+                                                    @RequestParam(defaultValue = "10") int size,
+                                                    @RequestParam(defaultValue = "id") String sortBy,
+                                                    @RequestParam(defaultValue = "ASC") String sortType
+    ) {
+        try {
+            List<Manufacture> listManufacture = manufactureService.getAllManufacture(page, size, sortBy, sortType);
+            //meta data
+            long totalItems = manufactureService.countAllManufacture();
+            Map<String, Object> metaData = buildPage(totalItems, page, size);
+            return this.successResponse("Get all manufacture.js successfully", listManufacture, metaData);
+        } catch (Exception e) {
             return errorResponse(e.getMessage());
         }
     }
 
     // READ - Get a Manufactory by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Manufacture> getManufactureById(@PathVariable int id) {
+    public ResponseEntity<String> getManufactureById(@PathVariable int id) {
         Optional<Manufacture> manufactory = manufactureService.getManufactureById(id);
         if (manufactory.isPresent()) {
-            return ResponseEntity.ok(manufactory.get());
+            return successResponse("Get manufacture.js by id successfully", manufactory.get());
         } else {
-            return ResponseEntity.notFound().build();
+            return errorResponse("Manufacture not found");
         }
+
     }
 
     @PostMapping("")
     public ResponseEntity<String> addManufacture(@RequestBody Manufacture manufacture) {
-        try{
+        try {
             Manufacture newManufacture = manufactureService.addManufactory(manufacture);
             return successResponse("Add manufacture.js successfully", newManufacture);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return errorResponse(e.getMessage());
         }
     }
 
-    @PutMapping("")
-    public ResponseEntity<String> updateManufacture(@PathVariable int id, Manufacture updatedManufacture){
-        try{
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateManufacture(@PathVariable int id, @Valid @RequestBody Manufacture updatedManufacture, BindingResult bindingResult) {
+        // @Valid @RequestBody Manufacture updatedManufacture
+        if (bindingResult.hasErrors()) {
+            // Handle validation errors here
+            StringBuilder errorMessage = new StringBuilder("Validation errors: ");
+            bindingResult.getAllErrors().forEach(error -> {
+                errorMessage.append(error.getDefaultMessage()).append("; ");
+            });
+            return errorResponse(errorMessage.toString());
+        }
+
+        try {
             Manufacture updated = manufactureService.updateManufacture(id, updatedManufacture);
             return successResponse("Update manufacture.js successfully", updated);
-        }catch (Exception e){
+        } catch (Exception e) {
             return errorResponse(e.getMessage());
-
         }
     }
 
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteManufactory(@PathVariable int id) {
+    public ResponseEntity<String> deleteManufactory(@PathVariable int id) {
         manufactureService.deleteManufacture(id);
-        return ResponseEntity.noContent().build();
+        return successResponse("Delete manufacture.js successfully", null);
     }
 
 

@@ -1,6 +1,8 @@
 package j2ee.project.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
 
@@ -12,12 +14,16 @@ public class Manufacture {
     private Integer id;
 
     @Column(name = "name", nullable = false)
+    @NotBlank(message = "Name is mandatory")
+    @NotNull(message = "Name is mandatory")
     private String name;
 
     @Column(name = "address", nullable = false)
+    @NotBlank(message = "Address is mandatory")
     private String address;
 
     @Column(name = "phone", nullable = false)
+    @NotBlank(message = "Phone is mandatory")
     private String phone;
 
     @Column(name = "createat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

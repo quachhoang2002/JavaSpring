@@ -161,10 +161,8 @@
     }
 
     const renderManufacture = () => {
-        let url =API_ADMIN_URL + '/manufacture';
         contentDiv.innerHTML = RenderManufactureTemplate();
-        renderManufactureItems(url)
-        addManuListener(url)
+        renderManufactureItems()
     }
 
     //check url for render like ?manufacture or ?dashboard
