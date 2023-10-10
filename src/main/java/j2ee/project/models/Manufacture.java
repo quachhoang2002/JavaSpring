@@ -26,6 +26,9 @@ public class Manufacture {
     @NotBlank(message = "Phone is mandatory")
     private String phone;
 
+    @Column(name = "image_path", nullable = true)
+    private String imagePath;
+
     @Column(name = "createat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createat;
 
@@ -51,6 +54,10 @@ public class Manufacture {
 
     public String getAddress() {
         return this.address;
+    }
+
+    public String getImagePath(){
+        return this.imagePath;
     }
 
     public String getPhone() {
@@ -81,6 +88,9 @@ public class Manufacture {
         this.createat = createat;
     }
 
+    public void setImagePath(String imagePath){
+        this.imagePath = imagePath;
+    }
     @Override
     public String toString() {
         return String.format("{id:%d, name:'%s', address:'%s', phone:'%s', createat:'%s'}",

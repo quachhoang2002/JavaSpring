@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ public class ManufactureController extends Controller {
     ) {
         try {
             List<Manufacture> listManufacture = manufactureService.getAllManufacture(page, size, sortBy, sortType);
+            //foreach to set image path
             //meta data
             long totalItems = manufactureService.countAllManufacture();
             Map<String, Object> metaData = buildPage(totalItems, page, size);
@@ -53,8 +55,15 @@ public class ManufactureController extends Controller {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> addManufacture(@RequestBody Manufacture manufacture) {
+    public ResponseEntity<String> addManufacture(@ModelAttribute Manufacture manufacture,
+                                                 @RequestParam(value = "image", required = false) MultipartFile imageFile) {
         try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                // Save the image file and get the file path
+                String imagePath = manufactureService.saveImage(imageFile);
+                // Set the image path in the Manufacture object
+                manufacture.setImagePath(imagePath);
+            }
             Manufacture newManufacture = manufactureService.addManufactory(manufacture);
             return successResponse("Add manufacture.js successfully", newManufacture);
         } catch (Exception e) {
@@ -63,10 +72,12 @@ public class ManufactureController extends Controller {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateManufacture(@PathVariable int id, @Valid @RequestBody Manufacture updatedManufacture, BindingResult bindingResult) {
-        // @Valid @RequestBody Manufacture updatedManufacture
+    public ResponseEntity<String> updateManufacture(@PathVariable int id,
+                                                    @Valid @ModelAttribute Manufacture updatedManufacture,
+                                                    @RequestParam(value = "image", required = false) MultipartFile imageFile,
+                                                    BindingResult bindingResult
+    ) {
         if (bindingResult.hasErrors()) {
-            // Handle validation errors here
             StringBuilder errorMessage = new StringBuilder("Validation errors: ");
             bindingResult.getAllErrors().forEach(error -> {
                 errorMessage.append(error.getDefaultMessage()).append("; ");
@@ -75,6 +86,10 @@ public class ManufactureController extends Controller {
         }
 
         try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String imagePath = manufactureService.saveImage(imageFile);
+                updatedManufacture.setImagePath(imagePath);
+            }
             Manufacture updated = manufactureService.updateManufacture(id, updatedManufacture);
             return successResponse("Update manufacture.js successfully", updated);
         } catch (Exception e) {

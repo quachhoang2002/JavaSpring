@@ -23,5 +23,10 @@ public class ClientController {
         return "user/register.html";
     }
 
+    @GetMapping("/mail")
+    public String mail(){
+        return "user/mail.html";
+    }
+
 
 }

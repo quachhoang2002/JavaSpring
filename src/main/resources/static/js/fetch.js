@@ -3,12 +3,19 @@ const API_ADMIN_URL = "http://localhost:8081/api/admin";
 const LIMIT = 10;
 
 function postDataToApi(apiUrl, data, onSuccess, onError) {
+    //if not form data then stringify
+    let header = {};
+    if (!(data instanceof FormData)){
+        header = {
+            "Content-Type": "application/json",
+        }
+        data = JSON.stringify(data);
+    }
+
     fetch(apiUrl, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        headers: header,
+        body: data,
     })
         .then((response) => {
             console.log(response)
@@ -131,12 +138,19 @@ function deleteDataFromApi(apiUrl, onSuccess, onError) {
 }
 
 function putDataToApi(apiUrl, data, onSuccess, onError) {
+    //if not form data then stringify
+    let header = {};
+    if (!(data instanceof FormData)){
+        header = {
+            "Content-Type": "application/json",
+        }
+        data = JSON.stringify(data);
+    }
+
     fetch(apiUrl, {
         method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        headers: header,
+        body: data,
     })
         .then((response) => {
             console.log(response)

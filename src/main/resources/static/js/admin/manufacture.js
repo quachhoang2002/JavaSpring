@@ -1,8 +1,7 @@
 const MANUFACTURE_URL = API_ADMIN_URL + '/manufacture'
 
 function RenderManufactureTemplate() {
-    return (
-        `
+    return (`
             <main>
                   <div class="container-fluid px-4">
                       <h1 class="mt-4">Manufacture</h1>
@@ -79,6 +78,11 @@ function RenderManufactureTemplate() {
                                  <label for="phone" class="form-label">Phone</label>
                                  <input type="text" class="form-control" id="phone" name="phone" required>
                              </div>
+                             
+                              <div class="mb-3">                           
+                                <label for="formFile" class="form-label">Upload Image</label>
+                                <input class="form-control" type="file" id="formFile">                      
+                            </div>
                          </form>
                      </div>
                      <!-- Modal Footer -->
@@ -114,6 +118,13 @@ function RenderManufactureTemplate() {
                                  <label for="phone" class="form-label">Phone</label>
                                  <input type="text" class="form-control" id="phone" name="phone" required>
                              </div>
+                             <div>
+                             
+                              <div class="mb-3">                           
+                                <label for="formFile" class="form-label">Upload Image</label>
+                                <input class="form-control" type="file" id="formFile">                      
+                            </div>
+                            
                          </form>
                      </div>
                      <!-- Modal Footer  have render in js -->
@@ -124,12 +135,11 @@ function RenderManufactureTemplate() {
     </div>\
 
                         
-        `
-    )
+        `)
 }
 
 
-async function renderManufactureItems(i = 1) {
+async function renderManufactureItems() {
 
     let successCallback = (response) => {
         const tableBody = document.querySelector("#content tbody");
@@ -145,12 +155,16 @@ async function renderManufactureItems(i = 1) {
 
         response.data.forEach(item => {
             const row = tableBody.insertRow();
+
             row.innerHTML = `
                             <td>${item.id}</td>
                             <td>${item.name}</td>
                             <td>${item.address}</td>
                             <td>${item.phone}</td>
                             <td>${item.createat || ''}</td>
+                            <td>
+                                <img src="${item.imagePath}" alt="Image" width="100" height="100">
+                            </td>
                             <td>
                                 ${editBtn(item.id)}
                                 ${deleteBtn(item.id)} 
@@ -163,15 +177,21 @@ async function renderManufactureItems(i = 1) {
         pagination.innerHTML = '';
         totalPage = Math.ceil(response.meta.totalItem / response.meta.limit);
         for (let i = 1; i <= totalPage; i++) {
-            pagination.innerHTML += `<button type="button" class="btn btn-secondary btn-sm" onclick="renderManufactureItems(${i})">${i}</button>`
+            urlPage =  `?manufacture&page=${i}&limit=${LIMIT}`
+            pagination.innerHTML += `<a href="${urlPage}" class="btn btn-secondary ${i == page ? 'active' : ''}">${i}</a>`
         }
-
     }
+
+    //get page from url
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page") ?? 1;
+    let limit = url.searchParams.get("limit") ?? LIMIT;
 
     let errorCallback = (error) => {
     }
 
-    GET_URL = `${MANUFACTURE_URL}?page=${i}&size=${LIMIT}`;
+
+    GET_URL = `${MANUFACTURE_URL}?page=${page}&size=${limit}`;
     console.log(GET_URL);
 
     await getDataFromApi(GET_URL, successCallback, errorCallback);
@@ -183,6 +203,8 @@ async function addManu() {
         // const closeBtn = document.querySelector("#closeBtn");
         // closeBtn.click();
         bootstrap.Modal.getInstance(document.querySelector('#addManu')).hide();
+        //get current page
+        const currentPage = document.querySelector(".btn-secondary.active").innerText;
         renderManufactureItems();
     }
 
@@ -190,14 +212,29 @@ async function addManu() {
         alert(error.message);
     }
 
+    // const form = document.querySelector("#manufacturerForm");
+    //
+    // const data = {
+    //     name: form.name.value,
+    //     address: form.address.value,
+    //     phone: form.phone.value
+    // }
     const form = document.querySelector("#manufacturerForm");
 
-    const data = {
-        name: form.name.value,
-        address: form.address.value,
-        phone: form.phone.value
+
+    const formData = new FormData();
+    formData.append('name', form.name.value);
+    formData.append('address', form.address.value);
+    formData.append('phone', form.phone.value);
+
+    const imageInput = document.querySelector("#formFile");
+
+    if (imageInput.files.length > 0) {
+        // Append the selected image to the FormData
+        formData.append('image', imageInput.files[0]);
     }
-    await postDataToApi(MANUFACTURE_URL, data, successCallback, errorCallback);
+
+    await postDataToApi(MANUFACTURE_URL, formData, successCallback, errorCallback);
 
 }
 
@@ -225,15 +262,21 @@ async function edit(id) {
         await renderManufactureItems();
     }
 
-    const form = document.querySelector("#editManufacturerForm");
     editUrl = `${MANUFACTURE_URL}/${id}`;
-    console.log(editUrl)
-    const data = {
-        name: form.name.value,
-        address: form.address.value,
-        phone: form.phone.value
+
+    const form = document.querySelector("#editManufacturerForm");
+    const formData = new FormData();
+    formData.append('name', form.name.value);
+    formData.append('address', form.address.value);
+    formData.append('phone', form.phone.value);
+    const imageInput = form.querySelector("#formFile");
+    if (imageInput.files.length > 0) {
+        // Append the selected image to the FormData
+        formData.append('image', imageInput.files[0]);
     }
-    await putDataToApi(editUrl, data, successCallback, errorCallback);
+
+
+    await putDataToApi(editUrl, formData, successCallback, errorCallback);
     //remove event listener
 }
 
