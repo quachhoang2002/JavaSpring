@@ -1,6 +1,7 @@
 package j2ee.project.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
@@ -13,31 +14,29 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
+    @NotNull(message = "Name is mandatory")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotNull
+    @NotNull(message = "Price is mandatory")
     @Column(name = "price", nullable = false)
     private double price;
 
-    @NotNull
+    @NotNull(message = "Category is mandatory")
     @ManyToOne
-    @JoinColumn(name = "category_id",nullable = false ,referencedColumnName = "id")
+    @JoinColumn(name = "category_id" ,referencedColumnName = "id")
     private Category category;
 
-    @NotNull
+    @NotNull(message = "Manufacture is mandatory")
     @ManyToOne
-    @JoinColumn(name = "manufacture_id",nullable = false ,referencedColumnName = "id")
+    @JoinColumn(name = "manufacture_id",referencedColumnName = "id")
     private Manufacture manufacture;
 
-    @NotNull
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     private String description;
 
-    @NotNull
-    @Column(name = "image", nullable = false)
-    private String image;
+    @Column(name = "imagePath", nullable = true)
+    private String imagePath;
 
     @Column(name = "createdAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
@@ -96,12 +95,12 @@ public class Product {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImagePath(String image) {
+        this.imagePath = image;
     }
 
     @PrePersist
@@ -128,6 +127,22 @@ public class Product {
             return null;
         }
         return updatedAt.toString().substring(0, 19);
+    }
+
+    //to string
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", name='" + name +
+                ", price='" + price +
+                ", category='" + category +
+                ", manufacture='" + manufacture +
+                ", description='" + description +
+                ", imagePath='" + imagePath +
+                ", createdAt='" + createdAt +
+                ", updatedAt='" + updatedAt +
+                '}';
     }
 
 }

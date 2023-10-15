@@ -1,29 +1,29 @@
 package j2ee.project.models;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
-@Table(name = "category_entity")
+import java.sql.Timestamp;
+import java.util.Date;
+
+
 @Entity
+@Table(name = "categories")
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull
-    @Column(name = "name", nullable = false)
     private String name;
+    @Lob
+    private String description;
 
-    public Category(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Category(String name) {
-        this.name = name;
-    }
+    @Column(name = "createdAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
 
     public Category() {
     }
+
+    // Getters and setters, or use Lombok to generate them.
 
     public Integer getId() {
         return id;
@@ -40,4 +40,32 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @PrePersist
+    private void setCreatedAt() {
+        // Set the createdAt field to the current timestamp when persisting the entity
+        createdAt = new Timestamp(new Date().getTime());
+    }
+
+    public String getCreatedAt() {
+        if (createdAt == null) {
+            return null;
+        }
+        return createdAt.toString().substring(0, 19);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{id:%d, name:'%s',description:'%s',createdAt:'%s'}",
+                this.id, this.name,this.description ,this.getCreatedAt());
+    }
+
 }

@@ -1,15 +1,24 @@
 package j2ee.project.repository;
 
+import j2ee.project.models.Category;
 import j2ee.project.models.Product;
-import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM Product p WHERE p.category_id = :categoryId")
-    void deleteByCategoryId(@Param("categoryId") int categoryId);
+    List<Product> findAll(Sort sort);
+
+    default List<Product> findWithOrder(String sortBy, String sortType) {
+        if (sortBy == null || sortBy.equals("")) {
+            sortBy = "id";
+        }
+        if (sortType == null || sortType.equals("")) {
+            sortType = "ASC";
+        }
+        Sort.Direction direction = Sort.Direction.fromString(sortType);
+        Sort sort = Sort.by(direction, sortBy);
+        return findAll(sort);
+    }
 }

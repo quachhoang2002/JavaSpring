@@ -24,22 +24,26 @@ public class User {
     @Column(name = "phone", nullable = true)
     private String phone;
 
-    @Column(name = "createat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp createat;
+    @Column(name = "createdat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdat;
 
     @Column(name = "status", nullable = true, columnDefinition = "INT DEFAULT 1")
     private Integer status;
 
+    //token
+    @Column(name = "token", nullable = true)
+    private String token;
+
     public User() {
     }
 
-    public User(Integer id, String name, String email, String password, String phone, Timestamp createat, Integer status) {
+    public User(Integer id, String name, String email, String password, String phone, Timestamp createdAt, Integer status) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.createat = createat;
+        this.createdat = createdAt;
         this.status = status;
     }
 
@@ -63,16 +67,36 @@ public class User {
         return this.phone;
     }
 
-    public Timestamp getCreateat() {
-        return this.createat;
+    public String getCreateat() {
+        return this.createdat.toString().substring(0, 19);
     }
 
     public Integer getStatus() {
         return this.status;
     }
 
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    //to string
     @Override
     public String toString() {
-        return String.format("id:%d",this.id);
+        return "{" +
+            " id='" + getId() + "'" +
+            ", name='" + getName() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", password='" + getPassword() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", createdat='" + getCreateat()+ "'" +
+            ", status='" + getStatus() + "'" +
+            ", token='" + getToken() + "'" +
+            "}";
     }
+
+
 }

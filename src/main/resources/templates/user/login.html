@@ -31,14 +31,17 @@
                                     <input type="password" id="loginPassword" class="form-control form-control-lg"/>
                                     <label class="form-label" for="loginPassword">Password</label>
                                 </div>
-                                <div class="form-outline">
-                                    <input type="checkbox" id="rememberMe" value="false"/>
-                                    <label for="rememberMe">Ghi nhớ</label>
-                                </div>
-
 
                                 <div class="d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login</button>
+                                    <button type="submit"
+                                            class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login
+                                    </button>
+
+
+                                <div class="custom-control custom-checkbox mb-4">
+                                    <input class="custom-control-input" type="checkbox" value="" id="rememberPassword"
+                                           checked/>
+                                    <label class="custom-control-label" for="rememberPassword">Remember password</label>
                                 </div>
 
                                 <p class="text-center text-muted mt-3 mb-0">Don't have an account?
@@ -49,6 +52,7 @@
 
 
                             </form>
+
 
                             <div id="error-message" class="alert alert-danger" style="display:none;"></div>
 
@@ -62,56 +66,49 @@
 </body>
 <script src="/js/fetch.js"></script>
 <script>
-    const loginUrl = API_URL + '/user/login';
+
+    //login scope
+    const loginUrl = API_URL + '/auth/login';
+
+    onSuccessfulLogin = (response) => {
+        console.log(response);
+        if (response.data.token) {
+            console.log(response.data.token);
+            localStorage.setItem('token', response.data.token);
+        }
+        window.location.href = '/';
+    }
+
+    onFailedLogin = (error) => {
+        document.getElementById('error-message').innerHTML = error;
+        document.getElementById('error-message').style.display = 'block';
+    }
+
+    console.log(localStorage.getItem('token'));
+    // check if have token in local storage
+    if (localStorage.getItem('token')) {
+        const data = {
+            token: localStorage.getItem('token')
+        }
+        onTokenLogin = (response) => {}
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
+    }
 
     const loginUser = async (event) => {
         event.preventDefault();
-
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-        const rememberMe = document.getElementById('rememberMe').checked; // Sử dụng checked để kiểm tra ô kiểm ghi nhớ
+        const checkbox = document.getElementById('rememberPassword').checked;
 
         const data = {
             email: email,
             password: password,
-            rememberMe: rememberMe, // Đổi tên field remember thành rememberMe để phù hợp với backend
-        };
-
-        const headers = {
-            'Content-Type': 'application/json', // Đặt tiêu đề Content-Type thành application/json
-        };
-
-        const requestOptions = {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(data), // Chuyển đổi dữ liệu thành chuỗi JSON
-        };
-
-        const onSuccessfulLogin = (userData) => {
-            // Lưu thông tin người dùng vào localStorage
-            localStorage.setItem('userData', JSON.stringify(userData));
-            window.location.href = '/'; // Chuyển hướng sau khi đăng nhập thành công
-        };
-
-        const onFailedLogin = (error) => {
-            document.getElementById('error-message').innerHTML = error;
-            document.getElementById('error-message').style.display = 'block';
-        };
-
-        try {
-            const response = await fetch(loginUrl, requestOptions);
-
-            if (response.status === 200) {
-                const userData = await response.json();
-                onSuccessfulLogin(userData);
-            } else {
-                const errorMessage = await response.text();
-                onFailedLogin(errorMessage);
-            }
-        } catch (error) {
-            console.error("Error:", error);
+            remember: checkbox
         }
-    };
+
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
+
+    }
 
     document.getElementById('loginForm').addEventListener('submit', loginUser);
 
