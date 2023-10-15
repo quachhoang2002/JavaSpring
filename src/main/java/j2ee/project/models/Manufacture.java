@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Table(name = "manufacture")
 @Entity
@@ -29,19 +30,19 @@ public class Manufacture {
     @Column(name = "image_path", nullable = true)
     private String imagePath;
 
-    @Column(name = "createat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp createat;
+    @Column(name = "createdAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
 
     //get set
     public Manufacture() {
     }
 
-    public Manufacture(Integer id, String name, String address, String phone, Timestamp createat) {
+    public Manufacture(Integer id, String name, String address, String phone, Timestamp createdAt) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
-        this.createat = createat;
+        this.createdAt = createdAt;
     }
 
     public Integer getId() {
@@ -64,8 +65,12 @@ public class Manufacture {
         return this.phone;
     }
 
-    public Timestamp getCreateat() {
-        return this.createat;
+    public String getCreatedAt() {
+        if (this.createdAt == null) {
+            return null;
+        }
+        //return formrta yyyy-mm-dd hh:mm:ss
+        return this.createdAt.toString();
     }
 
     public void setId(Integer id) {
@@ -84,8 +89,10 @@ public class Manufacture {
         this.phone = phone;
     }
 
-    public void setCreateat(Timestamp createat) {
-        this.createat = createat;
+    @PrePersist
+    private void setCreatedAt() {
+        // Set the createdAt field to the current timestamp when persisting the entity
+        createdAt = new Timestamp(new Date().getTime());
     }
 
     public void setImagePath(String imagePath){
@@ -93,8 +100,8 @@ public class Manufacture {
     }
     @Override
     public String toString() {
-        return String.format("{id:%d, name:'%s', address:'%s', phone:'%s', createat:'%s'}",
-                this.id, this.name, this.address, this.phone, this.createat);
+        return String.format("{id:%d, name:'%s', address:'%s', phone:'%s', createdAt:'%s'}",
+                this.id, this.name, this.address, this.phone, this.getCreatedAt());
     }
 
 }

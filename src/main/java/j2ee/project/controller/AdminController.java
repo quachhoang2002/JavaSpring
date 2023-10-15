@@ -21,4 +21,9 @@ public class AdminController {
     public String manufacture(){
         return "admin/manufacture.html";
     }
+
+    @GetMapping("/admin/category")
+    public String category(){
+        return "admin/category.html";
+    }
 }

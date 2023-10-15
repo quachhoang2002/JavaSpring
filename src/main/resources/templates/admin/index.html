@@ -28,7 +28,7 @@
         </div>
     </form>
     <!-- Navbar-->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
                aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
@@ -56,9 +56,16 @@
                     </a>
                     <div class="sb-sidenav-menu-heading">Interface</div>
 
-                    <a class="nav-link collapsed" href="/admin?manufacture"  aria-expanded="false" aria-controls="collapseLayouts">
+                    <a class="nav-link collapsed" href="/admin?manufacture" aria-expanded="false"
+                       aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                         Manufacture
+                    </a>
+
+                    <a class="nav-link collapsed" href="/admin?category" aria-expanded="false"
+                       aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Category
                     </a>
 
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
@@ -150,6 +157,7 @@
 <script src="/js/admin/datatables-simple-demo.js"></script>
 <script src="/js/admin/dashboard.js"></script>
 <script src="/js/admin/manufacture.js"></script>
+<script src="/js/admin/category.js"></script>
 <script>
 
     const contentDiv = document.getElementById('layoutSidenav_content');
@@ -165,10 +173,17 @@
         renderManufactureItems()
     }
 
+    const renderCategory = () => {
+        contentDiv.innerHTML = RenderCategoryTemplate();
+        renderCategoryItems()
+    }
+
     //check url for render like ?manufacture or ?dashboard
     const url = window.location.href;
     if (url.includes('?manufacture')) {
         renderManufacture();
+    } else if (url.includes('?category')) {
+        renderCategory();
     } else {
         renderDashboard();
     }

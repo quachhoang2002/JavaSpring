@@ -24,8 +24,8 @@ public class User {
     @Column(name = "phone", nullable = true)
     private String phone;
 
-    @Column(name = "createat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp createat;
+    @Column(name = "createdat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdat;
 
     @Column(name = "status", nullable = true, columnDefinition = "INT DEFAULT 1")
     private Integer status;
@@ -37,13 +37,13 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String name, String email, String password, String phone, Timestamp createat, Integer status) {
+    public User(Integer id, String name, String email, String password, String phone, Timestamp createdAt, Integer status) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.createat = createat;
+        this.createdat = createdAt;
         this.status = status;
     }
 
@@ -67,8 +67,8 @@ public class User {
         return this.phone;
     }
 
-    public Timestamp getCreateat() {
-        return this.createat;
+    public String getCreateat() {
+        return this.createdat.toString().substring(0, 19);
     }
 
     public Integer getStatus() {
@@ -92,7 +92,7 @@ public class User {
             ", email='" + getEmail() + "'" +
             ", password='" + getPassword() + "'" +
             ", phone='" + getPhone() + "'" +
-            ", createat='" + getCreateat() + "'" +
+            ", createdat='" + getCreateat()+ "'" +
             ", status='" + getStatus() + "'" +
             ", token='" + getToken() + "'" +
             "}";
