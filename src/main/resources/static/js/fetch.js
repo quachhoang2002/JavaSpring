@@ -33,7 +33,7 @@ function postDataToApi(apiUrl, data, onSuccess, onError) {
             if (responseData.status === "error" && responseData.message) {
                 // If the response contains an error status and message, call the onError callback
                 if (onError && typeof onError === "function") {
-                    onError(responseData.message);
+                    onError(responseData);
                 }
             } else {
                 // If there is no error, call the onSuccess callback with the response data

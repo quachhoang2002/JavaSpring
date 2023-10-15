@@ -68,6 +68,12 @@
                         Category
                     </a>
 
+                    <a class="nav-link collapsed" href="/admin?product" aria-expanded="false"
+                       aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Product
+                    </a>
+
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                        aria-expanded="false" aria-controls="collapsePages">
                         <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
@@ -158,34 +164,27 @@
 <script src="/js/admin/dashboard.js"></script>
 <script src="/js/admin/manufacture.js"></script>
 <script src="/js/admin/category.js"></script>
+<script src="/js/admin/product.js"></script>
 <script>
-
     const contentDiv = document.getElementById('layoutSidenav_content');
-
-    // render dashboard
-    const renderDashboard = () => {
-        //but dashboard is a string
-        contentDiv.innerHTML = RenderDashboard();
-    }
-
-    const renderManufacture = () => {
-        contentDiv.innerHTML = RenderManufactureTemplate();
-        renderManufactureItems()
-    }
-
-    const renderCategory = () => {
-        contentDiv.innerHTML = RenderCategoryTemplate();
-        renderCategoryItems()
-    }
 
     //check url for render like ?manufacture or ?dashboard
     const url = window.location.href;
-    if (url.includes('?manufacture')) {
-        renderManufacture();
-    } else if (url.includes('?category')) {
-        renderCategory();
-    } else {
-        renderDashboard();
+    switch (true) {
+        case url.includes('?manufacture'):
+            contentDiv.innerHTML = RenderManufactureTemplate();
+            renderManufactureItems()
+            break;
+        case url.includes('?category'):
+            contentDiv.innerHTML = RenderCategoryTemplate();
+            renderCategoryItems()
+            break;
+        case url.includes('?product'):
+            contentDiv.innerHTML = RenderProductTemplate();
+            renderProductItems()
+            break;
+        default:
+            contentDiv.innerHTML = RenderDashboard();
     }
 
 </script>

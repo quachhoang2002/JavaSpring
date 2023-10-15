@@ -20,6 +20,7 @@ import java.util.Optional;
 @RequestMapping("/api/admin/manufacture")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class ManufactureController extends Controller {
+    private static final String IMAGE_FOLDER = "manufacture";
     @Autowired
     private ManufactureService manufactureService;
 
@@ -60,7 +61,7 @@ public class ManufactureController extends Controller {
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
                 // Save the image file and get the file path
-                String imagePath = manufactureService.saveImage(imageFile);
+                String imagePath = buildImagePath(imageFile,IMAGE_FOLDER);
                 // Set the image path in the Manufacture object
                 manufacture.setImagePath(imagePath);
             }
@@ -87,7 +88,7 @@ public class ManufactureController extends Controller {
 
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
-                String imagePath = manufactureService.saveImage(imageFile);
+                String imagePath = buildImagePath(imageFile,IMAGE_FOLDER);
                 updatedManufacture.setImagePath(imagePath);
             }
             Manufacture updated = manufactureService.updateManufacture(id, updatedManufacture);
