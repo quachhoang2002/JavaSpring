@@ -1,12 +1,9 @@
 package j2ee.project.controller.Admin;
 
-import j2ee.project.DTO.AddProductReq;
+import j2ee.project.DTO.ProductDTO;
 import j2ee.project.controller.Controller;
-import j2ee.project.models.Category;
 import j2ee.project.models.Product;
-import j2ee.project.models.Manufacture;
 import j2ee.project.service.ProductService;
-import j2ee.project.service.ManufactureService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,6 @@ import java.util.Optional;
 @RequestMapping("/api/admin/product")
 public class ProductController extends Controller {
 
-    private static final String IMAGE_FOLDER = "product";
     @Autowired
     private ProductService productService;
 
@@ -56,8 +52,7 @@ public class ProductController extends Controller {
 
     @PostMapping("")
     public ResponseEntity<String> addProduct(
-            @Valid @ModelAttribute AddProductReq productReq,
-            @RequestParam(value = "image", required = false) MultipartFile imageFile,
+            @Valid @ModelAttribute ProductDTO productReq,
             BindingResult bindingResult
     ) {
         try {
@@ -69,11 +64,6 @@ public class ProductController extends Controller {
                 return errorResponse(errorMessage.toString());
             }
 
-            if (imageFile != null && !imageFile.isEmpty()) {
-                String imagePath = this.buildImagePath(imageFile, IMAGE_FOLDER);
-                productReq.setImagePath(imagePath);
-            }
-
             Product data = productService.add(productReq);
             return successResponse("Add product successfully", data);
         } catch (Exception e) {
@@ -82,10 +72,21 @@ public class ProductController extends Controller {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable int id, @ModelAttribute Product product) {
+    public ResponseEntity<String> updateProduct(
+            @PathVariable int id,
+            @Valid @ModelAttribute ProductDTO req,
+            BindingResult bindingResult
+    ) {
         try {
-            product.setId(id);
-            Product data = productService.update(product);
+            if (bindingResult.hasErrors()) {
+                StringBuilder errorMessage = new StringBuilder("Validation errors: ");
+                bindingResult.getAllErrors().forEach(error -> {
+                    errorMessage.append(error.getDefaultMessage()).append("; ");
+                });
+                return errorResponse(errorMessage.toString());
+            }
+
+            Product data = productService.update(req, id);
             return successResponse("Update manufacture.js successfully", data);
         } catch (Exception e) {
             return errorResponse(e.getMessage());
