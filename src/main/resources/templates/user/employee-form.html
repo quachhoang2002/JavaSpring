@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Employee Form</h1>
-<form id="employeeForm" enctype=”multipart/form-data”>
+<form id="employeeForm" enctype="multipart/form-data"> <!-- Note the enctype attribute for file uploads -->
     Họ và tên: <input name="fullname"><br>
     Ngày sinh: <input name="birthday"><br>
     Quốc tịch:
@@ -18,9 +18,9 @@
     <input name="gender" type="radio" value="true">Nam
     <input name="gender" type="radio" value="false">Nữ<br>
     TT hôn nhân:
-    TT hôn nhân:
     <input name="married" type="checkbox" value="true">Đã có gia đình?<br>
-
+    <label for="imageFile">Avatar:</label>
+    <input type="file" name="imageFile" id="imageFile" accept="image/*"><br> <!-- Added the input field for image upload -->
     Sở thích:
     <input name="hobbies" type="checkbox" value="Đọc sách">Đọc sách
     <input name="hobbies" type="checkbox" value="Du lịch">Du lịch
@@ -36,6 +36,9 @@
     <p>Họ và tên: <span id="fullname"></span></p>
     <p>Ngày sinh: <span id="birthday"></span></p>
     <p>Giới tính: <span id="gender"></span></p>
+    <p>Avatar: <span id="avatar"></span>
+    </p>
+
     <p>Quốc tịch: <span id="country"></span></p>
     <p>TT hôn nhân: <span id="married"></span></p>
     <p>Sở thích: <span id="hobbies"></span></p>
@@ -64,13 +67,18 @@
         notes: formData.get("notes"),
     };
 
+    // Get the selected file
+    const imageFile = formData.get("imageFile");
+
+    // Create a new FormData object to send both data and the image
+    const formDataWithImage = new FormData();
+    formDataWithImage.append("data", JSON.stringify(data));
+    formDataWithImage.append("imageFile", imageFile);
+    console.log(formDataWithImage)
     // Tiếp tục gửi dữ liệu bằng fetch
-    fetch("/employees/create", {
+    fetch("/create", {
         method: "POST",
-        body: JSON.stringify(data), // Chuyển đổi dữ liệu thành chuỗi JSON
-        headers: {
-            "Content-Type": "application/json", // Đặt tiêu đề Content-Type cho yêu cầu
-        },
+        body: formDataWithImage, // Send the FormData object with both data and image
     })
     .then(response => response.json())
     .then(data => {
@@ -113,13 +121,10 @@
         } else {
             document.getElementById("hobbies").textContent = "Không có sở thích";
         }
+        document.getElementById("notes").textContent = data.notes;
 
-        // Kiểm tra xem trường "Ghi chú" có dữ liệu không
-        if (data.notes) {
-            document.getElementById("notes").textContent = data.notes;
-        } else {
-            document.getElementById("notes").textContent = "Không có ghi chú";
-        }
+        // Set the avatar image source
+        document.getElementById("avatar").textContent = data.imageUrl;
     })
     .catch(error => {
         console.error("Error:", error);

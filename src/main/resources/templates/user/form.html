@@ -22,7 +22,14 @@
 
 <!-- Display uploaded image -->
 <div id="imageContainer">
+    <img id="uploadedImage" src="" alt="Uploaded Image">
 </div>
+
+<!-- Display image path -->
+<p id="imagePath"></p>
+
+<!-- Display file path -->
+<p id="filePath"></p>
 
 <!-- Provide download link for the document -->
 <div id="documentLinkContainer">
@@ -31,55 +38,58 @@
 
 <script>
     function uploadFiles() {
-    const formData = new FormData();
-    formData.append("imageFile", document.getElementById("imageFile").files[0]);
-    formData.append("documentFile", document.getElementById("documentFile").files[0]);
+        const formData = new FormData();
+        formData.append("imageFile", document.getElementById("imageFile").files[0]);
+        formData.append("documentFile", document.getElementById("documentFile").files[0]);
 
-    fetch("/upload", {
-        method: "POST",
-        body: formData,
-    })
-    .then(response => response.text())
-    .then(result => {
-        // Extract file names from the result text using regular expressions
-        const imageFileNameMatch = result.match(/Image:\s*(\S+)/);
-        const documentFileNameMatch = result.match(/Document:\s*(\S+)/);
+        fetch("/upload", {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(result => {
+            // Check if the result contains the expected text
+            if (result.includes("Files uploaded successfully!")) {
+                const imageFileName = extractFileName(result, "Image:");
+                const documentFileName = extractFileName(result, "Document:");
 
-        // Check if matches were found
-        if (imageFileNameMatch && documentFileNameMatch) {
-            let imageFileName = imageFileNameMatch[1];
-            let documentFileName = documentFileNameMatch[1];
+                // Construct the image and document URLs
+                const imageUrl = `/assets/images/${imageFileName}`;
+                const documentUrl = `/download/${documentFileName}`;
 
-            // Remove the trailing comma from file names (if present)
-            imageFileName = imageFileName.replace(/,$/, '');
-            documentFileName = documentFileName.replace(/,$/, '');
+                // Display the uploaded image
+                document.getElementById("uploadedImage").src = imageUrl;
 
-            // Construct the image and download links
-            const imageUrl = `/assets/images/${imageFileName}`;
-            const documentUrl = `/assets/images/${documentFileName}`;
+                // Display the image path
+                const imagePathElement = document.getElementById("imagePath");
+                imagePathElement.textContent = `Image Path: ${imageUrl}`;
 
-            document.getElementById("imageContainer").innerHTML = `<img src="${imageUrl}" alt="Uploaded Image">`;
-            document.getElementById("documentLinkContainer").innerHTML = `<a href="${documentUrl}" download="${documentFileName}">Download Document</a>`;
-        } else {
-            console.error("File names not found in the response.");
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-    });
-}
+                // Display the file path
+                const filePathElement = document.getElementById("filePath");
+                filePathElement.textContent = `File Path: ${documentUrl}`;
 
-function extractFileName(text, prefix) {
-    const startIndex = text.indexOf(prefix);
-    if (startIndex !== -1) {
-        const endIndex = text.indexOf(",", startIndex);
-        if (endIndex !== -1) {
-            return text.substring(startIndex + prefix.length, endIndex).trim();
-        }
+                // Provide the download link for the document
+                const downloadLink = `<a href="${documentUrl}" download="${documentFileName}">Download Document</a>`;
+                document.getElementById("documentLinkContainer").innerHTML = downloadLink;
+            } else {
+                console.error("File upload failed.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
     }
-    return "";
-}
 
+    function extractFileName(text, prefix) {
+        const startIndex = text.indexOf(prefix);
+        if (startIndex !== -1) {
+            const endIndex = text.indexOf(",", startIndex);
+            if (endIndex !== -1) {
+                return text.substring(startIndex + prefix.length, endIndex).trim();
+            }
+        }
+        return "";
+    }
 </script>
 </body>
 </html>

@@ -31,4 +31,9 @@ public class ProductService {
         return productRepository.findById(Integer.valueOf(productId));
     }
 
+    public boolean checkIfProductExists(int id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        return productOptional.isPresent();
+    }
+
 }

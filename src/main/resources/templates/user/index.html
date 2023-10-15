@@ -132,8 +132,8 @@
             <form id="cart-form" class="d-flex">
                 <button id="logout-btn" class="btn btn-person-dash-fill" type="submit" onclick="" style="display: none">
 
-                        <i class="bi-person-fill me-1"></i>
-                        Log out
+                    <i class="bi-person-fill me-1"></i>
+                    Log out
 
                 </button>
 
@@ -146,8 +146,8 @@
 
                 <button id="login-btn" class="btn btn-outline-dark" type="submit" >
                     <a href="/login">
-                    <i class="bi-person-fill me-1"></i>
-                    Sign in
+                        <i class="bi-person-fill me-1"></i>
+                        Sign in
                     </a>
                 </button>
 
@@ -232,7 +232,7 @@
             </div>
         </div>
         <div id="pagination-container" class="text-center">
-            <div id="page-buttons"></div>
+            <button id="page-buttons" style="border: none; background-color: white;"></button>
         </div>
     </div>
 </section>
@@ -305,7 +305,7 @@
                                               </div>
                                               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                               <div class="text-center">
-                                                  <a class="btn btn-outline-dark mt-auto" href="#">View options</a>
+                                                  <a class="btn btn-outline-dark mt-auto" href="/getItem/${product.id}">View options</a>
                                               </div>
                                               </div>
                                           </div>
@@ -318,37 +318,43 @@
 
     // Hàm để hiển thị nút trang
     function renderPagination(products) {
-      console.log(products);
+<!--      console.log(products);-->
       // Tính toán tổng số trang dựa trên số lượng sản phẩm và sản phẩm trên mỗi trang
       const totalPages = Math.ceil(products.length / productsPerPage);
 
       // Xóa nội dung hiện tại của phần tử nút trang
       pageButtonsContainer.innerHTML = "";
 
+
       // Tạo nút cho từng trang và thêm sự kiện xử lý khi nhấn vào nút trang
       for (let i = 1; i <= totalPages; i++) {
         const pageButton = document.createElement("button");
         pageButton.textContent = i;
         pageButton.classList.add("btn", "btn-outline-dark", "mx-1");
-        pageButton.classList.add("btn-pagination"); // Thêm lớp này để chọn nút bằng CSS
+        pageButton.classList.add("btn-paginations"); // Thêm lớp này để chọn nút bằng CSS
 
         // Thêm sự kiện click và sử dụng hàm handlePageButtonClick
         pageButton.addEventListener("click", (e) => {
           handlePageButtonClick(e, i, products);
         });
 
+
         pageButtonsContainer.appendChild(pageButton);
       }
     }
     function handlePageButtonClick(e, pageIndex, products) {
       // Loại bỏ lớp active từ tất cả các nút trang
-      const allPageButtons = document.querySelectorAll(".btn-pagination");
-      allPageButtons.forEach((button) => {
+      console.log("Day la e: " + e);
+      const allPageButtons = document.querySelectorAll("#page-buttons");
+
+       console.log(allPageButtons);
+
+      allPageButtons.child.forEach((button) => {
         button.classList.remove("active-page-button");
       });
 
       // Thêm lớp active cho nút trang đang được chọn
-      e.currentTarget.classList.add("active-page-button");
+      e.currentTarget.classList.toggle("active-page-button");
 
       currentPage = pageIndex;
       renderProducts(products);

@@ -1,5 +1,7 @@
 package j2ee.project.models;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Date;
 
 public class Employee {
@@ -12,6 +14,28 @@ public class Employee {
     private String notes;
     private String hobbiesStr;
     public Employee() {
+    }
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
+    public Employee(String fullname, Date birthday, boolean gender, String country, boolean married, String[] hobbies, String notes, String hobbiesStr, String imageUrl) {
+        this.fullname = fullname;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.country = country;
+        this.married = married;
+        this.hobbies = hobbies;
+        this.notes = notes;
+        this.hobbiesStr = hobbiesStr;
+        this.imageUrl = imageUrl;
     }
 
     public Employee(String fullname, Date birthday, boolean gender, String country, boolean married, String[] hobbies, String notes) {

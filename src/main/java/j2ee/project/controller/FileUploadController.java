@@ -18,12 +18,11 @@ public class FileUploadController {
 
     @Value("${file.upload-dir}")
     private String uploadDir; // This should point to your actual directory path
-
-    // Mapping for the file upload form
-//    @GetMapping("/upload")
-//    public String showUploadForm() {
-//        return "upload/form"; // You can create an HTML form for file upload
-//    }
+   // Mapping for the file upload form
+    @GetMapping("/upload")
+    public String showUploadForm() {
+        return "user/form.html"; // You can create an HTML form for file upload
+    }
 
     // Modify the uploadFiles method to use a single method for generating unique file names
     @PostMapping("/upload")
@@ -37,7 +36,10 @@ public class FileUploadController {
         String documentFileName = generateUniqueFileName(documentFile.getOriginalFilename());
 
         String responseMessage = validateAndUploadFiles(imageFile, documentFile, imageFileName, documentFileName);
-
+        String imageUrl = "/assets/images/" + imageFileName;
+        String documentUrl = "/download/" + documentFileName;
+        model.addAttribute("imageUrl", imageUrl);
+        model.addAttribute("documentUrl", documentUrl);
         if (responseMessage == null) {
             return "Files uploaded successfully! Image: " + imageFileName + ", Document: " + documentFileName;
         } else {

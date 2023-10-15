@@ -1,26 +1,27 @@
 package j2ee.project.controller;
 
-import ch.qos.logback.core.model.Model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import j2ee.project.models.Employee;
 import org.springframework.beans.BeanUtils;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@org.springframework.stereotype.Controller
-@RequestMapping("/employees")
-public class EmployeeController extends Controller{
-    @GetMapping("/form")
-    public String showForm(Employee employeeDTO) {
-        return "user/employee-form.html"; // Tạo một file HTML tên là "employee-form.html" để hiển thị form nhập liệu
-    }
+@Controller
+public class EmployeeController {
+    @GetMapping("/form-employ")
+    public String showForm() {
+        return "user/employee-form.html"; }
+
     @PostMapping("/create")
     @ResponseBody
-    public Employee createEmployee(@RequestBody String employeeDTOJson) {
+    public Employee createEmployee(@RequestPart("data") String employeeDTOJson, @RequestPart("imageFile") MultipartFile imageFile) {
         // Sử dụng ObjectMapper để phân tích chuỗi JSON thành một đối tượng EmployeeDTO
         ObjectMapper objectMapper = new ObjectMapper();
         Employee employeeDTO = null;
@@ -37,7 +38,8 @@ public class EmployeeController extends Controller{
 
             // Sao chép các thuộc tính cơ bản
             employee.setFullname(employeeDTO.getFullname());
-            employee.setBirthday(employeeDTO.getBirthday());
+            Date birthday = employeeDTO.getBirthday();
+            employee.setBirthday(birthday);
             employee.setGender(employeeDTO.isGender());
             employee.setCountry(employeeDTO.getCountry());
             employee.setMarried(employeeDTO.isMarried());
@@ -55,6 +57,23 @@ public class EmployeeController extends Controller{
                 employee.setHobbies(new String[0]);
             }
 
+            if (!imageFile.isEmpty()) {
+                try {
+                    // Save the image to a specific directory or database
+                    // You can use a service or repository for this purpose
+                    byte[] imageBytes = imageFile.getBytes();
+                    // Save the image data as needed
+
+                    // Set the image URL or identifier in your employee object
+                    // For example, you can store the image URL
+                    String imageUrl = "/images/" + imageFile.getOriginalFilename(); // This is just an example URL
+                    employee.setImageUrl(imageUrl);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // Handle the exception if there's an issue with image file processing
+                }
+            }
+
             // Đối tượng Employee đã được tạo và sẽ được trả về dưới dạng JSON
             return employee;
         } else {
@@ -62,4 +81,6 @@ public class EmployeeController extends Controller{
             return null;
         }
     }
+
+
 }

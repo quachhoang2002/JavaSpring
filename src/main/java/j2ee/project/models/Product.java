@@ -1,9 +1,12 @@
 package j2ee.project.models;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
-@Table(name = "product_entity")
+import java.sql.Timestamp;
+import java.util.Date;
+
+@Table(name = "products")
 @Entity
 public class Product {
     @Id
@@ -19,12 +22,14 @@ public class Product {
     private double price;
 
     @NotNull
-    @Column(name = "category_id", nullable = false)
-    private int category_id;
+    @ManyToOne
+    @JoinColumn(name = "category_id",nullable = false ,referencedColumnName = "id")
+    private Category category;
 
     @NotNull
-    @Column
-    private int supplier_id;
+    @ManyToOne
+    @JoinColumn(name = "manufacture_id",nullable = false ,referencedColumnName = "id")
+    private Manufacture manufacture;
 
     @NotNull
     @Column(name = "description", nullable = false)
@@ -34,21 +39,13 @@ public class Product {
     @Column(name = "image", nullable = false)
     private String image;
 
-    public Product(Integer id, String name, double price, int category_id, int supplier_id, String description, String image) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.category_id = category_id;
-        this.supplier_id = supplier_id;
-        this.description = description;
-        this.image = image;
-    }
+    @Column(name = "createdAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
+
+    @Column(name = "updatedAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp updatedAt;
 
     public Product() {
-    }
-
-    public Product(Integer id) {
-        this.id = id;
     }
 
     public Integer getId() {
@@ -75,20 +72,20 @@ public class Product {
         this.price = price;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public int getSupplier_id() {
-        return supplier_id;
+    public Manufacture getManufacture() {
+        return manufacture;
     }
 
-    public void setSupplier_id(int supplier_id) {
-        this.supplier_id = supplier_id;
+    public void setManufacture(Manufacture manufacture) {
+        this.manufacture = manufacture;
     }
 
     public String getDescription() {
@@ -106,4 +103,31 @@ public class Product {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @PrePersist
+    private void setCreatedAt() {
+        // Set the createdAt field to the current timestamp when persisting the entity
+        createdAt = new Timestamp(new Date().getTime());
+    }
+
+    public String getCreatedAt() {
+        if (createdAt == null) {
+            return null;
+        }
+        return createdAt.toString().substring(0, 19);
+    }
+
+    @PreUpdate
+    private void setUpdatedAt() {
+        // Set the updatedAt field to the current timestamp when persisting the entity
+        updatedAt = new Timestamp(new Date().getTime());
+    }
+
+    public String getUpdatedAt() {
+        if (updatedAt == null) {
+            return null;
+        }
+        return updatedAt.toString().substring(0, 19);
+    }
+
 }
