@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ManufactureService {
+public class ManufactureService extends BaseService {
     private final ManufactureRepository manufactureRepository;
 
     @Autowired
@@ -68,10 +68,9 @@ public class ManufactureService {
         manufactureRepository.deleteById(id);
     }
 
-    public long countAllManufacture(){
+    public long countAllManufacture() {
         return manufactureRepository.count();
     }
-
 
 
 }

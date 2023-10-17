@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CategoryService {
+public class CategoryService extends BaseService {
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;

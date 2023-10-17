@@ -48,7 +48,6 @@ function RenderProductTemplate() {
                               </table>
                           </div>
                           
-                          // Pagination
                             <div class="card-footer">
                             </div>
                        </div>
@@ -71,10 +70,35 @@ function RenderProductTemplate() {
                                  <label for="name" class="form-label">Name</label>
                                  <input type="text" class="form-control" id="name" name="name" required>
                              </div>
+                              <!-- select category -->
+                             <div class="mb-3">
+                                <label for="category"  class="form-label"> Category </label>  
+                                <select class="form-select" aria-label="Default select example" id="category" name="category" required>
+                               </select> 
+                              </div>
+                            
+                             <!-- select manufacture -->
+                             <div class="mb-3">
+                                <label for="manufacture" class="form-label"> Manufacture </label>
+                                <select class="form-select" aria-label="Default select example" id="manufacture" name="manufacture" required>
+                                </select>
+                              </div>
+                                      
+                                      
+                              <div class="mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" id="price" name="price" required>
+                              </div>
+                              
                              <div class="mb-3">
                                  <label for="description" class="form-label">Description</label>
                                  <input type="text" class="form-control" id="description" name="description" required>
                              </div>
+                             
+                              <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="image" name="image" required>
+                              </div>
                              
                          </form>
                      </div>
@@ -103,10 +127,35 @@ function RenderProductTemplate() {
                                  <label for="name" class="form-label">Name</label>
                                  <input type="text" class="form-control" id="name" name="name" required>
                              </div>
+                            <!-- select category -->
+                             <div class="mb-3">
+                                <label for="category"  class="form-label"> Category </label>  
+                                <select class="form-select" aria-label="Default select example" id="category" name="category" required>
+                               </select> 
+                              </div>
+                            
+                             <!-- select manufacture -->
+                             <div class="mb-3">
+                                <label for="manufacture" class="form-label"> Manufacture </label>
+                                <select class="form-select" aria-label="Default select example" id="manufacture" name="manufacture" required>
+                                </select>
+                              </div>
+                                      
+                              
+                              <div class="mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" id="price" name="price" required>
+                              </div>
+                              
                              <div class="mb-3">
                                  <label for="description" class="form-label">Description</label>
                                  <input type="text" class="form-control" id="description" name="description" required>
                              </div>
+                             
+                              <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" class="form-control" id="image" name="image" required>
+                              </div>
                             
                          </form>
                      </div>
@@ -127,7 +176,7 @@ async function renderProductItems() {
         tableBody.innerHTML = ''; // Clear existing rows
 
         const editBtn = (id) => {
-            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProduct" onclick="editProductForm(${id})">editProduct</button>`
+            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProduct" onclick="editProductForm(${id})">Edit</button>`
         }
 
         const deleteBtn = (id) => {
@@ -155,6 +204,14 @@ async function renderProductItems() {
                              </td>
                         `
         });
+
+        //category and manufacture in form
+        const categorySelect = document.querySelector("#addForm #category");
+        const manufactureSelect = document.querySelector("#addForm #manufacture");
+        //click event for get option
+        renderOptionCategory(categorySelect);
+        renderOptionManufacture(manufactureSelect);
+
 
         // Pagination
         const pagination = document.querySelector(".card-footer");
@@ -196,19 +253,19 @@ async function addProduct() {
         alert(error.message);
     }
 
-    // const form = document.querySelector("#addForm");
-    //
-    // const data = {
-    //     name: form.name.value,
-    //     address: form.address.value,
-    //     phone: form.phone.value
-    // }
     const form = document.querySelector("#addForm");
-
 
     const formData = new FormData();
     formData.append('name', form.name.value);
+    formData.append('categoryID', form.category.value);
+    formData.append('manufactureID', form.manufacture.value);
+    formData.append('price', form.price.value);
     formData.append('description', form.description.value);
+
+
+    if (form.image.files[0]) {
+        formData.append('image', form.image.files[0]);
+    }
 
     await postDataToApi(PRODUCT_URL, formData, successCallback, errorCallback);
 
@@ -230,7 +287,7 @@ async function deleteProduct(url) {
 async function editProduct(id) {
     const errorCallback = (error) => {
         console.log(error);
-        alert(error);
+        alert(error.message)
     }
     const successCallback = async (response) => {
         alert(response.message);
@@ -243,7 +300,15 @@ async function editProduct(id) {
     const form = document.querySelector("#editProductForm");
     const formData = new FormData();
     formData.append('name', form.name.value);
+    formData.append('categoryID', form.category.value);
+    formData.append('manufactureID', form.manufacture.value);
+    formData.append('price', form.price.value);
     formData.append('description', form.description.value);
+
+    if (form.image.files[0]) {
+        formData.append('image', form.image.files[0]);
+    }
+
 
     await putDataToApi(editUrl, formData, successCallback, errorCallback);
     //remove event listener
@@ -254,8 +319,17 @@ async function editProductForm(id) {
     let successCallback = (response) => {
         console.log(response);
         const form = document.querySelector("#editProductForm");
+
+        renderOptionCategory(form.category)
+        renderOptionManufacture(form.manufacture)
+
+
         form.name.value = response.data.name;
         form.description.value = response.data.description;
+        form.price.value = response.data.price;
+        //write category and manufacture
+        form.category.innerHTML = `<option value="${response.data.category.id}">${response.data.category.name}</option>`
+        form.manufacture.innerHTML = `<option value="${response.data.manufacture.id}">${response.data.manufacture.name}</option>`
         //render button in footer
         const footer = document.querySelector("#editProduct .modal-footer");
         footer.innerHTML = `<button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`
@@ -265,8 +339,42 @@ async function editProductForm(id) {
     let errorCallback = (error) => {
         alert(error.message);
     }
+
     editUrl = `${PRODUCT_URL}/${id}`;
 
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
+
+function renderOptionCategory(select = null) {
+    let successCallback = (response) => {
+        if (select) {
+            select.innerHTML = '';
+            response.data.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name}</option>`
+            });
+        }
+    }
+
+    let errorCallback = (error) => {
+    }
+
+    getDataFromApi(CATEGORY_URL, successCallback, errorCallback);
+}
+
+function renderOptionManufacture(select = null) {
+    let successCallback = (response) => {
+        if (select) {
+            select.innerHTML = '';
+            response.data.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name}</option>`
+            });
+        }
+    }
+
+    let errorCallback = (error) => {
+    }
+
+    getDataFromApi(MANUFACTURE_URL, successCallback, errorCallback);
+}
+
 

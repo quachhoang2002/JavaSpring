@@ -61,7 +61,7 @@ public class ManufactureController extends Controller {
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
                 // Save the image file and get the file path
-                String imagePath = buildImagePath(imageFile,IMAGE_FOLDER);
+                String imagePath = this.manufactureService.buildImagePath(imageFile, IMAGE_FOLDER);
                 // Set the image path in the Manufacture object
                 manufacture.setImagePath(imagePath);
             }
@@ -88,7 +88,7 @@ public class ManufactureController extends Controller {
 
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
-                String imagePath = buildImagePath(imageFile,IMAGE_FOLDER);
+                String imagePath = this.manufactureService.buildImagePath(imageFile,IMAGE_FOLDER);
                 updatedManufacture.setImagePath(imagePath);
             }
             Manufacture updated = manufactureService.updateManufacture(id, updatedManufacture);

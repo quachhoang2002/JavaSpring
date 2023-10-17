@@ -45,7 +45,6 @@ function RenderManufactureTemplate() {
                               </table>
                           </div>
                           
-                          // Pagination
                             <div class="card-footer">
                             </div>
                        </div>

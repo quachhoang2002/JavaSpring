@@ -1,8 +1,9 @@
 package j2ee.project.DTO;
 
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
 
-public class AddProductReq {
+public class ProductDTO {
     @NotNull(message = "Name is mandatory")
     private String name;
 
@@ -15,11 +16,12 @@ public class AddProductReq {
     @NotNull(message = "Manufacture is mandatory")
     private Integer manufactureID;
 
+    @NotNull(message = "Image is mandatory")
+    private MultipartFile image;
+
     private String description;
 
-    private String imagePath;
-
-    public AddProductReq() {
+    public ProductDTO() {
     }
 
     public String getName() {
@@ -63,12 +65,13 @@ public class AddProductReq {
         this.description = description;
     }
 
-    public String getImagePath() {
-        return imagePath;
+
+
+    public MultipartFile getImage() {
+        return image;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
-
 }
