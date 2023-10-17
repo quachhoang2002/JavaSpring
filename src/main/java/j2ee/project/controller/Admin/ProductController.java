@@ -34,7 +34,7 @@ public class ProductController extends Controller {
                                               @RequestParam(defaultValue = "ASC") String sortType
     ) {
         try {
-            List<Product> products = productService.getAll(page, size, sortBy, sortType);
+            List<Product> products = productService.getAllSort(page, size, sortBy, sortType);
 
             long totalItems = productService.count();
             Map<String, Object> metaData = buildPage(totalItems, page, size);

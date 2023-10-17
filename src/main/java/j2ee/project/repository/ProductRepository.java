@@ -21,4 +21,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
         Sort sort = Sort.by(direction, sortBy);
         return findAll(sort);
     }
+
+    List<Product> findByCategory(Category category);
 }

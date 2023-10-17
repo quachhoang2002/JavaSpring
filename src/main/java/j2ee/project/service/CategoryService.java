@@ -1,8 +1,9 @@
 package j2ee.project.service;
 
 import j2ee.project.models.Category;
-import j2ee.project.models.Manufacture;
+import j2ee.project.models.Product;
 import j2ee.project.repository.CategoryRepository;
+import j2ee.project.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,13 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     //add category
@@ -26,11 +30,13 @@ public class CategoryService {
 
     //get all categories
     // READ - Get all Manufactories with pagination
-    public List<Category> getAll(int page, long limit, String sortBy, String sortType) {
+    public List<Category> getAllSort(int page, long limit, String sortBy, String sortType) {
         //get and sort by id
         return categoryRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit).toList();
     }
-
+    public List<Category> getAll(){
+        return categoryRepository.findAll();
+    }
     //get category by id
     public Optional<Category> getCategoryById(Integer id) {
         return categoryRepository.findById(id);
@@ -52,4 +58,24 @@ public class CategoryService {
     public long countAllManufacture(){
         return categoryRepository.count();
     }
+
+    public void deleteCategoryAndProducts(int categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+
+        if (category == null) {
+            throw new RuntimeException("Category not found");
+        }
+
+        // Lấy danh sách sản phẩm thuộc về danh mục này
+        List<Product> products = productRepository.findByCategory(category);
+
+        // Xóa danh mục
+        categoryRepository.delete(category);
+
+        // Xóa các sản phẩm thuộc danh mục này
+        for (Product product : products) {
+            productRepository.delete(product);
+        }
+    }
+
 }

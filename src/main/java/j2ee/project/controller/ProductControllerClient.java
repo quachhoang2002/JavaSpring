@@ -1,11 +1,10 @@
 package j2ee.project.controller;
 
+import j2ee.project.DTO.AddProductReq;
 import j2ee.project.models.Product;
-import j2ee.project.models.User;
 import j2ee.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,19 +13,20 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/product/")
-public class ProductController extends Controller{
+public class ProductControllerClient extends Controller{
     @Autowired
     private ProductService productService;
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<String> addProduct(@RequestBody Product product) {
+    public ResponseEntity<String> addProduct(@RequestBody AddProductReq productReq) {
         try {
-            productService.addProduct(product);
-            return successResponse("Add successfully", null);
+            Product product = productService.add(productReq);
+            return successResponse("Add successfully", product);
         } catch (Exception e) {
             return errorResponse(e.getMessage());
         }
     }
+
     @GetMapping("/getAll")
     @ResponseBody
     public ResponseEntity<List<Product>> getAllProducts() {

@@ -51,11 +51,13 @@ public class ProductService {
 
     //get all categories
     // READ - Get all Manufactories with pagination
-    public List<Product> getAll(int page, long limit, String sortBy, String sortType) {
+    public List<Product> getAllSort(int page, long limit, String sortBy, String sortType) {
         //get and sort by id
         return productRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit).toList();
     }
-
+    public List<Product> getAll(){
+        return productRepository.findAll();
+    }
     //get product by id
     public Optional<Product> getById(Integer id) {
         return productRepository.findById(id);
@@ -76,5 +78,9 @@ public class ProductService {
 
     public long count() {
         return productRepository.count();
+    }
+
+    public Optional<Product> getProductById(int productId) {
+        return productRepository.findById(productId);
     }
 }
