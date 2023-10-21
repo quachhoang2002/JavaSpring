@@ -1,4 +1,4 @@
-package j2ee.project.controller;
+package j2ee.project.controller.User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;

@@ -1,4 +1,4 @@
-package j2ee.project.controller;
+package j2ee.project.controller.Admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
