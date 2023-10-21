@@ -1,5 +1,6 @@
 package j2ee.project.controller.User;
 
+import j2ee.project.controller.Controller;
 import j2ee.project.models.*;
 import j2ee.project.repository.BillDetailsRepository;
 import j2ee.project.repository.BillRepository;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/bill/")
-public class BillController extends Controller{
+public class BillController extends Controller {
     @Autowired
     private BillRepository billRepository;
     @Autowired

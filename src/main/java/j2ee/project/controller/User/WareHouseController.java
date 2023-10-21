@@ -1,5 +1,6 @@
 package j2ee.project.controller.User;
 
+import j2ee.project.controller.Controller;
 import j2ee.project.models.Product;
 import j2ee.project.models.WareHouse;
 import j2ee.project.repository.WareHouseRepository;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/warehouse/")
-public class WareHouseController extends Controller{
+public class WareHouseController extends Controller {
     @Autowired
     private WareHouseRepository wareHouseRepository;
     @Autowired

@@ -1,5 +1,6 @@
 package j2ee.project.controller.User;
 
+import j2ee.project.controller.Controller;
 import j2ee.project.models.*;
 import j2ee.project.repository.CartRepository;
 import j2ee.project.repository.ProductRepository;
@@ -13,7 +14,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/cart/")
-public class CartController extends Controller{
+public class CartController extends Controller {
     @Autowired
     private CartService cartService;
     @Autowired
