@@ -1,14 +1,11 @@
 package j2ee.project.controller.Admin;
 
-import j2ee.project.controller.Controller;
+import j2ee.project.controller.User.Controller;
 import j2ee.project.models.Category;
-import j2ee.project.models.Manufacture;
 import j2ee.project.service.CategoryService;
-import j2ee.project.service.ManufactureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;

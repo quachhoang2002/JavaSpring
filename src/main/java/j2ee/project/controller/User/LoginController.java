@@ -1,6 +1,5 @@
 package j2ee.project.controller.User;
 
-import j2ee.project.controller.Controller;
 import j2ee.project.models.User;
 import j2ee.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

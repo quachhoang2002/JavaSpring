@@ -231,8 +231,8 @@
                 <!--                </div>-->
             </div>
         </div>
-        <div id="pagination-container" class="text-center">
-            <button id="page-buttons" style="border: none; background-color: white;"></button>
+        <div class="pagination-container text-center" id="pagination-container" >
+            <div class="pagination-element"></div>
         </div>
     </div>
 </section>
@@ -250,147 +250,109 @@
 <script src="js/scripts.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script>
-    const productListContainer = document.getElementById(
-      "product-list-container"
-    );
-    const paginationContainer = document.getElementById(
-      "pagination-container"
-    );
-    const pageButtonsContainer = document.getElementById("page-buttons");
+    const productListContainer = document.getElementById("product-list-container");
+    let paginationContainer = document.getElementById(".pagination-container"); // Define paginationContainer
+    const productsPerPage = 8;
+    let currentPage = 1;
 
-    const productsPerPage = 8; // Số lượng sản phẩm trên mỗi trang
-    let currentPage = 1; // Trang hiện tại (có thể thay đổi)
+    // Function to fetch products from the server
+    function fetchProducts(page, size, sortBy, sortType) {
+      fetch(`/api/admin/product?page=${page}&size=${size}&sortBy=${sortBy}&sortType=${sortType}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response from the server and render products
+          renderProducts(data.data);
+          renderPagination(data.metaData, currentPage, productsPerPage);
+        })
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+        });
+    }
 
-    // Gọi API để lấy dữ liệu tất cả sản phẩm
-    fetch("http://localhost:8081/api/product/getAll")
-      .then((response) => response.json())
-      .then((data) => {
-        // Xử lý dữ liệu sản phẩm ở đây
-        renderProducts(data);
+    // Initial fetch of products with default parameters
+    fetchProducts(currentPage, productsPerPage, "id", "ASC");
 
-        // Xử lý phân trang và render nút trang
-        renderPagination(data);
-      })
-      .catch((error) => {
-        console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
-      });
-
-    // Hàm để hiển thị danh sách sản phẩm trên trang hiện tại
     function renderProducts(products) {
-      // Xóa nội dung hiện tại của phần tử container
+      // Clear the current content of the productListContainer
       productListContainer.innerHTML = "";
-
-      // Tính toán phạm vi sản phẩm cần hiển thị trên trang hiện tại
-      const startIndex = (currentPage - 1) * productsPerPage;
-      const endIndex = startIndex + productsPerPage;
-      const productsToDisplay = products.slice(startIndex, endIndex);
-
-      // Duyệt qua danh sách sản phẩm để hiển thị sản phẩm cần thiết
-      productsToDisplay.forEach((product) => {
-        // Tạo một thẻ div để hiển thị thông tin sản phẩm
+       console.log(products)
+      // Iterate through the list of products and render each product
+      products.forEach((product) => {
+        // Create a div to display product information
         const productCard = document.createElement("div");
         productCard.classList.add("col", "mb-5");
         productCard.innerHTML = `
-                                          <div class="card h-100">
-                                              <img class="card-img-top" src="${
-                                                product.image
-                                              }" alt="Product Image" />
-                                              <div class="card-body p-4">
-                                              <div class="text-center">
-                                                  <h5 class="fw-bolder">${
-                                                    product.name
-                                                  }</h5>
-                                                  $${product.price.toFixed(2)}
-                                              </div>
-                                              </div>
-                                              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                              <div class="text-center">
-                                                  <a class="btn btn-outline-dark mt-auto" href="/getItem/${product.id}">View options</a>
-                                              </div>
-                                              </div>
-                                          </div>
-                                          `;
+          <div class="item-container card h-100">
+            <img class="card-img-top" src="${product.imagePath}" alt="Product Image" />
+            <div class="card-body p-4">
+              <div class="text-center">
+                <h5 class="fw-bolder">${product.name}</h5>
+                $${product.price.toFixed(2)}
+              </div>
+            </div>
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+              <div class "text-center">
+                <a class="btn btn-outline-dark mt-auto" href="/getItem/${product.id}">View options</a>
+              </div>
+            </div>
+          </div>
+        `;
 
-        // Thêm thẻ sản phẩm vào container
+
         productListContainer.appendChild(productCard);
       });
     }
 
-    // Hàm để hiển thị nút trang
-    function renderPagination(products) {
-<!--      console.log(products);-->
-      // Tính toán tổng số trang dựa trên số lượng sản phẩm và sản phẩm trên mỗi trang
-      const totalPages = Math.ceil(products.length / productsPerPage);
 
-      // Xóa nội dung hiện tại của phần tử nút trang
-      pageButtonsContainer.innerHTML = "";
+    function renderPagination(metaData, currentPage, productsPerPage) {
+    const paginationElements = document.querySelector(".pagination-element");
+    paginationElements.innerHTML = '';
 
-
-      // Tạo nút cho từng trang và thêm sự kiện xử lý khi nhấn vào nút trang
-      for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement("button");
-        pageButton.textContent = i;
-        pageButton.classList.add("btn", "btn-outline-dark", "mx-1");
-        pageButton.classList.add("btn-paginations"); // Thêm lớp này để chọn nút bằng CSS
-
-        // Thêm sự kiện click và sử dụng hàm handlePageButtonClick
-        pageButton.addEventListener("click", (e) => {
-          handlePageButtonClick(e, i, products);
-        });
-
-
-        pageButtonsContainer.appendChild(pageButton);
-      }
-    }
-    function handlePageButtonClick(e, pageIndex, products) {
-      // Loại bỏ lớp active từ tất cả các nút trang
-      console.log("Day la e: " + e);
-      const allPageButtons = document.querySelectorAll("#page-buttons");
-
-       console.log(allPageButtons);
-
-      allPageButtons.child.forEach((button) => {
-        button.classList.remove("active-page-button");
-      });
-
-      // Thêm lớp active cho nút trang đang được chọn
-      e.currentTarget.classList.toggle("active-page-button");
-
-      currentPage = pageIndex;
-      renderProducts(products);
-      renderPagination(products);
-    }
-    // Kiểm tra trạng thái đăng nhập
-    function checkLoginStatus() {
-        $.ajax({
-            url: '/api/user/check-login',
-            type: 'GET',
-            success: function (data) {
-                // Trạng thái đăng nhập hợp lệ
-                // Hiển thị phần giỏ hàng ở đây
-                if (data.loggedIn) {
-                    console.log(data)
-                    $('#logout-btn').css('display','block');
-                    $('#cart-btn').css('display','block');
-                    $('#login-btn').css('display','none');
-                } else {
-                    console.log("Dudimemay");
-                    $('#logout-btn').css('display','none');
-                    $('#cart-btn').css('display','none');
-                    $('#login-btn').css('display','block');
-                }
-            },
-            error: function () {
-                // Xử lý lỗi nếu có
-            }
-        });
-    }
-
-    // Gọi hàm kiểm tra trạng thái đăng nhập khi trang web được tải
-    $(document).ready(function () {
-        checkLoginStatus();
+    const previousButton = document.createElement('button');
+    previousButton.textContent = 'Previous';
+    previousButton.classList.add('btn', 'btn-outline-dark');
+    previousButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            fetchProducts(currentPage - 1, productsPerPage, 'id', 'ASC');
+        }
     });
 
+
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Next';
+    nextButton.classList.add('btn', 'btn-outline-dark');
+    nextButton.addEventListener('click', () => {
+        if (currentPage < metaData.currentPage) {
+            fetchProducts(currentPage + 1, productsPerPage, 'id', 'ASC');
+        }
+    });
+
+
+
+
+    for (let i = 1; i <= 30; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.classList.add('btn', 'btn-outline-dark');
+        pageButton.addEventListener('click', () => {
+            fetchProducts(i, productsPerPage, 'id', 'ASC');
+        });
+        paginationContainer.appendChild(pageButton);
+    }
+
+
+    paginationContainer.appendChild(previousButton);
+    paginationContainer.appendChild(nextButton);
+
+    // Append the paginationContainer to your HTML, assuming you have an element with the id "pagination" to hold it
+    const paginationElement = document.getElementById('pagination-element');
+    paginationElement.innerHTML = '';
+    paginationElement.appendChild(paginationContainer);
+}
+
+
 </script>
+
+
 </body>
 </html>
