@@ -28,7 +28,7 @@ public class CategoryController extends Controller {
                                                     @RequestParam(defaultValue = "ASC") String sortType
     ) {
         try {
-            List<Category> listManufacture = categoryService.getAll(page, size, sortBy, sortType);
+            List<Category> listManufacture = categoryService.getAllSort(page, size, sortBy, sortType);
             //foreach to set image path
             //meta data
             long totalItems = categoryService.countAllManufacture();
