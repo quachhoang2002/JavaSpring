@@ -1,12 +1,10 @@
-package j2ee.project.controller;
+package j2ee.project.controller.User;
 
 import j2ee.project.models.*;
 import j2ee.project.repository.BillDetailsRepository;
 import j2ee.project.repository.BillRepository;
 import j2ee.project.repository.CartRepository;
 import j2ee.project.repository.WareHouseRepository;
-import j2ee.project.service.ProductService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

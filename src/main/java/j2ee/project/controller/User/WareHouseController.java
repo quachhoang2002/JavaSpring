@@ -1,18 +1,12 @@
-package j2ee.project.controller;
+package j2ee.project.controller.User;
 
 import j2ee.project.models.Product;
-import j2ee.project.models.User;
 import j2ee.project.models.WareHouse;
 import j2ee.project.repository.WareHouseRepository;
 import j2ee.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 

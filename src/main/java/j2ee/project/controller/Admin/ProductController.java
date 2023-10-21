@@ -1,15 +1,15 @@
 package j2ee.project.controller.Admin;
 
 import j2ee.project.DTO.ProductDTO;
-import j2ee.project.controller.Controller;
+import j2ee.project.controller.User.Controller;
 import j2ee.project.models.Product;
+import j2ee.project.repository.ProductRepository;
 import j2ee.project.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +21,13 @@ public class ProductController extends Controller {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductRepository productRepository;
 
     @GetMapping("")
     @ResponseBody
     public ResponseEntity<String> getProducts(@RequestParam(defaultValue = "1") int page,
-                                              @RequestParam(defaultValue = "10") int size,
+                                              @RequestParam(defaultValue = "8") int size,
                                               @RequestParam(defaultValue = "id") String sortBy,
                                               @RequestParam(defaultValue = "ASC") String sortType
     ) {
@@ -39,16 +41,28 @@ public class ProductController extends Controller {
             return errorResponse(e.getMessage());
         }
     }
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAll() {
+        List<Product> products = productRepository.findAll();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getProduct(@PathVariable int id) {
-        Optional<Product> product = productService.getById(id);
-        if (product.isPresent()) {
-            return successResponse("Get manufacture.js by id successfully", product.get());
+        if (products != null && !products.isEmpty()) {
+            return successResponse("Get all product successfully", products);
         } else {
-            return errorResponse("Manufacture not found");
+            return errorResponse("Product not found");
         }
     }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProduct(@PathVariable int id) {
+        Optional<Product> product = productService.getById(id);
+        if (product.isPresent()) {
+            return ResponseEntity.ok(product.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @PostMapping("")
     public ResponseEntity<String> addProduct(

@@ -1,4 +1,4 @@
-package j2ee.project.controller;
+package j2ee.project.controller.User;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

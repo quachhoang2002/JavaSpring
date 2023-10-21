@@ -1,4 +1,4 @@
-package j2ee.project.controller;
+package j2ee.project.controller.User;
 
 import j2ee.project.models.*;
 import j2ee.project.repository.CartRepository;
