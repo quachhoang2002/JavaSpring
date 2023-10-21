@@ -1,5 +1,7 @@
-package j2ee.project.controller;
+package j2ee.project.controller.User;
 
-public class BillDetailsController extends Controller{
+import j2ee.project.controller.Controller;
+
+public class BillDetailsController extends Controller {
 
 }
