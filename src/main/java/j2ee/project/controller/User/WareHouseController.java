@@ -2,15 +2,13 @@ package j2ee.project.controller.User;
 
 import j2ee.project.controller.Controller;
 import j2ee.project.models.Product;
-import j2ee.project.models.WareHouse;
+import j2ee.project.models.Stock;
 import j2ee.project.repository.WareHouseRepository;
 import j2ee.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,12 +21,19 @@ public class WareHouseController extends Controller {
 
     @PostMapping("/update")
     @ResponseBody
-    public ResponseEntity<String> updateProductInWareHouse(@RequestBody WareHouse wareHouse) {
+    public ResponseEntity<String> updateProductInWareHouse(@RequestBody Stock wareHouse) {
         try {
-            Optional<WareHouse> existingWareHouse = wareHouseRepository.findByProduct_Id(wareHouse.getProduct().getId());
+            Product product = productService.getProductById(wareHouse.getProduct().getId()).get();
+            if (product == null) {
+                return errorResponse("Product not found.");
+            }
+
+            wareHouse.setProduct(product);
+            Optional<Stock> existingWareHouse = wareHouseRepository.findByProduct(wareHouse.getProduct());
+            System.out.println(existingWareHouse);
 
             if (existingWareHouse.isPresent()) {
-                WareHouse storedWareHouse = existingWareHouse.get();
+                Stock storedWareHouse = existingWareHouse.get();
                 int newQuantity = storedWareHouse.getQuantity() + wareHouse.getQuantity(); // Tính toán quantity mới
                 storedWareHouse.setQuantity(newQuantity); // Cập nhật quantity theo giá trị mới
                 wareHouseRepository.save(storedWareHouse);
@@ -43,9 +48,8 @@ public class WareHouseController extends Controller {
 
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<String> addProductToWareHouse(@RequestBody WareHouse wareHouse) {
+    public ResponseEntity<String> addProductToWareHouse(@RequestBody Stock wareHouse) {
         try {
-            System.out.println(wareHouse.getProduct().getId());
             Optional<Product> productOptional = productService.getProductById(wareHouse.getProduct().getId());
 
             if (productOptional.isPresent()) {

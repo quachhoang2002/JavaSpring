@@ -2,10 +2,7 @@ package j2ee.project.controller.User;
 
 import j2ee.project.controller.Controller;
 import j2ee.project.models.*;
-import j2ee.project.repository.BillDetailsRepository;
-import j2ee.project.repository.BillRepository;
-import j2ee.project.repository.CartRepository;
-import j2ee.project.repository.WareHouseRepository;
+import j2ee.project.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +22,8 @@ public class BillController extends Controller {
     @Autowired
     private WareHouseRepository wareHouseRepository;
 
+    private ProductRepository productRepository;
+
     @PostMapping("/add")
     @ResponseBody
     public ResponseEntity<String> addNewBill(@RequestBody Order bill) {
@@ -39,10 +38,13 @@ public class BillController extends Controller {
                 billDetails.setPrice(cartItem.getPrice());
                 billDetailsRepository.save(billDetails);
 
-                Optional<WareHouse> wareHouseOptional = wareHouseRepository.findByProduct_Id(cartItem.getProductId());
+                Product product = productRepository.findById(cartItem.getProductId()).get();
+                billDetails.setProduct(product);
+
+                Optional<Stock> wareHouseOptional = wareHouseRepository.findByProduct(billDetails.getProduct());
 
                 if (wareHouseOptional.isPresent()) {
-                    WareHouse wareHouse = wareHouseOptional.get(); // Lấy đối tượng WareHouse từ Optional
+                    Stock wareHouse = wareHouseOptional.get(); // Lấy đối tượng WareHouse từ Optional
                     int newQuantity = wareHouse.getQuantity() - cartItem.getQuantity();
                     wareHouse.setQuantity(newQuantity);
                     wareHouseRepository.save(wareHouse);

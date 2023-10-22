@@ -32,16 +32,21 @@ public class CartController extends Controller {
 
             // Check if the product with the given productId already exists in the cart
             Optional<Cart> existingCartItem = cartService.findCartByProductId(productId);
+            Product product = productRepository.findById(productId).get();
 
             if (existingCartItem.isPresent()) {
                 // Product already exists in the cart, update the quantity
+                if (!isProductInStock(product, quantity)) {
+                    return errorResponse("Product is out of stock.");
+                }
+
                 Cart cartItem = existingCartItem.get();
                 cartItem.setQuantity(cartItem.getQuantity() + quantity);
                 cartService.updateCart(cartItem);
             } else {
                 // Product doesn't exist in the cart, add a new row
                 // Kiểm tra xem có đủ hàng trong kho không
-                if (!isProductInStock(productId, quantity)) {
+                if (isProductInStock(product, quantity)) {
                     cartService.addCart(cart);
                 } else {
                     return errorResponse("Product is out of stock.");
@@ -54,11 +59,12 @@ public class CartController extends Controller {
         }
     }
 
-    private boolean isProductInStock(int productId, int requestedQuantity) {
-        Optional<WareHouse> wareHouseOptional = wareHouseRepository.findByProduct_Id(productId);
-        System.out.println("asdadszxczxczxc: " + wareHouseOptional);
+    private boolean isProductInStock(Product product, int requestedQuantity) {
+        Optional<Stock> wareHouseOptional = wareHouseRepository.findByProduct(product);
         if (wareHouseOptional.isPresent()) {
-            WareHouse wareHouse = wareHouseOptional.get();
+            Stock wareHouse = wareHouseOptional.get();
+            System.out.println("aasdasdsad"+wareHouse.getQuantity());
+            System.out.println("aaassdfsaf"+requestedQuantity);
             if (wareHouse.getQuantity() >= requestedQuantity) {
                 return true;
             }
@@ -94,7 +100,9 @@ public class CartController extends Controller {
             int productId = (int) request.get("id"); // Lấy productId từ request
             int newQuantity = (int) request.get("quantity"); // Lấy quantity từ request
 
-            if (isProductInStock(productId, newQuantity)) {
+            Product product = productRepository.findById(productId).get();
+
+            if (isProductInStock(product, newQuantity)) {
                 return errorResponse("Product is out of stock.");
             }
 
