@@ -15,33 +15,31 @@ public class Product {
     private Integer id;
 
     @NotNull(message = "Name is mandatory")
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @NotNull(message = "Price is mandatory")
-    @Column(name = "price", nullable = false)
+    @Column(nullable = false)
     private double price;
 
     @NotNull(message = "Category is mandatory")
     @ManyToOne
-    @JoinColumn(name = "category_id" ,referencedColumnName = "id")
     private Category category;
 
     @NotNull(message = "Manufacture is mandatory")
     @ManyToOne
-    @JoinColumn(name = "manufacture_id",referencedColumnName = "id")
     private Manufacture manufacture;
 
-    @Column(name = "description", nullable = true)
+    @Column(nullable = true)
     private String description;
 
-    @Column(name = "imagePath", nullable = true)
+    @Column(nullable = true)
     private String imagePath;
 
-    @Column(name = "createdAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
-    @Column(name = "updatedAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp updatedAt;
 
     public Product() {
