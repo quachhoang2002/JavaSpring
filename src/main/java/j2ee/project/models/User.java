@@ -11,27 +11,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone", nullable = true)
+    @Column(nullable = true)
     private String phone;
 
-    @Column(name = "createdat", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdat;
 
-    @Column(name = "status", nullable = true, columnDefinition = "INT DEFAULT 1")
+    @Column(nullable = true, columnDefinition = "INT DEFAULT 1")
     private Integer status;
 
     //token
-    @Column(name = "token", nullable = true)
+    @Column(nullable = true)
     private String token;
 
     public User() {
