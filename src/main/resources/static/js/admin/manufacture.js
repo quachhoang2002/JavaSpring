@@ -132,7 +132,10 @@ function RenderManufactureTemplate() {
                      </div>
             </div>
         </div>
-    </div>\
+    </div>
+
+
+           <div class="notifications"></div>
 
                         
         `)
@@ -177,7 +180,7 @@ async function renderManufactureItems() {
         pagination.innerHTML = '';
         totalPage = Math.ceil(response.meta.totalItem / response.meta.limit);
         for (let i = 1; i <= totalPage; i++) {
-            urlPage =  `?manufacture&page=${i}&limit=${LIMIT}`
+            urlPage = `?manufacture&page=${i}&limit=${LIMIT}`
             pagination.innerHTML += `<a href="${urlPage}" class="btn btn-secondary ${i == page ? 'active' : ''}">${i}</a>`
         }
     }
@@ -300,5 +303,50 @@ async function editForm(id) {
     editUrl = `${MANUFACTURE_URL}/${id}`;
 
     await getDataFromApi(editUrl, successCallback, errorCallback);
+}
+
+
+function renderFilterBox() {
+    // Create the main container div
+    filter = document.querySelector("#filter");
+    const filterContainer = document.createElement("div");
+    filterContainer.className = "filter-container";
+    filterContainer.style.width = "100%";
+    filterContainer.style.marginBottom = "10px";
+
+    // Create and append labels and select elements
+    const labels = ["Type", "Date", "Sort", "Country"];
+    labels.forEach(labelText => {
+        const label = document.createElement("label");
+        label.textContent = labelText + ":";
+        select = document.createElement("select");
+        renderOptionCategory(select);
+
+        filterContainer.appendChild(label);
+        filterContainer.appendChild(select);
+    });
+
+    // Create the Price range input and output elements
+    const priceLabel = document.createElement("label");
+    priceLabel.textContent = "Price:";
+    const priceInput = document.createElement("input");
+    priceInput.type = "range";
+    priceInput.min = "1";
+    priceInput.max = "100";
+    priceInput.value = "0";
+    priceInput.className = "slider";
+    priceInput.id = "myRange";
+    const priceOutput = document.createElement("output");
+    priceOutput.textContent = "0";
+
+    priceInput.addEventListener("input", function () {
+        priceOutput.textContent = this.value;
+    });
+
+    filterContainer.appendChild(priceLabel);
+    filterContainer.appendChild(priceInput);
+    filterContainer.appendChild(priceOutput);
+
+    filter.appendChild(filterContainer);
 }
 

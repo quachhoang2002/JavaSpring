@@ -33,6 +33,7 @@ public class Manufacture {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
+
     //get set
     public Manufacture() {
     }

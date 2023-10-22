@@ -33,11 +33,13 @@ function postDataToApi(apiUrl, data, onSuccess, onError) {
             if (responseData.status === "error" && responseData.message) {
                 // If the response contains an error status and message, call the onError callback
                 if (onError && typeof onError === "function") {
+                    showToast(responseData.message, "error");
                     onError(responseData);
                 }
             } else {
                 // If there is no error, call the onSuccess callback with the response data
                 if (onSuccess && typeof onSuccess === "function") {
+                    showToast(responseData.message, "success");
                     onSuccess(responseData);
                 }
             }
@@ -48,7 +50,7 @@ function postDataToApi(apiUrl, data, onSuccess, onError) {
             } else {
                 console.error("Error:", error);
                 // Display a default error message on the page
-                showError("An error occurred while posting data.");
+                showToast("An error occurred while getting data.", "error")
             }
         });
 }
@@ -90,7 +92,7 @@ function getDataFromApi(apiUrl, onSuccess, onError) {
             } else {
                 console.error("Error:", error);
                 // Display a default error message on the page
-                showError("An error occurred while fetching data.");
+                showToast("An error occurred while getting data.", "error")
             }
         });
 }
@@ -117,11 +119,13 @@ function deleteDataFromApi(apiUrl, onSuccess, onError) {
             if (responseData.status === "error" && responseData.message) {
                 // If the response contains an error status and message, call the onError callback
                 if (onError && typeof onError === "function") {
+                    showToast(responseData.message, "error");
                     onError(responseData);
                 }
             } else {
                 // If there is no error, call the onSuccess callback with the response data
                 if (onSuccess && typeof onSuccess === "function") {
+                    showToast(responseData.message, "success");
                     onSuccess(responseData);
                 }
             }
@@ -132,7 +136,7 @@ function deleteDataFromApi(apiUrl, onSuccess, onError) {
             } else {
                 console.error("Error:", error);
                 // Display a default error message on the page
-                showError("An error occurred while deleting data.");
+                showToast("An error occurred while deleting data.", "error")
             }
         });
 }
@@ -176,11 +180,13 @@ function putDataToApi(apiUrl, data, onSuccess, onError) {
             if (responseData.status === "error" && responseData.message) {
                 // If the response contains an error status and message, call the onError callback
                 if (onError && typeof onError === "function") {
+                    showToast(responseData.message, "error");
                     onError(responseData);
                 }
             } else {
                 // If there is no error, call the onSuccess callback with the response data
                 if (onSuccess && typeof onSuccess === "function") {
+                    showToast(responseData.message, "success");
                     onSuccess(responseData);
                 }
             }
@@ -191,18 +197,27 @@ function putDataToApi(apiUrl, data, onSuccess, onError) {
             } else {
                 console.error("Error:", error);
                 // Display a default error message on the page
-                showError("An error occurred while putting data.");
+                showToast("An error occurred while posting data.", "error")
             }
         });
 }
 
-function showError(errorMessage) {
-    // Display the error message on the page (e.g., in a div with the id "error-message")
-    const errorMessageElement = document.getElementById("error-message");
-    if (errorMessageElement) {
-        errorMessageElement.textContent = errorMessage;
-        errorMessageElement.style.display = "block";
-    }
+
+function buildImageBlobFromURL(imageURL) {
+    return fetch(imageURL)
+        .then((response) => {
+            console.log(response);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();
+        })
+        .then((imageBlob) => {
+            return imageBlob;
+        })
+        .catch((error) => {
+            console.error('Error fetching image:', error);
+        });
 }
 
 
