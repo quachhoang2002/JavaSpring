@@ -54,12 +54,12 @@ public class ProductController extends Controller {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable int id) {
+    public ResponseEntity<String> getProduct(@PathVariable int id) {
         Optional<Product> product = productService.getById(id);
         if (product.isPresent()) {
-            return ResponseEntity.ok(product.get());
+            return successResponse("Get product by id successfully", product.get());
         } else {
-            return ResponseEntity.notFound().build();
+            return errorResponse("Product not found");
         }
     }
 

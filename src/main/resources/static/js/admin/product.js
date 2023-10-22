@@ -152,10 +152,18 @@ function RenderProductTemplate() {
                                  <input type="text" class="form-control" id="description" name="description" required>
                              </div>
                              
+                             <div class="mb-3 image-preview">
+                              </div>
+                             
                               <div class="mb-3">
                                     <label for="image" class="form-label">Image</label>
                                     <input type="file" class="form-control" id="image" name="image" required>
                               </div>
+                              
+                             <div class="modal-footer">
+                                 <button type="button" class="btn btn-secondary" id="closeBtn" data-bs-dismiss="modal" >Close</button>
+                                 <button type="button" class="btn btn-primary" onclick="editProduct()">Submit</button>
+                             </div>   
                             
                          </form>
                      </div>
@@ -290,7 +298,6 @@ async function editProduct(id) {
         alert(error.message)
     }
     const successCallback = async (response) => {
-        alert(response.message);
         bootstrap.Modal.getInstance(document.querySelector("#editProduct")).hide();
         await renderProductItems();
     }
@@ -330,6 +337,11 @@ async function editProductForm(id) {
         //write category and manufacture
         form.category.innerHTML = `<option value="${response.data.category.id}">${response.data.category.name}</option>`
         form.manufacture.innerHTML = `<option value="${response.data.manufacture.id}">${response.data.manufacture.name}</option>`
+
+        //render image
+        const prviewImage = document.querySelector("#editProductForm .image-preview");
+        prviewImage.innerHTML = `<img src="${response.data.imagePath}" alt="Image" width="100" height="100">`
+
         //render button in footer
         const footer = document.querySelector("#editProduct .modal-footer");
         footer.innerHTML = `<button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`
