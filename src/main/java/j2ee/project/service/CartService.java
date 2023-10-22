@@ -16,7 +16,7 @@ public class CartService {
     public void addCart(Cart cart){
         cartRepository.save(cart);
     }
-    public Optional<Cart> findCartByProductId(long productId) {
+    public Optional<Cart> findCartByProductId(int productId) {
         return cartRepository.findByProductId(productId);
     }
 

@@ -1,32 +1,36 @@
 package j2ee.project.models;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
-@Table(name = "bill_entity")
+import java.util.List;
+
+@Table(name = "orders")
 @Entity
-public class Bill {
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
-    @Column(name = "customerName", nullable = false)
     private String customerName;
     @NotNull
-    @Column(name = "shippingAddress", nullable = false)
     private String shippingAddress;
     @NotNull
-    @Column(name = "customerPhone", nullable = false)
     private String customerPhone;
     @NotNull
-    @Column(name = "email_receive", nullable = false)
     private String email_receive;
     @NotNull
-    @Column(name = "total_price", nullable = false)
     private double total_price;
+
+    @NotNull
+    @ManyToOne
+    private User user;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderDetails> orderDetails;
     private int status;
 
-    public Bill(int id, String customerName, String shippingAddress, String customerPhone, String email_receive, double total_price, int status) {
+    public Order(int id, String customerName, String shippingAddress, String customerPhone, String email_receive, double total_price, int status) {
         this.id = id;
         this.customerName = customerName;
         this.shippingAddress = shippingAddress;
@@ -36,7 +40,7 @@ public class Bill {
         this.status = status;
     }
 
-    public Bill(int id, String customerName, String shippingAddress, String customerPhone, int status) {
+    public Order(int id, String customerName, String shippingAddress, String customerPhone, int status) {
         this.id = id;
         this.customerName = customerName;
         this.shippingAddress = shippingAddress;
@@ -45,10 +49,10 @@ public class Bill {
     }
 
 
-    public Bill() {
+    public Order() {
     }
 
-    public Bill(int id, String customerName, String shippingAddress, String customerPhone) {
+    public Order(int id, String customerName, String shippingAddress, String customerPhone) {
         this.id = id;
         this.customerName = customerName;
         this.shippingAddress = shippingAddress;

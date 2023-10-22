@@ -1,7 +1,7 @@
 package j2ee.project.controller.Admin;
 
 import j2ee.project.DTO.ProductDTO;
-import j2ee.project.controller.User.Controller;
+import j2ee.project.controller.Controller;
 import j2ee.project.models.Product;
 import j2ee.project.repository.ProductRepository;
 import j2ee.project.service.ProductService;

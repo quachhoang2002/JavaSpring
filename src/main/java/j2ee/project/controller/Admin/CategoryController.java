@@ -1,6 +1,6 @@
 package j2ee.project.controller.Admin;
 
-import j2ee.project.controller.User.Controller;
+import j2ee.project.controller.Controller;
 import j2ee.project.models.Category;
 import j2ee.project.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

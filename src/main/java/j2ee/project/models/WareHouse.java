@@ -1,19 +1,23 @@
 package j2ee.project.models;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.NotFound;
 
 import java.util.Date;
-@Table(name = "warehouse_entity")
+import java.util.Set;
+
+@Table(name = "warehouse")
 @Entity
 public class WareHouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NotNull
-    @Column(name = "productId", nullable = false)
-    private int productId;
+    @ManyToOne
+    private Product product;
+
     @NotNull
     @Column(name = "quantity", nullable = false)
     private int quantity;
@@ -24,9 +28,9 @@ public class WareHouse {
     public WareHouse() {
     }
 
-    public WareHouse(int id, int productId, int quantity, Date createdAt) {
+    public WareHouse(int id, Product product, int quantity, Date createdAt) {
         this.id = id;
-        this.productId = productId;
+        this.product = product;
         this.quantity = quantity;
         this.createdAt = createdAt;
     }
@@ -39,14 +43,14 @@ public class WareHouse {
         this.id = id;
     }
 
-    public int getProductId() {
-        return productId;
+
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
-
     public int getQuantity() {
         return quantity;
     }

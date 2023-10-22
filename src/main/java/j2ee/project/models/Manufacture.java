@@ -14,23 +14,23 @@ public class Manufacture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     @NotBlank(message = "Name is mandatory")
     @NotNull(message = "Name is mandatory")
     private String name;
 
-    @Column(name = "address", nullable = false)
+    @Column(nullable = false)
     @NotBlank(message = "Address is mandatory")
     private String address;
 
-    @Column(name = "phone", nullable = false)
+    @Column(nullable = false)
     @NotBlank(message = "Phone is mandatory")
     private String phone;
 
-    @Column(name = "image_path", nullable = true)
+    @Column(nullable = true)
     private String imagePath;
 
-    @Column(name = "createdAt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
     //get set

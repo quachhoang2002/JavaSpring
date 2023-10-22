@@ -1,6 +1,6 @@
 package j2ee.project.controller.Admin;
 
-import j2ee.project.controller.User.Controller;
+import j2ee.project.controller.Controller;
 import j2ee.project.models.Manufacture;
 import j2ee.project.service.ManufactureService;
 import jakarta.validation.Valid;

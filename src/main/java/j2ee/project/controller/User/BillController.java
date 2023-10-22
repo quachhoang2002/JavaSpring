@@ -27,21 +27,19 @@ public class BillController extends Controller {
 
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<String> addNewBill(@RequestBody Bill bill) {
+    public ResponseEntity<String> addNewBill(@RequestBody Order bill) {
         try {
-            Bill newBill = billRepository.save(bill);
+            Order newBill = billRepository.save(bill);
 
             List<Cart> cartItems = cartRepository.findAll();
 
             for (Cart cartItem : cartItems) {
-                BillDetails billDetails = new BillDetails();
-                billDetails.setBillId(newBill.getId());
-                billDetails.setProductId(cartItem.getProductId());
+                OrderDetails billDetails = new OrderDetails();
                 billDetails.setQuantity(cartItem.getQuantity());
                 billDetails.setPrice(cartItem.getPrice());
                 billDetailsRepository.save(billDetails);
 
-                Optional<WareHouse> wareHouseOptional = wareHouseRepository.findByProductId(cartItem.getProductId());
+                Optional<WareHouse> wareHouseOptional = wareHouseRepository.findByProduct_Id(cartItem.getProductId());
 
                 if (wareHouseOptional.isPresent()) {
                     WareHouse wareHouse = wareHouseOptional.get(); // Lấy đối tượng WareHouse từ Optional

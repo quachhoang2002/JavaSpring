@@ -3,23 +3,27 @@ package j2ee.project.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "billDetails_entity")
-public class BillDetails {
+@Table(name = "order_details")
+public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer billId;
-    private Integer productId;
+
+    @ManyToOne
+    private Order order;
+
+    @ManyToOne
+    private Product product;
     private Integer quantity;
     private double price;
 
-    public BillDetails() {
+    public OrderDetails() {
     }
 
-    public BillDetails(Integer id, Integer billId, Integer productId, Integer quantity, double price) {
+    public OrderDetails(Integer id, Order order, Product product, Integer quantity, double price) {
         this.id = id;
-        this.billId = billId;
-        this.productId = productId;
+        this.order = order;
+        this.product = product;
         this.quantity = quantity;
         this.price = price;
     }
@@ -32,20 +36,20 @@ public class BillDetails {
         this.id = id;
     }
 
-    public Integer getBillId() {
-        return billId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setBillId(Integer billId) {
-        this.billId = billId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public Integer getQuantity() {
@@ -66,10 +70,10 @@ public class BillDetails {
 
     @Override
     public String toString() {
-        return "BillDetails{" +
+        return "OrderDetail{" +
                 "id=" + id +
-                ", billId=" + billId +
-                ", productId=" + productId +
+                ", order=" + order +
+                ", product=" + product +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

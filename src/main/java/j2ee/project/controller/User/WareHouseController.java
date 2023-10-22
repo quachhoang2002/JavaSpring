@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,11 +20,12 @@ public class WareHouseController extends Controller {
     private WareHouseRepository wareHouseRepository;
     @Autowired
     private ProductService productService;
+
     @PostMapping("/update")
     @ResponseBody
     public ResponseEntity<String> updateProductInWareHouse(@RequestBody WareHouse wareHouse) {
         try {
-            Optional<WareHouse> existingWareHouse = wareHouseRepository.findByProductId(wareHouse.getProductId());
+            Optional<WareHouse> existingWareHouse = wareHouseRepository.findByProduct_Id(wareHouse.getProduct().getId());
 
             if (existingWareHouse.isPresent()) {
                 WareHouse storedWareHouse = existingWareHouse.get();
@@ -42,8 +45,8 @@ public class WareHouseController extends Controller {
     @ResponseBody
     public ResponseEntity<String> addProductToWareHouse(@RequestBody WareHouse wareHouse) {
         try {
-            System.out.println(wareHouse.getProductId());
-            Optional<Product> productOptional = productService.getProductById(wareHouse.getProductId());
+            System.out.println(wareHouse.getProduct().getId());
+            Optional<Product> productOptional = productService.getProductById(wareHouse.getProduct().getId());
 
             if (productOptional.isPresent()) {
                 // Sản phẩm tồn tại, thêm vào kho
