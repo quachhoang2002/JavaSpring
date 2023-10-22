@@ -41,7 +41,7 @@ public class CartController extends Controller {
             } else {
                 // Product doesn't exist in the cart, add a new row
                 // Kiểm tra xem có đủ hàng trong kho không
-                if (isProductInStock(productId, quantity)) {
+                if (!isProductInStock(productId, quantity)) {
                     cartService.addCart(cart);
                 } else {
                     return errorResponse("Product is out of stock.");
@@ -55,7 +55,8 @@ public class CartController extends Controller {
     }
 
     private boolean isProductInStock(int productId, int requestedQuantity) {
-        Optional<WareHouse> wareHouseOptional = wareHouseRepository.findById(productId);
+        Optional<WareHouse> wareHouseOptional = wareHouseRepository.findByProduct_Id(productId);
+        System.out.println("asdadszxczxczxc: " + wareHouseOptional);
         if (wareHouseOptional.isPresent()) {
             WareHouse wareHouse = wareHouseOptional.get();
             if (wareHouse.getQuantity() >= requestedQuantity) {
@@ -93,7 +94,7 @@ public class CartController extends Controller {
             int productId = (int) request.get("id"); // Lấy productId từ request
             int newQuantity = (int) request.get("quantity"); // Lấy quantity từ request
 
-            if (!isProductInStock(productId, newQuantity)) {
+            if (isProductInStock(productId, newQuantity)) {
                 return errorResponse("Product is out of stock.");
             }
 

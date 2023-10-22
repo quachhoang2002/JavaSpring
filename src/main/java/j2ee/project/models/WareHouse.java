@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.NotFound;
 
 import java.util.Date;
-@Table(name = "warehouse_entity")
+import java.util.Set;
+
+@Table(name = "warehouse")
 @Entity
 public class WareHouse {
     @Id

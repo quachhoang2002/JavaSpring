@@ -39,7 +39,7 @@ public class BillController extends Controller {
                 billDetails.setPrice(cartItem.getPrice());
                 billDetailsRepository.save(billDetails);
 
-                Optional<WareHouse> wareHouseOptional = wareHouseRepository.findByProductId(cartItem.getProductId());
+                Optional<WareHouse> wareHouseOptional = wareHouseRepository.findByProduct_Id(cartItem.getProductId());
 
                 if (wareHouseOptional.isPresent()) {
                     WareHouse wareHouse = wareHouseOptional.get(); // Lấy đối tượng WareHouse từ Optional
