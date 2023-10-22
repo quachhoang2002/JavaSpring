@@ -4,7 +4,7 @@ import j2ee.project.controller.Controller;
 import j2ee.project.models.*;
 import j2ee.project.repository.CartRepository;
 import j2ee.project.repository.ProductRepository;
-import j2ee.project.repository.WareHouseRepository;
+import j2ee.project.repository.StockRepository;
 import j2ee.project.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class CartController extends Controller {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private WareHouseRepository wareHouseRepository;
+    private StockRepository stockRepository;
     @PostMapping("/add")
     @ResponseBody
     public ResponseEntity<String> addProductToCart(@RequestBody Cart cart) {
@@ -60,7 +60,7 @@ public class CartController extends Controller {
     }
 
     private boolean isProductInStock(Product product, int requestedQuantity) {
-        Optional<Stock> wareHouseOptional = wareHouseRepository.findByProduct(product);
+        Optional<Stock> wareHouseOptional = stockRepository.findByProduct(product);
         if (wareHouseOptional.isPresent()) {
             Stock wareHouse = wareHouseOptional.get();
             System.out.println("aasdasdsad"+wareHouse.getQuantity());

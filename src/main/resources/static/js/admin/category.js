@@ -172,7 +172,6 @@ async function renderCategoryItems() {
 
 async function addCategory() {
     let successCallback = (response) => {
-        alert(response.message);
         // const closeBtn = document.querySelector("#closeBtn");
         // closeBtn.click();
         bootstrap.Modal.getInstance(document.querySelector('#addCategory')).hide();
@@ -181,7 +180,6 @@ async function addCategory() {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     // const form = document.querySelector("#addForm");
@@ -204,12 +202,10 @@ async function addCategory() {
 
 async function deleteCategory(url) {
     let successCallback = (response) => {
-        alert(response.message);
         renderCategoryItems();
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     await deleteDataFromApi(url, successCallback, errorCallback);

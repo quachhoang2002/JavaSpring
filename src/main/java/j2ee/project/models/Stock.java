@@ -3,9 +3,15 @@ package j2ee.project.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
-@Table(name = "stock")
+@Table(name = "stock"
+        , uniqueConstraints = {
+        @UniqueConstraint(columnNames = "id"),
+        @UniqueConstraint(columnNames = {"product_id"})
+}
+)
 @Entity
 public class Stock {
     @Id
@@ -17,20 +23,20 @@ public class Stock {
     private Product product;
 
     @NotNull
-    @Column(name = "quantity", nullable = false)
     private int quantity;
-    @Column(name = "createdAt", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date createdAt;
 
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
+
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp updatedAt;
     public Stock() {
     }
 
-    public Stock(int id, Product product, int quantity, Date createdAt) {
+    public Stock(int id, Product product, int quantity) {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
-        this.createdAt = createdAt;
     }
 
     public int getId() {
@@ -49,6 +55,7 @@ public class Stock {
     public void setProduct(Product product) {
         this.product = product;
     }
+
     public int getQuantity() {
         return quantity;
     }
@@ -57,11 +64,38 @@ public class Stock {
         this.quantity = quantity;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public String getCreatedAt() {
+        if (createdAt == null) {
+            return null;
+        }
+        return createdAt.toString().substring(0, 19);
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    @PrePersist
+    public void setCreatedAt() {
+        createdAt = new Timestamp(new Date().getTime());
+    }
+
+    public String getUpdatedAt() {
+        if (updatedAt == null) {
+            return null;
+        }
+        return updatedAt.toString().substring(0, 19);
+    }
+
+    @PreUpdate
+    public void setUpdatedAt() {
+        updatedAt = new Timestamp(new Date().getTime());
+    }
+
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "id=" + id +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", createdAt=" + this.getCreatedAt() +
+                ", updatedAt=" + this.getUpdatedAt() +
+                '}';
     }
 }

@@ -2,8 +2,9 @@ const PRODUCT_URL = API_ADMIN_URL + '/product'
 
 function RenderProductTemplate() {
     return (`
-            <main>
-                  <div class="container-fluid px-4">
+           <main>
+                         
+                <div class="container-fluid px-4">
                       <h1 class="mt-4">Product</h1>
                       <div class="card mb-4">
                           <div class="card-body">
@@ -12,8 +13,8 @@ function RenderProductTemplate() {
                       </div>
                       <div class="card mb-4">
                           <div class="card-header">
-                              <i class="fas fa-table me-1"></i>
-                                 Product
+                               <div id ="filter" class="float-start">
+                               </div>
                                  
                              <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
                                  data-bs-target="#addProduct"
@@ -22,6 +23,7 @@ function RenderProductTemplate() {
                              </button>
                           </div>
                           <div class="card-body">
+                          
                               <table id="content" class="table table-bordered">
                                   <thead>
                                    <tr>
@@ -52,6 +54,7 @@ function RenderProductTemplate() {
                             </div>
                        </div>
                   </div>
+                  
            </main>
                 
             <!-- Modal -->
@@ -112,7 +115,7 @@ function RenderProductTemplate() {
     </div>
     
            <!-- Modal editProduct -->
-              <div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+           <div class="modal fade" id="editProduct" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
               <div class="modal-dialog">
                  <div class="modal-content">
                      <!-- Modal Header -->
@@ -173,6 +176,7 @@ function RenderProductTemplate() {
             </div>
         </div>
     </div>
+    
               
         `)
 }
@@ -241,6 +245,9 @@ async function renderProductItems() {
     }
 
 
+    filter = document.querySelector("#filter");
+    renderFilterBox();
+
     GET_URL = `${PRODUCT_URL}?page=${page}&size=${limit}`;
     console.log(GET_URL);
 
@@ -249,9 +256,6 @@ async function renderProductItems() {
 
 async function addProduct() {
     let successCallback = (response) => {
-        alert(response.message);
-        // const closeBtn = document.querySelector("#closeBtn");
-        // closeBtn.click();
         bootstrap.Modal.getInstance(document.querySelector('#addProduct')).hide();
         //get current page
         renderProductItems();
@@ -295,7 +299,6 @@ async function deleteProduct(url) {
 async function editProduct(id) {
     const errorCallback = (error) => {
         console.log(error);
-        alert(error.message)
     }
     const successCallback = async (response) => {
         bootstrap.Modal.getInstance(document.querySelector("#editProduct")).hide();
@@ -324,7 +327,6 @@ async function editProduct(id) {
 //get detail
 async function editProductForm(id) {
     let successCallback = (response) => {
-        console.log(response);
         const form = document.querySelector("#editProductForm");
 
         renderOptionCategory(form.category)
@@ -342,6 +344,18 @@ async function editProductForm(id) {
         const prviewImage = document.querySelector("#editProductForm .image-preview");
         prviewImage.innerHTML = `<img src="${response.data.imagePath}" alt="Image" width="100" height="100">`
 
+        buildImageBlobFromURL(response.data.imagePath).then(blob => {
+            form.image.addEventListener("change", (event) => {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = () => {
+                    image = reader.result;
+                    prviewImage.innerHTML = `<img src="${image}" alt="Image" width="100" height="100">`
+                }
+            })
+        });
+
         //render button in footer
         const footer = document.querySelector("#editProduct .modal-footer");
         footer.innerHTML = `<button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`
@@ -349,44 +363,10 @@ async function editProductForm(id) {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     editUrl = `${PRODUCT_URL}/${id}`;
 
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
-
-function renderOptionCategory(select = null) {
-    let successCallback = (response) => {
-        if (select) {
-            select.innerHTML = '';
-            response.data.forEach(item => {
-                select.innerHTML += `<option value="${item.id}">${item.name}</option>`
-            });
-        }
-    }
-
-    let errorCallback = (error) => {
-    }
-
-    getDataFromApi(CATEGORY_URL, successCallback, errorCallback);
-}
-
-function renderOptionManufacture(select = null) {
-    let successCallback = (response) => {
-        if (select) {
-            select.innerHTML = '';
-            response.data.forEach(item => {
-                select.innerHTML += `<option value="${item.id}">${item.name}</option>`
-            });
-        }
-    }
-
-    let errorCallback = (error) => {
-    }
-
-    getDataFromApi(MANUFACTURE_URL, successCallback, errorCallback);
-}
-
 

@@ -20,7 +20,7 @@ public class BillController extends Controller {
     @Autowired
     private BillDetailsRepository billDetailsRepository;
     @Autowired
-    private WareHouseRepository wareHouseRepository;
+    private StockRepository stockRepository;
 
     private ProductRepository productRepository;
 
@@ -41,13 +41,13 @@ public class BillController extends Controller {
                 Product product = productRepository.findById(cartItem.getProductId()).get();
                 billDetails.setProduct(product);
 
-                Optional<Stock> wareHouseOptional = wareHouseRepository.findByProduct(billDetails.getProduct());
+                Optional<Stock> wareHouseOptional = stockRepository.findByProduct(billDetails.getProduct());
 
                 if (wareHouseOptional.isPresent()) {
                     Stock wareHouse = wareHouseOptional.get(); // Lấy đối tượng WareHouse từ Optional
                     int newQuantity = wareHouse.getQuantity() - cartItem.getQuantity();
                     wareHouse.setQuantity(newQuantity);
-                    wareHouseRepository.save(wareHouse);
+                    stockRepository.save(wareHouse);
                 } else {
                     // Xử lý trường hợp không tìm thấy WareHouse
                 }
