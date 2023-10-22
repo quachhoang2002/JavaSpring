@@ -101,13 +101,15 @@ public class CartController extends Controller {
             int newQuantity = (int) request.get("quantity"); // Lấy quantity từ request
 
             Product product = productRepository.findById(productId).get();
+            System.out.println(product);
 
-            if (isProductInStock(product, newQuantity)) {
+            if (!isProductInStock(product, newQuantity)) {
                 return errorResponse("Product is out of stock.");
             }
 
             Optional<Cart> existingCartItem = cartService.findCartByProductId(productId);
             if (existingCartItem.isPresent()) {
+
                 Cart cartItem = existingCartItem.get();
                 cartItem.setQuantity(newQuantity);
                 cartService.updateCart(cartItem);
