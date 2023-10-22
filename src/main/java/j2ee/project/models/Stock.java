@@ -2,12 +2,12 @@ package j2ee.project.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.NotFound;
 
 import java.util.Date;
-@Table(name = "warehouse_entity")
+
+@Table(name = "stock")
 @Entity
-public class WareHouse {
+public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,10 +23,10 @@ public class WareHouse {
     @Temporal(TemporalType.DATE)
     private Date createdAt;
 
-    public WareHouse() {
+    public Stock() {
     }
 
-    public WareHouse(int id, Product product, int quantity, Date createdAt) {
+    public Stock(int id, Product product, int quantity, Date createdAt) {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
