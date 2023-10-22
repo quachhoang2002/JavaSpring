@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class ProductService extends BaseService {
@@ -62,9 +64,23 @@ public class ProductService extends BaseService {
 
     //get all categories
     // READ - Get all Manufactories with pagination
-    public List<Product> getAllSort(int page, long limit, String sortBy, String sortType) {
+    public List<Product> getAllSort(int page, long limit, String sortBy, String sortType,Map<String,String> filters) {
         //get and sort by id
-        return productRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit).toList();
+        Stream<Product> products = productRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit);
+        for (Map.Entry<String, String> entry : filters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (key.equals("name")) {
+                products = products.filter(product -> product.getName().toLowerCase().contains(value.toLowerCase()));
+            }
+            if (key.equals("category")) {
+                products = products.filter(product -> product.getCategory().getName().toLowerCase().contains(value.toLowerCase()));
+            }
+            if (key.equals("manufacture")) {
+                products = products.filter(product -> product.getManufacture().getName().toLowerCase().contains(value.toLowerCase()));
+            }
+        }
+        return products.toList();
     }
     public List<Product> getAll(){
         return productRepository.findAll();
@@ -109,8 +125,8 @@ public class ProductService extends BaseService {
         return "Product removed !! " + id;
     }
 
-    public long count() {
-        return productRepository.count();
+    public long count(List<Product> products) {
+        return products.size();
     }
 
     public Optional<Product> getProductById(int productId) {

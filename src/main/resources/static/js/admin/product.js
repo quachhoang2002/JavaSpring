@@ -182,6 +182,27 @@ function RenderProductTemplate() {
 }
 
 async function renderProductItems() {
+    //get page from url
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page") ?? 1;
+    let limit = url.searchParams.get("limit") ?? LIMIT;
+
+    filterArr = [
+        'name',
+        'category',
+        'manufacture',
+        'price',
+    ];
+    renderFilterBox(filterArr);
+
+    GET_URL = `${PRODUCT_URL}?page=${page}&size=${limit}`;
+    filterArr.forEach(item => {
+        let value = url.searchParams.get(item);
+        if (value) {
+            GET_URL += `&${item}=${value}`;
+        }
+    }, GET_URL);
+
 
     let successCallback = (response) => {
         const tableBody = document.querySelector("#content tbody");
@@ -230,26 +251,19 @@ async function renderProductItems() {
         pagination.innerHTML = '';
         totalPage = Math.ceil(response.meta.totalItem / response.meta.limit);
         for (let i = 1; i <= totalPage; i++) {
-            urlPage = `?product&page=${i}&limit=${LIMIT}`
+            //if page empty
+            if (url.searchParams.get("page") == null) {
+                url.href += `&page=${i}`;
+            }
+
+            let urlPage = url.href.replace(`page=${page}`, `page=${i}`);
             pagination.innerHTML += `<a href="${urlPage}" class="btn btn-secondary ${i == page ? 'active' : ''}">${i}</a>`
         }
     }
 
-    //get page from url
-    let url = new URL(window.location.href);
-    let page = url.searchParams.get("page") ?? 1;
-    let limit = url.searchParams.get("limit") ?? LIMIT;
-
 
     let errorCallback = (error) => {
     }
-
-
-    filter = document.querySelector("#filter");
-    renderFilterBox();
-
-    GET_URL = `${PRODUCT_URL}?page=${page}&size=${limit}`;
-    console.log(GET_URL);
 
     await getDataFromApi(GET_URL, successCallback, errorCallback);
 }
@@ -324,7 +338,6 @@ async function editProduct(id) {
     //remove event listener
 }
 
-//get detail
 async function editProductForm(id) {
     let successCallback = (response) => {
         const form = document.querySelector("#editProductForm");
@@ -344,17 +357,17 @@ async function editProductForm(id) {
         const prviewImage = document.querySelector("#editProductForm .image-preview");
         prviewImage.innerHTML = `<img src="${response.data.imagePath}" alt="Image" width="100" height="100">`
 
-        buildImageBlobFromURL(response.data.imagePath).then(blob => {
-            form.image.addEventListener("change", (event) => {
-                const file = event.target.files[0];
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onloadend = () => {
-                    image = reader.result;
-                    prviewImage.innerHTML = `<img src="${image}" alt="Image" width="100" height="100">`
-                }
-            })
-        });
+
+        form.image.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = () => {
+                image = reader.result;
+                prviewImage.innerHTML = `<img src="${image}" alt="Image" width="100" height="100">`
+            }
+        })
+
 
         //render button in footer
         const footer = document.querySelector("#editProduct .modal-footer");
@@ -369,4 +382,119 @@ async function editProductForm(id) {
 
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
+
+function renderFilterBox(filterAttributes) {
+    // Create the main container div
+    filter = document.querySelector("#filter");
+    const filterContainer = document.createElement("div");
+    filterContainer.className = "filter-container";
+    filterContainer.style.width = "100%";
+    filterContainer.style.marginBottom = "10px";
+
+    // Create and append labels and select elements
+    filterAttributes.forEach(labelText => {
+        if (labelText == 'price') {
+            return;
+        }
+
+        if (labelText == 'name') {
+            let label = document.createElement("label");
+            label.textContent = labelText + ":";
+            let input = document.createElement("input");
+            input.type = "text";
+            input.id = "name";
+            input.placeholder = "Search by name";
+            input.className = "form-control";
+            input.style.width = "100%";
+            input.style.marginBottom = "10px";
+            input.addEventListener("input", function () {
+                    filterName = input.value;
+                }
+            )
+            filterContainer.appendChild(label);
+            filterContainer.appendChild(input);
+            return;
+        }
+
+        const label = document.createElement("label");
+        label.textContent = labelText + ":";
+        label.style.marginRight = "10px";
+        label.style.marginBottom = "10px";
+        select = document.createElement("select");
+        setFilterBox(select, labelText)
+
+        filterContainer.appendChild(label);
+        filterContainer.appendChild(select);
+        //margin left and uc first
+
+        filterContainer.style.marginLeft = "10px";
+        filterContainer.style.textTransform = "capitalize";
+
+    });
+
+    // Create the Price range input and output elements
+    const priceLabel = document.createElement("label");
+    priceLabel.textContent = "Price:";
+    const priceInput = document.createElement("input");
+    priceInput.type = "range";
+    priceInput.min = "1";
+    priceInput.max = "100";
+    priceInput.value = "0";
+    priceInput.className = "slider";
+    priceInput.id = "myRange";
+    const priceOutput = document.createElement("output");
+    priceOutput.textContent = "0";
+
+    priceInput.addEventListener("input", function () {
+        priceOutput.textContent = this.value;
+    });
+
+    filterContainer.appendChild(priceLabel);
+    filterContainer.appendChild(priceInput);
+    filterContainer.appendChild(priceOutput);
+
+    //submit filter
+    const submitBtn = document.createElement("button");
+    submitBtn.textContent = "Submit";
+    submitBtn.className = "btn btn-primary";
+    submitBtn.style.marginTop = "10px";
+    submitBtn.addEventListener("click", function () {
+        const currentURL = window.location.href;
+        const filterNameParam = "name=" + filterName;
+
+        const separator = currentURL.includes("?") ? "&" : "?";
+
+        let updatedURL = currentURL;
+
+        // If the current URL has a query string
+        if (currentURL.includes("?")) {
+            if (currentURL.match(/[?&]name=[^&]*/)) {
+                updatedURL = currentURL.replace(/([?&])name=[^&]*/, '$1' + filterNameParam);
+            } else {
+                updatedURL += separator + filterNameParam;
+            }
+
+            // if (currentURL.match(/[?&]category=[^&]*/)) {
+            //     updatedURL = currentURL.replace(/([?&])category=[^&]*/, '$1' + filterCategory);
+            // }
+            // else {
+            //     updatedURL += separator + filterCategory;
+            // }
+
+        } else {
+            // No query string, so simply add the query parameters
+            updatedURL += separator + filterNameParam;
+        }
+
+        // Redirect to the product page with the filter
+        window.location.href = updatedURL;
+
+    }, false);
+
+    filterContainer.appendChild(submitBtn);
+
+    filter.appendChild(filterContainer);
+
+}
+
 

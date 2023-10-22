@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,18 +30,23 @@ public class ProductController extends Controller {
     public ResponseEntity<String> getProducts(@RequestParam(defaultValue = "1") int page,
                                               @RequestParam(defaultValue = "8") int size,
                                               @RequestParam(defaultValue = "id") String sortBy,
-                                              @RequestParam(defaultValue = "ASC") String sortType
+                                              @RequestParam(defaultValue = "ASC") String sortType,
+                                              @RequestParam(defaultValue = "") String name
     ) {
         try {
-            List<Product> products = productService.getAllSort(page, size, sortBy, sortType);
+            HashMap<String, String> params = new HashMap<>();
+            params.put("name", name);
 
-            long totalItems = productService.count();
+            List<Product> products = productService.getAllSort(page, size, sortBy, sortType, params);
+
+            long totalItems = productService.count(products);
             Map<String, Object> metaData = buildPage(totalItems, page, size);
             return this.successResponse("Get all product successfully", products, metaData);
         } catch (Exception e) {
             return errorResponse(e.getMessage());
         }
     }
+
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         List<Product> products = productRepository.findAll();

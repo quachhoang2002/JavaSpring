@@ -46,7 +46,7 @@ function renderOptionManufacture(select = null) {
     getDataFromApi(MANUFACTURE_URL, successCallback, errorCallback);
 }
 
-function showToast(message,type) {
+function showToast(message, type) {
     let toast = document.createElement("div");
     document.body.appendChild(toast);
     toast.className = "toast";
@@ -83,4 +83,18 @@ function showToast(message,type) {
 }
 
 
-
+function setFilterBox(select, type) {
+    switch (type) {
+        case "product":
+            renderOptionProduct(select);
+            break;
+        case "category":
+            renderOptionCategory(select);
+            break;
+        case "manufacture":
+            renderOptionManufacture(select);
+            break;
+        default:
+            break;
+    }
+}
