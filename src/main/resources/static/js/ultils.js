@@ -99,6 +99,22 @@ function createToast(status, icon, title, message) {
     setTimeout(() => newToast.remove(), 5000);
 }
 
+function setFilterBox(select, type) {
+    switch (type) {
+        case "product":
+            renderOptionProduct(select);
+            break;
+        case "category":
+            renderOptionCategory(select);
+            break;
+        case "manufacture":
+            renderOptionManufacture(select);
+            break;
+        default:
+            break;
+    }
+}
+
 function renderFilterBox(filterAttributes) {
     // Create the main container div
     filter = document.querySelector('#filter');
