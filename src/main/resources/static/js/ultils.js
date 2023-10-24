@@ -78,7 +78,6 @@ function showToast(message,type) {
     setTimeout(function () {
         toast.style.opacity = 0;
         setTimeout(function () {
-//            toast.style.display = "none";
             document.body.classList.remove("body-animation");
         }, 500);
     }, 3000);
