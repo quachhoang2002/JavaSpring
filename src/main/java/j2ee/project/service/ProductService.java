@@ -125,8 +125,23 @@ public class ProductService extends BaseService {
         return "Product removed !! " + id;
     }
 
-    public long count(List<Product> products) {
-        return products.size();
+    public long count(Map<String,String> filters) {
+        Stream<Product> products = productRepository.findAll().stream();
+        for (Map.Entry<String, String> entry : filters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (key.equals("name")) {
+                products = products.filter(product -> product.getName().toLowerCase().contains(value.toLowerCase()));
+            }
+            if (key.equals("category")) {
+                products = products.filter(product -> product.getCategory().getName().toLowerCase().contains(value.toLowerCase()));
+            }
+            if (key.equals("manufacture")) {
+                products = products.filter(product -> product.getManufacture().getName().toLowerCase().contains(value.toLowerCase()));
+            }
+        }
+
+        return products.count();
     }
 
     public Optional<Product> getProductById(int productId) {

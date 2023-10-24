@@ -160,7 +160,7 @@ function RenderProductTemplate() {
                              
                               <div class="mb-3">
                                     <label for="image" class="form-label">Image</label>
-                                    <input type="file" class="form-control" id="image" name="image" required>
+                                    <input type="file" class="form-control" value="" id="image" name="image" required>
                               </div>
                               
                              <div class="modal-footer">
@@ -394,6 +394,26 @@ function renderFilterBox(filterAttributes) {
     // Create and append labels and select elements
     filterAttributes.forEach(labelText => {
         if (labelText == 'price') {
+            // Create the Price range input and output elements
+            const priceLabel = document.createElement("label");
+            priceLabel.textContent = "Price:";
+            const priceInput = document.createElement("input");
+            priceInput.type = "range";
+            priceInput.min = "1";
+            priceInput.max = "10000000";
+            priceInput.value = "0";
+            priceInput.className = "slider";
+            priceInput.id = "price";
+            priceInput.oninput = function () {
+                priceOutput.textContent = this.value; // Update the output value as the input changes
+            };
+
+            const priceOutput = document.createElement("output");
+            priceOutput.textContent = priceInput.value;
+
+            filterContainer.appendChild(priceLabel);
+            filterContainer.appendChild(priceInput);
+            filterContainer.appendChild(priceOutput);
             return;
         }
 
@@ -407,10 +427,6 @@ function renderFilterBox(filterAttributes) {
             input.className = "form-control";
             input.style.width = "100%";
             input.style.marginBottom = "10px";
-            input.addEventListener("input", function () {
-                    filterName = input.value;
-                }
-            )
             filterContainer.appendChild(label);
             filterContainer.appendChild(input);
             return;
@@ -421,37 +437,22 @@ function renderFilterBox(filterAttributes) {
         label.style.marginRight = "10px";
         label.style.marginBottom = "10px";
         select = document.createElement("select");
+        select.id = labelText
         setFilterBox(select, labelText)
 
         filterContainer.appendChild(label);
         filterContainer.appendChild(select);
         //margin left and uc first
 
+        select.addEventListener("change", function () {
+            const selectedValue = select.value;
+            console.log(`Selected value for ${labelText}: ${selectedValue}`);
+        });
+
         filterContainer.style.marginLeft = "10px";
         filterContainer.style.textTransform = "capitalize";
 
     });
-
-    // Create the Price range input and output elements
-    const priceLabel = document.createElement("label");
-    priceLabel.textContent = "Price:";
-    const priceInput = document.createElement("input");
-    priceInput.type = "range";
-    priceInput.min = "1";
-    priceInput.max = "100";
-    priceInput.value = "0";
-    priceInput.className = "slider";
-    priceInput.id = "myRange";
-    const priceOutput = document.createElement("output");
-    priceOutput.textContent = "0";
-
-    priceInput.addEventListener("input", function () {
-        priceOutput.textContent = this.value;
-    });
-
-    filterContainer.appendChild(priceLabel);
-    filterContainer.appendChild(priceInput);
-    filterContainer.appendChild(priceOutput);
 
     //submit filter
     const submitBtn = document.createElement("button");
@@ -460,34 +461,25 @@ function renderFilterBox(filterAttributes) {
     submitBtn.style.marginTop = "10px";
     submitBtn.addEventListener("click", function () {
         const currentURL = window.location.href;
-        const filterNameParam = "name=" + filterName;
+        const filterNameParam = "name=" + 'a';
 
         const separator = currentURL.includes("?") ? "&" : "?";
 
-        let updatedURL = currentURL;
+        let updatedURL = new URL(currentURL);
 
         // If the current URL has a query string
-        if (currentURL.includes("?")) {
-            if (currentURL.match(/[?&]name=[^&]*/)) {
-                updatedURL = currentURL.replace(/([?&])name=[^&]*/, '$1' + filterNameParam);
-            } else {
-                updatedURL += separator + filterNameParam;
-            }
 
-            // if (currentURL.match(/[?&]category=[^&]*/)) {
-            //     updatedURL = currentURL.replace(/([?&])category=[^&]*/, '$1' + filterCategory);
-            // }
-            // else {
-            //     updatedURL += separator + filterCategory;
-            // }
+        filterAttributes.forEach(filterAttr => {
+            console.log(updatedURL.href)
+            // Remove the parameter
+            newValue = document.querySelector("#" + filterAttr).value
+            updatedURL.searchParams.set(filterAttr, newValue);
+            console.log(updatedURL.href)
+        })
 
-        } else {
-            // No query string, so simply add the query parameters
-            updatedURL += separator + filterNameParam;
-        }
 
         // Redirect to the product page with the filter
-        window.location.href = updatedURL;
+        window.location.href = updatedURL.href;
 
     }, false);
 

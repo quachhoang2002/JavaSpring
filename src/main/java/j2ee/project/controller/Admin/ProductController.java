@@ -34,12 +34,12 @@ public class ProductController extends Controller {
                                               @RequestParam(defaultValue = "") String name
     ) {
         try {
-            HashMap<String, String> params = new HashMap<>();
-            params.put("name", name);
+            HashMap<String, String> filters = new HashMap<>();
+            filters.put("name", name);
 
-            List<Product> products = productService.getAllSort(page, size, sortBy, sortType, params);
+            List<Product> products = productService.getAllSort(page, size, sortBy, sortType, filters);
 
-            long totalItems = productService.count(products);
+            long totalItems = productService.count(filters);
             Map<String, Object> metaData = buildPage(totalItems, page, size);
             return this.successResponse("Get all product successfully", products, metaData);
         } catch (Exception e) {
