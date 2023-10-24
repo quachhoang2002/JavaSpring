@@ -56,6 +56,24 @@ public class LoginController extends Controller {
             return errorResponse(e.getMessage());
         }
     }
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseEntity<String> logout(@RequestBody Map<String, String> body) {
+        try {
+            String token = body.get("token");
+            if (token != null) {
+                User user = userService.findByToken(token);
+                System.out.println(user);
 
+                if (user != null) {
+                    userService.update(user);
+                    return successResponse("Logged out successfully", null);
+                }
+            }
+
+            return errorResponse("Invalid token"); // Token không hợp lệ
+        } catch (Exception e) {
+            return errorResponse(e.getMessage());
+        }
+    }
 
 }

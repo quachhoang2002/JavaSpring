@@ -3,7 +3,7 @@ package j2ee.project.models;
 import jakarta.persistence.*;
 import java.util.Date;
 
-@Table(name = "cart_entity")
+@Table(name = "cart")
 @Entity
 public class Cart {
     @Id

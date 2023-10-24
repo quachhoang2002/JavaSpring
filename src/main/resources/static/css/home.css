@@ -10842,5 +10842,50 @@ textarea.form-control-lg {
 .pagination-container{
 width: 100%;
 height: 50px;
-background-color: green;
+display: flex;
+flex-direction: row;
+align-items: center;
+}
+
+/* Phan Trang Voi Tang Giam ne Dỉconmemay */
+.button-container {
+    height: 38px;
+    width: 73px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    border: 1px solid black;
+    Border-radius: 10px;
+}
+
+.button-container:hover{
+    background-color: #212529;
+    color: white;
+    Border: 1px solid #212529;
+}
+
+.page-item.btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc; /* Đổi màu đường viền tùy ý */
+    border-radius: 50%; /* Để làm cho nút tròn */
+    background-color: #fff; /* Màu nền */
+    cursor: pointer;
+}
+
+.pagination{
+    gap: 5px;
+    Display: flex;
+    align-items: center;
+    Margin-bottom: 0;
+}
+
+.page-item.btn.active {
+    background-color: gray;
+    color: #fff;
+    border-color: gray;
 }

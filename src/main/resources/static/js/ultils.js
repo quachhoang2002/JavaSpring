@@ -48,10 +48,13 @@ function renderOptionManufacture(select = null) {
 
 function showToast(message,type) {
     let toast = document.createElement("div");
-    document.body.appendChild(toast);
+//    document.body.appendChild(toast);
+    const Test = document.querySelector(".container");
+    Test.appendChild(toast);
+
     toast.className = "toast";
     //z index: 9999
-    toast.style.zIndex = "9999";
+    toast.style.zIndex = "999999";
 
     if (type == "success") {
         toast.style.borderLeft = "5px solid #28a745";
@@ -75,12 +78,30 @@ function showToast(message,type) {
     setTimeout(function () {
         toast.style.opacity = 0;
         setTimeout(function () {
-            toast.style.display = "none";
+//            toast.style.display = "none";
             document.body.classList.remove("body-animation");
         }, 500);
     }, 3000);
 
 }
 
+function createToast(status, icon, title, message) {
+    let notifications = document.getElementById("notifications");
 
+    let newToast = document.createElement('div');
+
+    newToast.style.zIndex = "9999";
+    newToast.innerHTML = `
+    <div class="toastPopup ${status}" style="background-color: blue; z-index: 9999999 ">
+        <i class="bi ${icon}"></i>
+        <div class="content">
+            <div class="title">${title}</div>
+            <span>${message}</span>
+        </div>
+        <i class="bi bi-x" onclick="this.parentElement.remove()"></i>
+    </div>
+    `;
+    notifications.appendChild(newToast);
+    setTimeout(() => newToast.remove(), 5000);
+}
 

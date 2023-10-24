@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 import java.sql.Timestamp;
 
-@Table(name = "user_entity")
+@Table(name = "users")
 @Entity
 public class User {
     @Id

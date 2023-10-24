@@ -124,7 +124,7 @@
                     <a
                             class="nav-link active"
                             aria-current="page"
-                            href="#!"
+                            href="/"
                     >Home</a
                     >
                 </li>
@@ -152,7 +152,7 @@
                         <li>
                             <a
                                     class="dropdown-item"
-                                    href="#!"
+                                    href="/"
                             >All Products</a
                             >
                         </li>
@@ -162,7 +162,7 @@
                         <li>
                             <a
                                     class="dropdown-item"
-                                    href="#!"
+                                    href="/"
                             >Popular Items</a
                             >
                         </li>
@@ -629,6 +629,7 @@
                     // Nếu cập nhật thành công, cập nhật lại total price
                     calculateTotalPrice();
                 } else {
+                    alert(error.message);
                     // Hiển thị thông báo lỗi nếu cập nhật không thành công
                     console.error('Update error:', response.message);
                 }
