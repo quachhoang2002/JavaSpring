@@ -422,10 +422,11 @@
   onSuccessfulLogin = (response) => {
       console.log(response);
       if (response.data.token) {
-              console.log(response.data);
+          console.log("Data: " + response.data);
           localStorage.setItem('user', JSON.stringify(response.data));
           localStorage.setItem('token', response.data.token);
       }
+          localStorage.setItem('user', JSON.stringify(response.data));
           logOutButton.style.display = 'block';
           signInButton.style.display = 'none';
           cartButton.style.display = 'block';
@@ -441,14 +442,18 @@
       userButton.style.display = 'none';
   }
 
+  const loginUrl = API_URL + '/auth/login';
   console.log(localStorage.getItem('token'));
   // check if have token in local storage
   if (localStorage.getItem('token')) {
       const data = {
           token: localStorage.getItem('token')
       }
+
       onTokenLogin = (response) => {}
       postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
+  } else if(localStorage.getItem('user')){
+
   }
 
   const loginUser = async (event) => {

@@ -559,7 +559,7 @@ addToCartButton.addEventListener('click', function () {
             createToast(status, "bi-check-circle", "Success", message);
         })
         .catch((error) => {
-            createToast("error", "bi-check-circle", "Error", "Product is out of stock");
+            createToast("error", "bi-check-circle", +
             console.error('Error adding to cart:', error);
         });
 });

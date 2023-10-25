@@ -3,12 +3,13 @@ package j2ee.project.controller.User;
 import j2ee.project.controller.Controller;
 import j2ee.project.models.*;
 import j2ee.project.repository.*;
+import j2ee.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bill/")
@@ -21,45 +22,53 @@ public class BillController extends Controller {
     private BillDetailsRepository billDetailsRepository;
     @Autowired
     private StockRepository stockRepository;
-
+    @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private ProductService productService;
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<String> addNewBill(@RequestBody Order bill) {
-        try {
-            Order newBill = billRepository.save(bill);
+    public Order createOrder(List<Cart> cartItems) {
+        // Tạo đối tượng Order và gán thông tin từ các đối tượng Cart
+        Order order = new Order();
+        order.setCustomerName("Customer Name"); // Thay bằng tên khách hàng
+        order.setShippingAddress("Shipping Address"); // Thay bằng địa chỉ giao hàng
+        order.setCustomerPhone("Customer Phone"); // Thay bằng số điện thoại khách hàng
+        order.setEmail_receive("Email Address"); // Thay bằng địa chỉ email
+        order.setTotal_price(calculateTotalPrice(cartItems)); // Tính tổng giá trị đơn hàng
 
-            List<Cart> cartItems = cartRepository.findAll();
+        // Tạo danh sách OrderDetails từ danh sách Cart
+        List<OrderDetails> orderDetailsList = cartItems.stream()
+                .map(cartItem -> {
+                    OrderDetails orderDetails = new OrderDetails();
+                    orderDetails.setOrder(order);
+                    Optional<Product> product = getProductFromCart(cartItem);
+                    orderDetails.setProduct(product);
+                    orderDetails.setQuantity(cartItem.getQuantity());
+                    orderDetails.setPrice(cartItem.getPrice());
+                    return orderDetails;
+                })
+                .collect(Collectors.toList());
 
-            for (Cart cartItem : cartItems) {
-                OrderDetails billDetails = new OrderDetails();
-                billDetails.setQuantity(cartItem.getQuantity());
-                billDetails.setPrice(cartItem.getPrice());
-                billDetailsRepository.save(billDetails);
+        // Gán danh sách OrderDetails vào đối tượng Order
+        order.setOrderDetails(orderDetailsList);
 
-                Product product = productRepository.findById(cartItem.getProductId()).get();
-                billDetails.setProduct(product);
+        return order;
+    }
 
-                Optional<Stock> wareHouseOptional = stockRepository.findByProduct(billDetails.getProduct());
+    // Hàm tính tổng giá trị đơn hàng từ danh sách Cart
+    private double calculateTotalPrice(List<Cart> cartItems) {
+        return cartItems.stream()
+                .mapToDouble(cartItem -> cartItem.getPrice() * cartItem.getQuantity())
+                .sum();
+    }
 
-                if (wareHouseOptional.isPresent()) {
-                    Stock wareHouse = wareHouseOptional.get(); // Lấy đối tượng WareHouse từ Optional
-                    int newQuantity = wareHouse.getQuantity() - cartItem.getQuantity();
-                    wareHouse.setQuantity(newQuantity);
-                    stockRepository.save(wareHouse);
-                } else {
-                    // Xử lý trường hợp không tìm thấy WareHouse
-                }
-
-            }
-
-            cartRepository.deleteAll();
-
-            return successResponse("Added new bill and details successfully.", null);
-        } catch (Exception e) {
-            return errorResponse(e.getMessage());
-        }
+    // Hàm lấy thông tin sản phẩm từ đối tượng Cart
+    private Optional<Product> getProductFromCart(Cart cartItem) {
+        // Thực hiện truy vấn cơ sở dữ liệu hoặc logic để lấy thông tin sản phẩm dựa trên cartItem.productId
+        // Ví dụ:
+        Optional<Product> product = productService.getProductById(cartItem.getProductId());
+        return product;
     }
 
 }

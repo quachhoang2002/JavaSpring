@@ -2,6 +2,8 @@ package j2ee.project.models;
 
 import jakarta.persistence.*;
 
+import java.util.Optional;
+
 @Entity
 @Table(name = "order_details")
 public class OrderDetails {
@@ -13,14 +15,14 @@ public class OrderDetails {
     private Order order;
 
     @ManyToOne
-    private Product product;
+    private Optional<Product> product;
     private Integer quantity;
     private double price;
 
     public OrderDetails() {
     }
 
-    public OrderDetails(Integer id, Order order, Product product, Integer quantity, double price) {
+    public OrderDetails(Integer id, Order order, Optional<Product> product, Integer quantity, double price) {
         this.id = id;
         this.order = order;
         this.product = product;
@@ -44,11 +46,11 @@ public class OrderDetails {
         this.order = order;
     }
 
-    public Product getProduct() {
+    public Optional<Product> getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(Optional<Product> product) {
         this.product = product;
     }
 

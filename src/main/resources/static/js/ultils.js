@@ -86,7 +86,7 @@ function createToast(status, icon, title, message) {
 
     newToast.style.zIndex = '9999';
     newToast.innerHTML = `
-    <div class="toastPopup ${status}" style="background-color: blue; z-index: 9999999 ">
+    <div class="toastPopup ${status}" style=" z-index: 9999999 ">
         <i class="bi ${icon}"></i>
         <div class="content">
             <div class="title">${title}</div>
