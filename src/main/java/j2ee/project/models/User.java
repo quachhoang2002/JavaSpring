@@ -68,7 +68,10 @@ public class User {
     }
 
     public String getCreateat() {
-        return this.createdat.toString().substring(0, 19);
+        if (createdat == null) {
+            return null;
+        }
+        return createdat.toString().substring(0, 19);
     }
 
     @PrePersist

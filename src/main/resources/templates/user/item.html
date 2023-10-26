@@ -530,13 +530,16 @@ addToCartButton.addEventListener('click', function () {
     const quantity = document.getElementById('inputQuantity').value;
     const price = parseFloat(document.getElementById('productPrice').textContent.replace('$', ''));
     const createdAt = new Date().toISOString();
-
+    const user = localStorage.getItem('user');
+    const parsedUser = JSON.parse(user);
+    console.log(parsedUser.id);
     // Prepare the data to send
     const data = {
         productId: productIdAsInt,
         quantity: parseInt(quantity),
         price: price,
         createdAt: createdAt,
+        user_id: parsedUser.id
     };
 
     // Send the POST request
@@ -559,7 +562,7 @@ addToCartButton.addEventListener('click', function () {
             createToast(status, "bi-check-circle", "Success", message);
         })
         .catch((error) => {
-            createToast("error", "bi-check-circle", +
+            createToast("error", "bi-check-circle", "Error", "Product is out of stock")
             console.error('Error adding to cart:', error);
         });
 });

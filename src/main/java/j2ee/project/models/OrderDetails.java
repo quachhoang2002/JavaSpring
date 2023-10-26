@@ -15,14 +15,14 @@ public class OrderDetails {
     private Order order;
 
     @ManyToOne
-    private Optional<Product> product;
+    private Product product;
     private Integer quantity;
     private double price;
 
     public OrderDetails() {
     }
 
-    public OrderDetails(Integer id, Order order, Optional<Product> product, Integer quantity, double price) {
+    public OrderDetails(Integer id, Order order, Product product, Integer quantity, double price) {
         this.id = id;
         this.order = order;
         this.product = product;
@@ -46,11 +46,11 @@ public class OrderDetails {
         this.order = order;
     }
 
-    public Optional<Product> getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Optional<Product> product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 

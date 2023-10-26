@@ -705,12 +705,15 @@
             customerPhone: phone,
             email_receive: parsedUser.email,
             status: 0,
-            total_price: totalPriceForCheckout
+            total_price: totalPriceForCheckout,
+            user: {
+                id: parsedUser.id
+            }
         };
         console.log(paymentData)
         // Gửi thông tin thanh toán đến máy chủ (backend) bằng một yêu cầu HTTP, ví dụ sử dụng fetch
 
-        fetch('http://localhost:8081/api/bill/add', {
+        fetch('http://localhost:8081/api/order/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -720,11 +723,14 @@
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                alert('Thanh toán thành công!');
-                // Sau khi thanh toán thành công, bạn có thể thực hiện các hành động cần thiết, ví dụ làm trống giỏ hàng, chuyển hướng trang web, vv.
-            } else {
-                alert('Thanh toán thất bại. Vui lòng thử lại sau.');
-            }
+    alert('Thanh toán thành công!');
+    // Sử dụng JavaScript để tải lại trang sau một khoảng thời gian ngắn (ví dụ: 2 giây)
+    setTimeout(function () {
+        location.reload();
+    }, 1000); // Tải lại trang sau 2 giây
+} else {
+    alert('Thanh toán thất bại. Vui lòng thử lại sau.');
+}
         })
         .catch(error => {
             console.error('Lỗi khi gửi yêu cầu thanh toán:', error);
