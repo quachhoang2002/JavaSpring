@@ -31,11 +31,23 @@ public class ProductController extends Controller {
                                               @RequestParam(defaultValue = "8") int size,
                                               @RequestParam(defaultValue = "id") String sortBy,
                                               @RequestParam(defaultValue = "ASC") String sortType,
-                                              @RequestParam(defaultValue = "") String name
+                                              @RequestParam(defaultValue = "") String name,
+                                              @RequestParam(defaultValue = "") String category,
+                                              @RequestParam(defaultValue = "") String manufacture
     ) {
         try {
             HashMap<String, String> filters = new HashMap<>();
-            filters.put("name", name);
+            if (!name.isEmpty()) {
+                filters.put("name", name);
+            }
+
+            if (!category.isEmpty()) {
+                filters.put("category", category);
+            }
+
+            if(!manufacture.isEmpty()){
+                filters.put("manufacture", manufacture);
+            }
 
             List<Product> products = productService.getAllSort(page, size, sortBy, sortType, filters);
 

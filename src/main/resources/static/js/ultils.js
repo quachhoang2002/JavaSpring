@@ -2,8 +2,9 @@ function renderOptionProduct(select = null) {
     let successCallback = (response) => {
         if (select) {
             select.innerHTML = '';
-            response.data.forEach((item) => {
-                select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+            select.innerHTML= `<option value="" selected>All</option>`
+            response.data.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name}</option>`
             });
         }
     };
@@ -17,8 +18,9 @@ function renderOptionCategory(select = null) {
     let successCallback = (response) => {
         if (select) {
             select.innerHTML = '';
-            response.data.forEach((item) => {
-                select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+            select.innerHTML= `<option value="" selected>All</option>`
+            response.data.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name}</option>`
             });
         }
     };
@@ -32,8 +34,9 @@ function renderOptionManufacture(select = null) {
     let successCallback = (response) => {
         if (select) {
             select.innerHTML = '';
-            response.data.forEach((item) => {
-                select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+            select.innerHTML= `<option value="" selected>All</option>`
+            response.data.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name}</option>`
             });
         }
     };

@@ -49,13 +49,13 @@ public class ProductService extends BaseService {
         product.setManufacture(manufacture);
         product.setPrice(productReq.getPrice());
         product.setDescription(productReq.getDescription());
-        try{
+        try {
             MultipartFile image = productReq.getImage();
             if (image != null && !image.isEmpty()) {
-                String imagePath = this.buildImagePath(image,IMAGE_FOLDER);
+                String imagePath = this.buildImagePath(image, IMAGE_FOLDER);
                 product.setImagePath(imagePath);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -64,27 +64,17 @@ public class ProductService extends BaseService {
 
     //get all categories
     // READ - Get all Manufactories with pagination
-    public List<Product> getAllSort(int page, long limit, String sortBy, String sortType,Map<String,String> filters) {
+    public List<Product> getAllSort(int page, long limit, String sortBy, String sortType, Map<String, String> filters) {
         //get and sort by id
         Stream<Product> products = productRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit);
-        for (Map.Entry<String, String> entry : filters.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            if (key.equals("name")) {
-                products = products.filter(product -> product.getName().toLowerCase().contains(value.toLowerCase()));
-            }
-            if (key.equals("category")) {
-                products = products.filter(product -> product.getCategory().getName().toLowerCase().contains(value.toLowerCase()));
-            }
-            if (key.equals("manufacture")) {
-                products = products.filter(product -> product.getManufacture().getName().toLowerCase().contains(value.toLowerCase()));
-            }
-        }
+        products = buildFilter(filters,products);
         return products.toList();
     }
-    public List<Product> getAll(){
+
+    public List<Product> getAll() {
         return productRepository.findAll();
     }
+
     //get product by id
     public Optional<Product> getById(Integer id) {
         return productRepository.findById(id);
@@ -107,13 +97,13 @@ public class ProductService extends BaseService {
         existingProd.setManufacture(manufacture);
         existingProd.setPrice(product.getPrice());
         existingProd.setDescription(product.getDescription());
-        try{
+        try {
             MultipartFile image = product.getImage();
             if (image != null && !image.isEmpty()) {
-                String imagePath = this.buildImagePath(image,IMAGE_FOLDER);
+                String imagePath = this.buildImagePath(image, IMAGE_FOLDER);
                 existingProd.setImagePath(imagePath);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return productRepository.save(existingProd);
@@ -125,8 +115,14 @@ public class ProductService extends BaseService {
         return "Product removed !! " + id;
     }
 
-    public long count(Map<String,String> filters) {
+    public long count(Map<String, String> filters) {
         Stream<Product> products = productRepository.findAll().stream();
+        products = buildFilter(filters,products);
+
+        return products.count();
+    }
+
+    public Stream<Product> buildFilter(Map<String, String> filters, Stream<Product> products) {
         for (Map.Entry<String, String> entry : filters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -134,14 +130,19 @@ public class ProductService extends BaseService {
                 products = products.filter(product -> product.getName().toLowerCase().contains(value.toLowerCase()));
             }
             if (key.equals("category")) {
-                products = products.filter(product -> product.getCategory().getName().toLowerCase().contains(value.toLowerCase()));
+                // Parse the value string to an integer
+                int categoryId = Integer.parseInt(value);
+                // Use the parsed integer for filtering
+                products = products.filter(product -> product.getCategory().getId() == categoryId);
             }
             if (key.equals("manufacture")) {
-                products = products.filter(product -> product.getManufacture().getName().toLowerCase().contains(value.toLowerCase()));
+                int manufacture = Integer.parseInt(value);
+                // Use the parsed integer for filtering
+                products = products.filter(product -> product.getManufacture().getId() == manufacture);
             }
         }
 
-        return products.count();
+        return products;
     }
 
     public Optional<Product> getProductById(int productId) {
