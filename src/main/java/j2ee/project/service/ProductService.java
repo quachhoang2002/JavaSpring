@@ -64,10 +64,10 @@ public class ProductService extends BaseService {
 
     //get all categories
     // READ - Get all Manufactories with pagination
-    public List<Product> getAllSort(int page, long limit, String sortBy, String sortType, Map<String, String> filters) {
+    public List<Product> getAllSort(int page, int limit, String sortBy, String sortType, Map<String, String> filters) {
         //get and sort by id
-        Stream<Product> products = productRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit);
-        products = buildFilter(filters,products);
+        Stream<Product> products = productRepository.findWithOrder(sortBy, sortType).stream();
+        products = buildFilter(products, filters, page, limit);
         return products.toList();
     }
 
@@ -117,15 +117,16 @@ public class ProductService extends BaseService {
 
     public long count(Map<String, String> filters) {
         Stream<Product> products = productRepository.findAll().stream();
-        products = buildFilter(filters,products);
+        products = buildFilter(products, filters, 0, 0);
 
         return products.count();
     }
 
-    public Stream<Product> buildFilter(Map<String, String> filters, Stream<Product> products) {
+    public Stream<Product> buildFilter(Stream<Product> products, Map<String, String> filters, int page, int limit) {
         for (Map.Entry<String, String> entry : filters.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
+
             if (key.equals("name")) {
                 products = products.filter(product -> product.getName().toLowerCase().contains(value.toLowerCase()));
             }
@@ -140,6 +141,10 @@ public class ProductService extends BaseService {
                 // Use the parsed integer for filtering
                 products = products.filter(product -> product.getManufacture().getId() == manufacture);
             }
+        }
+
+        if(page != 0 && limit != 0){
+            products = products.skip((page - 1) * limit).limit(limit);
         }
 
         return products;
