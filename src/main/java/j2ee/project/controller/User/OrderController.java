@@ -6,6 +6,7 @@ import j2ee.project.repository.*;
 import j2ee.project.service.CartService;
 import j2ee.project.service.OrderDetailsService;
 import j2ee.project.service.OrderService;
+import j2ee.project.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,8 @@ public class OrderController extends Controller {
     private CartService cartService;
     @Autowired
     private OrderDetailsService orderDetailsService;
+    @Autowired
+    private StockService stockService;
     @PostMapping("/add")
     public ResponseEntity<?> createOrder(@RequestBody Order order) {
         Order createdOrder = orderService.createOrder(order);
@@ -43,9 +46,11 @@ public class OrderController extends Controller {
             orderDetail.setQuantity(cartItem.getQuantity());
             orderDetail.setPrice(cartItem.getPrice());
             orderDetail.setOrder(order);
+
+            int productId = cartItem.getProductId();
+            int quantity = cartItem.getQuantity();
+            stockService.decreaseStockQuantity(productId, quantity);
             orderDetailsService.createOrderDetails(orderDetail);
-            System.out.println("zxc zxczczxczxczxczxc z zxczxc" + cartItem.getProductId());
-            System.out.println("zxc zxczczxczxczxczxc z zxczxc" + cartItem.getUser_id());
             cartService.deleteByProductIdAndUserId(cartItem.getProductId(), cartItem.getUser_id());
         }
         return successResponse("successfully",null);
