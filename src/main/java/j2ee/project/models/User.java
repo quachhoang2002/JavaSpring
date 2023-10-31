@@ -3,8 +3,9 @@ import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
-@Table(name = "user_entity")
+@Table(name = "users")
 @Entity
 public class User {
     @Id
@@ -67,7 +68,16 @@ public class User {
     }
 
     public String getCreateat() {
-        return this.createdat.toString().substring(0, 19);
+        if (createdat == null) {
+            return null;
+        }
+        return createdat.toString().substring(0, 19);
+    }
+
+    @PrePersist
+    private void setCreatedAt() {
+        // Set the createdAt field to the current timestamp when persisting the entity
+        createdat = new Timestamp(new Date().getTime());
     }
 
     public Integer getStatus() {
@@ -81,6 +91,7 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
+
 
     //to string
     @Override

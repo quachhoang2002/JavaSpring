@@ -3,6 +3,7 @@ package j2ee.project.service;
 import j2ee.project.models.User;
 import j2ee.project.repository.UserRepository;
 import jakarta.persistence.TypedQuery;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,10 @@ public class UserService {
 
         return user;
     }
-
+    public void update(User user) {
+        user.setToken(null);
+        userRepository.save(user);
+    }
     //remember
     public void remember(User user){
         userRepository.save(user);

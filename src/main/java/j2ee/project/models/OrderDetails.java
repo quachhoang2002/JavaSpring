@@ -2,6 +2,8 @@ package j2ee.project.models;
 
 import jakarta.persistence.*;
 
+import java.util.Optional;
+
 @Entity
 @Table(name = "order_details")
 public class OrderDetails {

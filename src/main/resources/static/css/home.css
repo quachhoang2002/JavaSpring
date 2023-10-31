@@ -10842,5 +10842,156 @@ textarea.form-control-lg {
 .pagination-container{
 width: 100%;
 height: 50px;
-background-color: green;
+display: flex;
+flex-direction: row;
+align-items: center;
 }
+
+/* Phan Trang Voi Tang Giam ne Dỉconmemay */
+.button-container {
+    height: 38px;
+    width: 73px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    border: 1px solid black;
+    Border-radius: 10px;
+}
+
+.button-container:hover{
+    background-color: #212529;
+    color: white;
+    Border: 1px solid #212529;
+}
+
+.page-item.btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc; /* Đổi màu đường viền tùy ý */
+    border-radius: 50%; /* Để làm cho nút tròn */
+    background-color: #fff; /* Màu nền */
+    cursor: pointer;
+}
+
+.pagination{
+    gap: 5px;
+    Display: flex;
+    align-items: center;
+    Margin-bottom: 0;
+}
+
+.page-item.btn.active {
+    background-color: gray;
+    color: #fff;
+    border-color: gray;
+}
+
+
+/* CSS FOR TOAST NOTIFICATIONS */
+.buttons-noti {
+            padding: 10px;
+        }
+        .notifications {
+            display: flex;
+            position: fixed;
+            z-index: 999;
+            top: 30px;
+            right: 200px;
+            height: 200px;
+            width: 200px;
+        }
+        .toastPopup {
+            cursor: pointer;
+            position: relative;
+            padding: 10px;
+            color: #fff;
+            margin-bottom: 10px;
+            width: 400px;
+            display: grid;
+            grid-template-columns: 70px 1fr 70px;
+            border-radius: 5px;
+            --color: #0abf30;
+            background-image: linear-gradient(
+                to right,
+                #0abf3055,
+                #22242f 30%
+            );
+            animation: show 0.3s ease 1 forwards;
+        }
+        .toastPopup i {
+            color: var(--color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: x-large;
+        }
+        .toastPopup .title {
+            font-size: x-large;
+            font-weight: bold;
+        }
+        .toastPopup span,
+        .toastPopup i:nth-child(3) {
+            color: #fff;
+            opacity: 0.6;
+        }
+        @keyframes show {
+            0% {
+                transform: translateX(100%);
+            }
+            40% {
+                transform: translateX(-5%);
+            }
+            80% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-10%);
+            }
+        }
+        .toastPopup::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: var(--color);
+            width: 100%;
+            height: 3px;
+            content: '';
+            box-shadow: 0 0 10px var(--color);
+            animation: timeOut 5s linear 1 forwards;
+        }
+        @keyframes timeOut {
+            to {
+                width: 0;
+            }
+        }
+        .toastPopup.error {
+            --color: #f24d4c;
+            background-image: linear-gradient(
+                to right,
+                #f24d4c55,
+                #22242f 30%
+            );
+        }
+        .toastPopup.warning {
+            --color: #e9bd0c;
+            background-image: linear-gradient(
+                to right,
+                #e9bd0c55,
+                #22242f 30%
+            );
+        }
+        .toastPopup.info {
+            --color: #3498db;
+            background-image: linear-gradient(
+                to right,
+                #3498db55,
+                #22242f 30%
+            );
+        }
+
+
+

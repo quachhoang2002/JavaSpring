@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Integer> {
     Optional<Stock> findByProduct(Product product);
-
+    Stock findByProductId(int id);
     default List<Stock> findWithOrder(String sortBy, String sortType) {
         if (sortBy == null || sortBy.equals("")) {
             sortBy = "id";

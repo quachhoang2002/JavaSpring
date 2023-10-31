@@ -124,7 +124,7 @@
                     <a
                             class="nav-link active"
                             aria-current="page"
-                            href="#!"
+                            href="/"
                     >Home</a
                     >
                 </li>
@@ -152,7 +152,7 @@
                         <li>
                             <a
                                     class="dropdown-item"
-                                    href="#!"
+                                    href="/"
                             >All Products</a
                             >
                         </li>
@@ -162,7 +162,7 @@
                         <li>
                             <a
                                     class="dropdown-item"
-                                    href="#!"
+                                    href="/"
                             >Popular Items</a
                             >
                         </li>
@@ -380,6 +380,7 @@
                                             type="button"
                                             class="btn btn-primary btn-block btn-lg"
                                             id="buy-now"
+                                            onclick="checkout()"
                                     >
                                         Buy now
                                     </button>
@@ -415,6 +416,7 @@
         </p>
     </div>
 </footer>
+<div class="notifications" id="notifications"></div>
 <!-- Bootstrap core JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS -->
@@ -423,10 +425,14 @@
         type="text/javascript"
         src="https://code.jquery.com/jquery-1.7.1.min.js"
 ></script>
+<script src="/js/ultils.js"></script>
 <script>
+
     window.onload = function () {
         renderProductItems();
+        calculateTotalPrice();
     };
+    let totalPriceForCheckout ;
 
     async function renderProductItems() {
         const url = 'http://localhost:8081/api/cart/getAll';
@@ -522,6 +528,7 @@
                             'text-black'
                         );
                         quantityField.type = 'number';
+                        quantityField.style.width = '50px';
                         quantityField.min = '0';
                         quantityField.name =
                             data.cartItems[index].productId;
@@ -629,6 +636,7 @@
                     // Nếu cập nhật thành công, cập nhật lại total price
                     calculateTotalPrice();
                 } else {
+                    alert(error.message);
                     // Hiển thị thông báo lỗi nếu cập nhật không thành công
                     console.error('Update error:', response.message);
                 }
@@ -655,7 +663,7 @@
                         },
                         0
                     );
-
+                    totalPriceForCheckout = totalPrice;
                     // Định dạng total price
                     const formattedTotal = formatPrice(totalPrice);
 
@@ -672,6 +680,62 @@
                     error
                 );
             });
+    }
+
+    function checkout() {
+        // Lấy thông tin từ các trường nhập liệu (tên, địa chỉ, số điện thoại)
+        const fullName = document.getElementById('typeFullName').value;
+        const address = document.getElementById('typeAddress').value;
+        const phone = document.getElementById('typePhone').value;
+        const user = localStorage.getItem('user');
+        const parsedUser = JSON.parse(user);
+
+        console.log(parsedUser.email)
+        console.log(totalPriceForCheckout)
+        // Kiểm tra xem các trường có dữ liệu hợp lệ không
+        if (fullName.trim() === '' || address.trim() === '' || phone.trim() === '') {
+            createToast("error","bi-check-circle","Error", "Vui lòng điền đầy đủ thông tin");
+            return;
+        }
+
+        // Tạo một đối tượng chứa thông tin thanh toán
+        const paymentData = {
+            customerName: fullName,
+            shippingAddress: address,
+            customerPhone: phone,
+            email_receive: parsedUser.email,
+            status: 0,
+            total_price: totalPriceForCheckout,
+            user: {
+                id: parsedUser.id
+            }
+        };
+        console.log(paymentData)
+        // Gửi thông tin thanh toán đến máy chủ (backend) bằng một yêu cầu HTTP, ví dụ sử dụng fetch
+
+        fetch('http://localhost:8081/api/order/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(paymentData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+    alert('Thanh toán thành công!');
+    // Sử dụng JavaScript để tải lại trang sau một khoảng thời gian ngắn (ví dụ: 2 giây)
+    setTimeout(function () {
+        location.reload();
+    }, 1000); // Tải lại trang sau 2 giây
+} else {
+    alert('Thanh toán thất bại. Vui lòng thử lại sau.');
+}
+        })
+        .catch(error => {
+            console.error('Lỗi khi gửi yêu cầu thanh toán:', error);
+            alert('Có lỗi xảy ra khi thanh toán. Vui lòng thử lại sau.');
+        });
     }
 </script>
 </body>

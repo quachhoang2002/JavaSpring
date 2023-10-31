@@ -4,9 +4,11 @@ import j2ee.project.models.Product;
 import j2ee.project.models.Stock;
 import j2ee.project.repository.ProductRepository;
 import j2ee.project.repository.StockRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StockService {
@@ -39,5 +41,23 @@ public class StockService {
             return null;
         }
         return stockRepository.findByProduct(product).orElse(null);
+    }
+    @Transactional
+    public void decreaseStockQuantity(int productId, int quantity) {
+        Stock stock = stockRepository.findByProductId(productId);
+
+        if (stock != null) {
+            int currentQuantity = stock.getQuantity();
+            if (currentQuantity >= quantity) {
+                stock.setQuantity(currentQuantity - quantity);
+                stockRepository.save(stock);
+            } else {
+                // Xử lý tình huống không đủ số lượng sản phẩm trong kho
+                throw new RuntimeException("Số lượng sản phẩm không đủ trong kho");
+            }
+        } else {
+            // Xử lý tình huống không tìm thấy sản phẩm trong kho
+            throw new RuntimeException("Không tìm thấy sản phẩm trong kho");
+        }
     }
 }

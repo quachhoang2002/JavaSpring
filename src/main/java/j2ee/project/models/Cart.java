@@ -3,7 +3,7 @@ package j2ee.project.models;
 import jakarta.persistence.*;
 import java.util.Date;
 
-@Table(name = "cart_entity")
+@Table(name = "cart")
 @Entity
 public class Cart {
     @Id
@@ -18,11 +18,22 @@ public class Cart {
     @Column(name = "price", nullable = false)
     private double price;
 
+    @Column(name = "user_id", nullable = false)
+    private int user_id;
+
     @Column(name = "createdAt", nullable = false)
     @Temporal(TemporalType.DATE) // Sử dụng @Temporal để chỉ định kiểu dữ liệu của trường ngày tháng
     private Date createdAt;
 
     // Constructors, getters, setters, và các phương thức khác
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
 
     public int getId() {
         return id;

@@ -23,26 +23,27 @@
                                 <!-- Existing registration form fields... -->
 
                                 <div class="form-outline mb-4">
-                                    <input type="email" id="loginEmail" class="form-control form-control-lg"/>
-                                    <label class="form-label" for="loginEmail">Email/Username</label>
+                                    <label class="form-label" for="loginEmail">Email</label>
+                                    <input type="email" id="loginEmail" placeholder="example@gmail.com" class="form-control form-control-lg"/>
                                 </div>
 
-                                <div class="form-outline mb-4">
-                                    <input type="password" id="loginPassword" class="form-control form-control-lg"/>
+                                <div class="form-outline mb-4" style="margin-bottom: 0">
                                     <label class="form-label" for="loginPassword">Password</label>
+                                    <input type="password" id="loginPassword" class="form-control form-control-lg"/>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-4">
+                                    <input class="custom-control-input" type="checkbox" value="" id="rememberPassword"
+                                           checked/>
+                                    <label class="custom-control-label" for="rememberPassword">Remember password</label>
                                 </div>
 
                                 <div class="d-flex justify-content-center">
                                     <button type="submit"
                                             class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login
                                     </button>
-
-
-                                <div class="custom-control custom-checkbox mb-4">
-                                    <input class="custom-control-input" type="checkbox" value="" id="rememberPassword"
-                                           checked/>
-                                    <label class="custom-control-label" for="rememberPassword">Remember password</label>
                                 </div>
+
+
 
                                 <p class="text-center text-muted mt-3 mb-0">Don't have an account?
                                     <a href="/register" class="fw-bold text-body">
@@ -73,7 +74,8 @@
     onSuccessfulLogin = (response) => {
         console.log(response);
         if (response.data.token) {
-            console.log(response.data.token);
+            console.log(response.data);
+            localStorage.setItem('user', response.data);
             localStorage.setItem('token', response.data.token);
         }
         window.location.href = '/';
@@ -105,11 +107,11 @@
             password: password,
             remember: checkbox
         }
+        console.log(data);
 
         postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
 
     }
-
     document.getElementById('loginForm').addEventListener('submit', loginUser);
 
 </script>
