@@ -270,9 +270,9 @@ async function renderProductItems() {
 
 async function addProduct() {
     let successCallback = (response) => {
-        bootstrap.Modal.getInstance(document.querySelector('#addProduct')).hide();
+        // bootstrap.Modal.getInstance(document.querySelector('#addProduct')).hide();
         //get current page
-        renderProductItems();
+        window.location.reload()
     }
 
     let errorCallback = (error) => {
@@ -299,8 +299,7 @@ async function addProduct() {
 
 async function deleteProduct(url) {
     let successCallback = (response) => {
-        alert(response.message);
-        renderProductItems();
+        window.location.reload()
     }
 
     let errorCallback = (error) => {
@@ -316,7 +315,7 @@ async function editProduct(id) {
     }
     const successCallback = async (response) => {
         bootstrap.Modal.getInstance(document.querySelector("#editProduct")).hide();
-        await renderProductItems();
+        window.location.reload()
     }
 
     editUrl = `${PRODUCT_URL}/${id}`;

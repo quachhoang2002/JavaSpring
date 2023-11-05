@@ -30,8 +30,12 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
             rel="stylesheet"
     />
-<!--    <link rel="stylesheet" href="/css/admin.css">-->
+    <!--    <link rel="stylesheet" href="/css/admin.css">-->
     <style>
+        a {
+            text-decoration: none;
+            color: black;
+        }
         .buttons-noti {
             padding: 10px;
         }
@@ -214,19 +218,69 @@
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex">
+
+            <div id="loginForm" style="display: flex; align-items: center; flex-direction: row">
+            <button
+                    class="btn btn-outline-dark"
+                    type="submit"
+                    style="margin-right: 8px; display: none"
+                    id="cart-btn"
+
+            >
+                <i class="bi-cart-fill me-1"></i>
+                Cart
+                <span
+                        class="badge bg-dark text-white ms-1 rounded-pill"
+                        id="showQuantity"
+
+                >0</span
+                >
+            </button>
+
+
                 <button
+                        id="logout-btn"
+                        class="btn btn-person-dash-fill"
+                        type="submit"
+                        onclick="logOutEvent()"
+                        style="display: none; margin-right: 8px"
+                >
+                    <i class="bi-person-fill me-1"></i>
+                    Log out
+                </button>
+                <button
+                        id="user-btn"
+                        class-="btn btn-outlinedark"
+                        onclick="userEvent()"
+                        type="button"
+                        style="
+                                margin-right: 8px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin-left: 5px;
+                                display: none;
+                            "
+                >
+                    <i
+                            class="bi bi-person-lines-fill me-1"
+                            style="margin: 0"
+                    ></i>
+                    <span>Info</span>
+                </button>
+                <button
+                        id="login-btn"
                         class="btn btn-outline-dark"
                         type="submit"
+                        style="margin-right: 8px"
                 >
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
-                    <span
-                            class="badge bg-dark text-white ms-1 rounded-pill"
-                    >0</span
-                    >
+                    <a href="/login">
+                        <i class="bi-person-fill me-1"></i>
+                        Sign in
+                    </a>
                 </button>
-            </form>
+            </div>
+
         </div>
     </div>
 </nav>
@@ -377,7 +431,8 @@
                             style="top: 0.5rem; right: 0.5rem"
                     >
                         Sale
-                    </div>/api/warehouse
+                    </div>
+                    /api/warehouse
                     <!-- Product image-->
                     <img
                             class="card-img-top"
@@ -463,7 +518,10 @@
         </p>
     </div>
 </footer>
-<div class="notifications" id="notifications"></div>
+<div
+        class="notifications"
+        id="notifications"
+></div>
 
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -474,100 +532,256 @@
         src="https://code.jquery.com/jquery-1.7.1.min.js"
 ></script>
 <script src="/js/ultils.js"></script>
+<script src="/js/fetch.js"></script>
+
 <script>
-    // Get the product ID from the URL path
-const pathArray = window.location.pathname.split('/');
-const productId = pathArray[pathArray.length - 1]; // Get the last part of the path
-const productIdAsInt = parseInt(productId, 10);
-
-document.addEventListener('DOMContentLoaded', function () {
-    if (isNaN(productIdAsInt)) {
-        console.error('Invalid product ID');
-        return;
-    }
-
-    // Fetch data for the specified product
-    fetch(`http://localhost:8081/api/admin/product/${productIdAsInt}`)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((product) => {
-            console.log(product.data);
-                let category;
-
-            switch(product.data.category.id){
-                case 1:
-                    category =  "Acer";
-                    break;
-                case 2:
-                    category = "Asus";
-                    break;
-                default:  "Dell";
-
-
-            }
-            product.data.imagePath = product.data.imagePath.replace(/\\/g, '/');
-
-            // Render the fetched data on the page
-            document.getElementById('productImage').src = `../${product.data.imagePath}`;
-            document.getElementById('productSKU').innerHTML = `SKU: ${category}`;
-            document.getElementById('productName').textContent = product.data.name;
-            document.getElementById('productPrice').textContent = `$${product.data.price.toFixed(2)}`;
-            document.getElementById('productDescription').textContent = product.data.description;
-        })
-        .catch((error) => {
-            console.error('Error fetching product data:', error);
-        });
-});
-
-const addToCartButton = document.getElementById('add-to-cart-button');
-addToCartButton.addEventListener('click', function () {
-    console.log('Product ID to add to cart: ' + productIdAsInt);
-
-    const quantity = document.getElementById('inputQuantity').value;
-    const price = parseFloat(document.getElementById('productPrice').textContent.replace('$', ''));
-    const createdAt = new Date().toISOString();
-    const user = localStorage.getItem('user');
-    const parsedUser = JSON.parse(user);
-    console.log(parsedUser.id);
-    // Prepare the data to send
-    const data = {
-        productId: productIdAsInt,
-        quantity: parseInt(quantity),
-        price: price,
-        createdAt: createdAt,
-        user_id: parsedUser.id
+    window.onload = function () {
+        loadQuantity();
     };
 
-    // Send the POST request
-    fetch('http://localhost:8081/api/cart/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            let status = JSON.stringify(data.status);
-            let message = JSON.stringify(data.message);
-            createToast(status, "bi-check-circle", "Success", message);
-        })
-        .catch((error) => {
-            createToast("error", "bi-check-circle", "Error", "Product is out of stock")
-            console.error('Error adding to cart:', error);
-        });
-});
+    // Get the product ID from the URL path
+    const pathArray = window.location.pathname.split('/');
+    const productId = pathArray[pathArray.length - 1]; // Get the last part of the path
+    const productIdAsInt = parseInt(productId, 10);
 
+    document.addEventListener('DOMContentLoaded', function () {
+        if (isNaN(productIdAsInt)) {
+            console.error('Invalid product ID');
+            return;
+        }
 
+        // Fetch data for the specified product
+        fetch(
+            `http://localhost:8081/api/admin/product/${productIdAsInt}`
+        )
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error! Status: ${response.status}`
+                    );
+                }
+                return response.json();
+            })
+            .then((product) => {
+                console.log(product.data);
+                let category;
+
+                switch (product.data.category.id) {
+                    case 1:
+                        category = 'Acer';
+                        break;
+                    case 2:
+                        category = 'Asus';
+                        break;
+                    default:
+                        'Dell';
+                }
+                product.data.imagePath = product.data.imagePath.replace(
+                    /\\/g,
+                    '/'
+                );
+
+                // Render the fetched data on the page
+                document.getElementById(
+                    'productImage'
+                ).src = `../${product.data.imagePath}`;
+                document.getElementById(
+                    'productSKU'
+                ).innerHTML = `SKU: ${category}`;
+                document.getElementById('productName').textContent =
+                    product.data.name;
+                document.getElementById(
+                    'productPrice'
+                ).textContent = `$${product.data.price.toFixed(2)}`;
+                document.getElementById(
+                    'productDescription'
+                ).textContent = product.data.description;
+            })
+            .catch((error) => {
+                console.error('Error fetching product data:', error);
+            });
+    });
+
+    const addToCartButton =
+        document.getElementById('add-to-cart-button');
+    addToCartButton.addEventListener('click', function () {
+        console.log('Product ID to add to cart: ' + productIdAsInt);
+
+        const quantity = document.getElementById('inputQuantity').value;
+        const price = parseFloat(
+            document
+                .getElementById('productPrice')
+                .textContent.replace('$', '')
+        );
+        const createdAt = new Date().toISOString();
+        const user = localStorage.getItem('user');
+        const parsedUser = JSON.parse(user);
+        console.log(parsedUser.id);
+        // Prepare the data to send
+        const data = {
+            productId: productIdAsInt,
+            quantity: parseInt(quantity),
+            price: price,
+            createdAt: createdAt,
+            user_id: parsedUser.id,
+        };
+
+        // Send the POST request
+        fetch('http://localhost:8081/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error! Status: ${response.status}`
+                    );
+                }
+                return response.json();
+            })
+            .then((data) => {
+                loadQuantity();
+                let status = JSON.stringify(data.status);
+                let message = JSON.stringify(data.message);
+                createToast(
+                    status,
+                    'bi-check-circle',
+                    'Success',
+                    message
+                );
+            })
+            .catch((error) => {
+                createToast(
+                    'error',
+                    'bi-check-circle',
+                    'Error',
+                    'Product is out of stock'
+                );
+                console.error('Error adding to cart:', error);
+            });
+    });
+
+    const logOutButton = document.getElementById('logout-btn');
+    const cartButton = document.getElementById('cart-btn');
+    const userButton = document.getElementById('user-btn');
+    const signInButton = document.getElementById('login-btn');
+
+    onSuccessfulLogin = (response) => {
+        console.log(response);
+        if (response.data.token) {
+            console.log('Data: ' + response.data);
+            localStorage.setItem('user', JSON.stringify(response.data));
+            localStorage.setItem('token', response.data.token);
+        }
+        localStorage.setItem('user', JSON.stringify(response.data));
+        logOutButton.style.display = 'block';
+        signInButton.style.display = 'none';
+        cartButton.style.display = 'block';
+        userButton.style.display = 'block';
+
+    };
+
+    onFailedLogin = (error) => {
+        document.getElementById('error-message').innerHTML = error;
+        document.getElementById('error-message').style.display =
+            'block';
+        logOutButton.style.display = 'none';
+        cartButton.style.display = 'none';
+        signInButton.style.display = 'block';
+        userButton.style.display = 'none';
+
+    };
+
+    const loginUrl = API_URL + '/auth/login';
+    console.log(localStorage.getItem('token'));
+    // check if have token in local storage
+    if (localStorage.getItem('token')) {
+        const data = {
+            token: localStorage.getItem('token'),
+        };
+
+        onTokenLogin = (response) => {};
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
+    } else if (localStorage.getItem('user')) {
+    }
+
+    function logOutEvent() {
+        // Lấy token và user từ localStorage và xóa chúng
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        console.log('Lay thong tin Logout');
+        const logoutUrl = API_URL + '/auth/logout'; // Thay API_URL bằng địa chỉ URL thực tế của API logout
+        fetch(logoutUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: token }), // Gửi token để xác định người dùng đăng xuất
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                window.location.href = '/';
+                if (JSON.stringify(data.status) == 'success') {
+
+                } else {
+                    // Xử lý lỗi đăng xuất nếu cần
+                    console.error('Error logging out:', data.message);
+                    // Có thể hiển thị thông báo lỗi cho người dùng
+                }
+            })
+
+            .catch((error) => {
+                // Xử lý lỗi đăng xuất nếu có lỗi mạng hoặc lỗi server
+                console.error('Error logging out:', error);
+                // Có thể hiển thị thông báo lỗi cho người dùng
+            });
+            window.location.reload();
+    }
+
+    document.getElementById("cart-btn").onclick = function() {cartEvent()};
+    function cartEvent() {
+        window.location.href = '/viewCart';
+        console.log("Alolololololoolololololol");
+    }
+    function loadQuantity() {
+        fetch('http://localhost:8081/api/cart/getAll')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error! Status: ${response.status}`
+                    );
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Lấy số lượng dòng trong dữ liệu trả về
+                const user = JSON.parse(localStorage.getItem('user')); // Lấy thông tin người dùng từ localStorage
+                const cartItems = data.cartItems;
+                let numberOfItemsInCart = 0;
+
+                // Lặp qua mảng cartItems và đếm số lượng dòng với user_id trùng với user.id
+                for (const item of cartItems) {
+                    if (item.user_id === user.id) {
+                        numberOfItemsInCart++;
+                    }
+                }
+
+                console.log(numberOfItemsInCart);
+
+                // Cập nhật số lượng sản phẩm trên giao diện
+                const showQuantity = document.getElementById('showQuantity');
+                showQuantity.textContent = numberOfItemsInCart;
+            })
+            .catch((error) => {
+                console.error('Error fetching cart data:', error);
+            });
+    }
 
 </script>
 </body>

@@ -45,7 +45,7 @@ public class ProductController extends Controller {
                 filters.put("category", category);
             }
 
-            if(!manufacture.isEmpty()){
+            if (!manufacture.isEmpty()) {
                 filters.put("manufacture", manufacture);
             }
 

@@ -29,6 +29,10 @@ public class ClientController {
     public String cart(){
         return "user/cart.html";
     }
+    @GetMapping("/user")
+    public String user(){
+        return "user/user.html";
+    }
 
     @GetMapping("/getItem/{productId}")
     public String getItem(@PathVariable("productId") Integer productId, Model model) {

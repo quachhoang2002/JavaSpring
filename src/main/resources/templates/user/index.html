@@ -6,78 +6,91 @@
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <meta
+            name="description"
+            content=""
+    />
+    <meta
+            name="author"
+            content=""
+    />
     <title>Shop Homepage - Start Bootstrap Template</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link
+            rel="icon"
+            type="image/x-icon"
+            href="assets/favicon.ico"
+    />
     <!-- Bootstrap icons-->
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
             rel="stylesheet"
     />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/home.css" rel="stylesheet" />
+    <link
+            href="css/home.css"
+            rel="stylesheet"
+    />
     <style>
         .slider {
-          -webkit-appearance: none;
-          width: 15%;
-          height: 10px;
-          background: #d3d3d3;
-          border-radius: 10px;
-          outline: none;
-          opacity: 0.7;
-          -webkit-transition: 0.2s;
-          transition: opacity 0.2s;
+            -webkit-appearance: none;
+            width: 15%;
+            height: 10px;
+            background: #d3d3d3;
+            border-radius: 10px;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: 0.2s;
+            transition: opacity 0.2s;
         }
 
         .slider:hover {
-          opacity: 1;
+            opacity: 1;
         }
 
         .slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 15px;
-          height: 15px;
-          background: #212529;
-          border-radius: 50%;
-          cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #212529;
+            border-radius: 50%;
+            cursor: pointer;
         }
 
         .slider::-moz-range-thumb {
-          width: 25px;
-          height: 25px;
-          background: #04aa6d;
-          cursor: pointer;
+            width: 25px;
+            height: 25px;
+            background: #04aa6d;
+            cursor: pointer;
         }
 
         .filter-container {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-          > select {
-            width: 5%;
-            border: none;
-          }
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            > select {
+                width: 5%;
+                border: none;
+            }
         }
         .active-page-button {
-          background-color: #000; /* Màu nền nút khi được chọn */
-          color: #fff; /* Màu văn bản khi được chọn */
+            background-color: #000; /* Màu nền nút khi được chọn */
+            color: #fff; /* Màu văn bản khi được chọn */
         }
 
-        #cart-form{
-        > button > a{
-        text-decoration: none;
-        color: black;
-        position: relative;
-        width: 100%;
-        height: 100%;
-        padding: 10px;
-        }
-        > button > a:hover{
-        color: white;
-        }
+        #cart-form {
+            > button > a {
+                text-decoration: none;
+                color: black;
+                position: relative;
+                width: 100%;
+                height: 100%;
+                padding: 10px;
+            }
+            > button > a:hover {
+                color: white;
+            }
         }
     </style>
 </head>
@@ -85,7 +98,11 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="#!">Start Bootstrap</a>
+        <a
+                class="navbar-brand"
+                href="#!"
+        >Start Bootstrap</a
+        >
         <button
                 class="navbar-toggler"
                 type="button"
@@ -97,13 +114,25 @@
         >
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div
+                class="collapse navbar-collapse"
+                id="navbarSupportedContent"
+        >
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#!">Home</a>
+                    <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="#!"
+                    >Home</a
+                    >
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#!">About</a>
+                    <a
+                            class="nav-link"
+                            href="#!"
+                    >About</a
+                    >
                 </li>
                 <li class="nav-item dropdown">
                     <a
@@ -115,48 +144,94 @@
                             aria-expanded="false"
                     >Shop</a
                     >
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <ul
+                            class="dropdown-menu"
+                            aria-labelledby="navbarDropdown"
+                    >
                         <li>
-                            <a class="dropdown-item" href="#!">All Products</a>
+                            <a
+                                    class="dropdown-item"
+                                    href="#!"
+                            >All Products</a
+                            >
                         </li>
                         <li><hr class="dropdown-divider" /></li>
                         <li>
-                            <a class="dropdown-item" href="#!">Popular Items</a>
+                            <a
+                                    class="dropdown-item"
+                                    href="#!"
+                            >Popular Items</a
+                            >
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#!">New Arrivals</a>
+                            <a
+                                    class="dropdown-item"
+                                    href="#!"
+                            >New Arrivals</a
+                            >
                         </li>
                     </ul>
                 </li>
             </ul>
-            <form id="cart-form" class="d-flex">
-                <button id="logout-btn" class="btn btn-person-dash-fill" type="submit" onclick="logOutEvent()" style="display: none">
-
+            <div id="loginForm" style="display: flex; align-items: center; flex-direction: row">
+                <button
+                        id="logout-btn"
+                        class="btn btn-person-dash-fill"
+                        type="submit"
+                        onclick="logOutEvent()"
+                        style="display: none"
+                >
                     <i class="bi-person-fill me-1"></i>
                     Log out
-
                 </button>
 
-                <button id="cart-btn" class="btn btn-outline-dark" onclick="cartEvent()" type="button" style=" display: none">
+                <button
+                        id="cart-btn"
+                        class="btn btn-outline-dark"
+                        onclick="cartEvent()"
+                        type="button"
+                        style="display: none"
+                >
                     <i class="bi-cart-fill me-1"></i>
                     Cart
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    <span
+                            class="badge bg-dark text-white ms-1 rounded-pill"
+                            id="showQuantity"
+                    >0</span
+                    >
                 </button>
 
-                <button id="user-btn" class-="btn btn-outlinedark" onclick="userEvent()" type="button" style="display: flex; align-items: center; justify-content: center; margin-left: 5px; display: none">
-                    <i class="bi bi-person-lines-fill me-1" style="margin: 0"></i>
+                <button
+                        id="user-btn"
+                        class-="btn btn-outlinedark"
+                        onclick="getInfo()"
+                        type="button"
+                        style="
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                margin-left: 5px;
+                                display: none;
+                            "
+                >
+                    <i
+                            class="bi bi-person-lines-fill me-1"
+                            style="margin: 0"
+                    ></i>
                     <span>Info</span>
                 </button>
 
-
-                <button id="login-btn" class="btn btn-outline-dark" type="submit" >
+                <button
+                        id="login-btn"
+                        class="btn btn-outline-dark"
+                        type="submit"
+                >
                     <a href="/login">
                         <i class="bi-person-fill me-1"></i>
                         Sign in
                     </a>
                 </button>
-
-            </form>
+            </div>
         </div>
     </div>
 </nav>
@@ -174,29 +249,31 @@
 <!-- Section-->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
-        <div class="filter-container" style="width: 100%; margin-bottom: 10px">
+        <div
+                class="filter-container"
+                style="width: 100%; margin-bottom: 10px"
+        >
             <label for="type">Type: </label>
-            <select id="type" style="">
+            <select
+                    id="type"
+                    style=""
+            >
                 <option value="A">A</option>
-
             </select>
 
             <label for="date">Date: </label>
             <select id="date">
                 <option value="A">A</option>
-
             </select>
 
             <label for="sort">Sort: </label>
             <select id="sort">
                 <option value="A">A</option>
-
             </select>
 
             <label for="country">Country: </label>
             <select id="country">
                 <option value="A">A</option>
-
             </select>
 
             <label>Price: </label>
@@ -236,20 +313,44 @@
                 <!--                </div>-->
             </div>
         </div>
-        <div class="pagination-container text-center" id="pagination-container">
-            <div class="button-container " id="prev-page">
-                <a class="page-link" href="#">Previous</a>
+        <div
+                class="pagination-container text-center"
+                id="pagination-container"
+        >
+            <div
+                    class="button-container"
+                    id="prev-page"
+            >
+                <a
+                        class="page-link"
+                        href="#"
+                >Previous</a
+                >
             </div>
 
             <ul class="pagination">
-                <li class="page-item active button-container" id="page-1">
-                    <a class="page-link" href="#">1</a>
+                <li
+                        class="page-item active button-container"
+                        id="page-1"
+                >
+                    <a
+                            class="page-link"
+                            href="#"
+                    >1</a
+                    >
                 </li>
                 <!-- Thêm các nút phân trang ở đây (số trang được tự động cập nhật) -->
             </ul>
 
-            <div class="button-container " id="next-page">
-                <a class="page-link" href="#">Next</a>
+            <div
+                    class="button-container"
+                    id="next-page"
+            >
+                <a
+                        class="page-link"
+                        href="#"
+                >Next</a
+                >
             </div>
         </div>
     </div>
@@ -267,66 +368,93 @@
 <!-- Core theme JS-->
 <script src="js/scripts.js"></script>
 <script src="/js/fetch.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script
+        type="text/javascript"
+        src="https://code.jquery.com/jquery-1.7.1.min.js"
+></script>
 <script>
-    const productListContainer = document.getElementById("product-list-container");
-  let totalProducts = 0;
-  let totalPages = 1;
-  const productsPerPage = 8;
-  let currentPage = 1;
+    window.onload = function () {
+        loadQuantity();
+    };
+    const productListContainer = document.getElementById(
+        'product-list-container'
+    );
+    let totalProducts = 0;
+    let totalPages = 1;
+    const productsPerPage = 8;
+    let currentPage = 1;
 
-  const signInButton = document.getElementById('login-btn');
-  const logOutButton = document.getElementById('logout-btn');
-  const cartButton = document.getElementById('cart-btn');
-  const userButton = document.getElementById('user-btn');
-  const userName = document.getElementById('userName');
-  const cart = document.getElementById('cart');
-
+    const signInButton = document.getElementById('login-btn');
+    const logOutButton = document.getElementById('logout-btn');
+    const cartButton = document.getElementById('cart-btn');
+    const userButton = document.getElementById('user-btn');
+    const userName = document.getElementById('userName');
+    const cart = document.getElementById('cart');
 
     function calculateTotalPages(totalProducts, productsPerPage) {
         return Math.ceil(totalProducts / productsPerPage);
     }
 
-
-    document.getElementById("prev-page").addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            fetchProducts(currentPage, productsPerPage, "id", "ASC");
-            updatePagination();
-        }
-    });
-
-
-    document.getElementById("next-page").addEventListener("click", () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            fetchProducts(currentPage, productsPerPage, "id", "ASC");
-            updatePagination();
-        }
-    });
-
-
-    function updatePagination() {
-        const pageLinks = document.querySelectorAll(".pagination li");
-        pageLinks.forEach((pageLink) => {
-            pageLink.classList.remove("active");
+    document
+        .getElementById('prev-page')
+        .addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                fetchProducts(
+                    currentPage,
+                    productsPerPage,
+                    'id',
+                    'ASC'
+                );
+                updatePagination();
+            }
         });
 
-        document.getElementById(`page-${currentPage}`).classList.add("active");
+    document
+        .getElementById('next-page')
+        .addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                fetchProducts(
+                    currentPage,
+                    productsPerPage,
+                    'id',
+                    'ASC'
+                );
+                updatePagination();
+            }
+        });
+
+    function updatePagination() {
+        const pageLinks = document.querySelectorAll('.pagination li');
+        pageLinks.forEach((pageLink) => {
+            pageLink.classList.remove('active');
+        });
+
+        document
+            .getElementById(`page-${currentPage}`)
+            .classList.add('active');
 
         if (currentPage === 1) {
-            document.getElementById("prev-page").classList.add("disabled");
+            document
+                .getElementById('prev-page')
+                .classList.add('disabled');
         } else {
-            document.getElementById("prev-page").classList.remove("disabled");
+            document
+                .getElementById('prev-page')
+                .classList.remove('disabled');
         }
 
         if (currentPage === totalPages) {
-            document.getElementById("next-page").classList.add("disabled");
+            document
+                .getElementById('next-page')
+                .classList.add('disabled');
         } else {
-            document.getElementById("next-page").classList.remove("disabled");
+            document
+                .getElementById('next-page')
+                .classList.remove('disabled');
         }
     }
-
 
     function fetchProducts(page, size, sortBy, sortType) {
         const startIndex = (page - 1) * size;
@@ -340,183 +468,234 @@
                 updatePagination();
             })
             .catch((error) => {
-                console.error("Error fetching products:", error);
+                console.error('Error fetching products:', error);
             });
     }
-
 
     function updateTotalProductsAndPages() {
         fetch(`/api/admin/product/getAll`)
             .then((response) => response.json())
             .then((data) => {
                 totalProducts = data.data.length;
-                totalPages = calculateTotalPages(totalProducts, productsPerPage);
+                totalPages = calculateTotalPages(
+                    totalProducts,
+                    productsPerPage
+                );
                 populatePagination();
-                fetchProducts(currentPage, productsPerPage, "id", "ASC");
+                fetchProducts(
+                    currentPage,
+                    productsPerPage,
+                    'id',
+                    'ASC'
+                );
             })
             .catch((error) => {
-                console.error("Error fetching products:", error);
+                console.error('Error fetching products:', error);
             });
     }
 
-
     function populatePagination() {
-        const paginationList = document.querySelector(".pagination");
-        paginationList.innerHTML = "";
+        const paginationList = document.querySelector('.pagination');
+        paginationList.innerHTML = '';
 
         for (let i = 1; i <= totalPages; i++) {
-            const pageItem = document.createElement("li");
-            pageItem.classList.add("page-item");
+            const pageItem = document.createElement('li');
+            pageItem.classList.add('page-item');
             pageItem.id = `page-${i}`;
-            const pageLink = document.createElement("a");
-            pageLink.classList.add("page-link");
-            pageLink.href = "#";
+            const pageLink = document.createElement('a');
+            pageLink.classList.add('page-link');
+            pageLink.href = '#';
             pageLink.textContent = i;
             pageItem.appendChild(pageLink);
             paginationList.appendChild(pageItem);
 
             // Lắng nghe sự kiện khi nhấn vào trang
-            pageItem.addEventListener("click", () => {
+            pageItem.addEventListener('click', () => {
                 currentPage = i;
-                fetchProducts(currentPage, productsPerPage, "id", "ASC");
+                fetchProducts(
+                    currentPage,
+                    productsPerPage,
+                    'id',
+                    'ASC'
+                );
                 updatePagination();
             });
         }
     }
 
     function renderProducts(products) {
-      // Clear the current content of the productListContainer
-      productListContainer.innerHTML = "";
-       console.log(products)
-      // Iterate through the list of products and render each product
-      products.forEach((product) => {
-        // Create a div to display product information
-        const productCard = document.createElement("div");
-        productCard.classList.add("col", "mb-5");
-        productCard.innerHTML = `
-          <div class="item-container card h-100">
-            <img class="card-img-top" src="${product.imagePath}" alt="Product Image" />
-            <div class="card-body p-4">
-              <div class="text-center">
-                <h5 class="fw-bolder">${product.name}</h5>
-                $${product.price.toFixed(2)}
-              </div>
-            </div>
-            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-              <div class "text-center">
-                <a class="btn btn-outline-dark mt-auto" href="/getItem/${product.id}">View options</a>
-              </div>
-            </div>
-          </div>
-        `;
+        // Clear the current content of the productListContainer
+        productListContainer.innerHTML = '';
+        console.log(products);
+        // Iterate through the list of products and render each product
+        products.forEach((product) => {
+            // Create a div to display product information
+            const productCard = document.createElement('div');
+            productCard.classList.add('col', 'mb-5');
+            productCard.innerHTML = `
+<div class="item-container card h-100">
+<img class="card-img-top" src="${product.imagePath}" alt="Product Image" />
+<div class="card-body p-4">
+<div class="text-center">
+<h5 class="fw-bolder">${product.name}</h5>
+$${product.price.toFixed(2)}
+</div>
+</div>
+<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+<div class "text-center">
+<a class="btn btn-outline-dark mt-auto" href="/getItem/${
+    product.id
+}">View options</a>
+</div>
+</div>
+</div>
+`;
 
-
-        productListContainer.appendChild(productCard);
-      });
+            productListContainer.appendChild(productCard);
+        });
     }
-
 
     updateTotalProductsAndPages();
 
+    onSuccessfulLogin = (response) => {
+        console.log(response);
+        if (response.data.token) {
+            console.log('Data: ' + response.data);
+            localStorage.setItem('user', JSON.stringify(response.data));
+            localStorage.setItem('token', response.data.token);
+        }
+        localStorage.setItem('user', JSON.stringify(response.data));
+        logOutButton.style.display = 'block';
+        signInButton.style.display = 'none';
+        cartButton.style.display = 'block';
+        userButton.style.display = 'block';
+    };
 
-  onSuccessfulLogin = (response) => {
-      console.log(response);
-      if (response.data.token) {
-          console.log("Data: " + response.data);
-          localStorage.setItem('user', JSON.stringify(response.data));
-          localStorage.setItem('token', response.data.token);
-      }
-          localStorage.setItem('user', JSON.stringify(response.data));
-          logOutButton.style.display = 'block';
-          signInButton.style.display = 'none';
-          cartButton.style.display = 'block';
-          userButton.style.display = 'block';
-  }
+    onFailedLogin = (error) => {
+        document.getElementById('error-message').innerHTML = error;
+        document.getElementById('error-message').style.display =
+            'block';
+        logOutButton.style.display = 'none';
+        cartButton.style.display = 'none';
+        signInButton.style.display = 'block';
+        userButton.style.display = 'none';
+    };
 
-  onFailedLogin = (error) => {
-      document.getElementById('error-message').innerHTML = error;
-      document.getElementById('error-message').style.display = 'block';
-      logOutButton.style.display = 'none';
-      cartButton.style.display = 'none';
-      signInButton.style.display = 'block';
-      userButton.style.display = 'none';
-  }
+    const loginUrl = API_URL + '/auth/login';
+    console.log(localStorage.getItem('token'));
+    // check if have token in local storage
+    if (localStorage.getItem('token')) {
+        const data = {
+            token: localStorage.getItem('token'),
+        };
 
-  const loginUrl = API_URL + '/auth/login';
-  console.log(localStorage.getItem('token'));
-  // check if have token in local storage
-  if (localStorage.getItem('token')) {
-      const data = {
-          token: localStorage.getItem('token')
-      }
+        onTokenLogin = (response) => {};
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
+    } else if (localStorage.getItem('user')) {
+    }
 
-      onTokenLogin = (response) => {}
-      postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
-  } else if(localStorage.getItem('user')){
+    const loginUser = async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const checkbox =
+            document.getElementById('rememberPassword').checked;
 
-  }
+        const data = {
+            email: email,
+            password: password,
+            remember: checkbox,
+        };
+        console.log(data);
 
-  const loginUser = async (event) => {
-      event.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      const checkbox = document.getElementById('rememberPassword').checked;
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
+    };
+    document
+        .getElementById('loginForm')
+        .addEventListener('submit', loginUser);
 
-      const data = {
-          email: email,
-          password: password,
-          remember: checkbox
-      }
-      console.log(data);
+    function logOutEvent() {
+        // Lấy token và user từ localStorage và xóa chúng
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
 
-      postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
+        console.log('Lay thong tin Logout');
+        const logoutUrl = API_URL + '/auth/logout'; // Thay API_URL bằng địa chỉ URL thực tế của API logout
+        fetch(logoutUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: token }), // Gửi token để xác định người dùng đăng xuất
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (JSON.stringify(data.status) == 'success') {
+                    // Đăng xuất thành công, chuyển hướng đến trang đăng nhập
 
-  }
-  document.getElementById('loginForm').addEventListener('submit', loginUser);
+                } else {
+                    // Xử lý lỗi đăng xuất nếu cần
+                    console.error('Error logging out:', data.message);
+                    // Có thể hiển thị thông báo lỗi cho người dùng
+                }
+            })
 
+            .catch((error) => {
+                // Xử lý lỗi đăng xuất nếu có lỗi mạng hoặc lỗi server
+                console.error('Error logging out:', error);
+                // Có thể hiển thị thông báo lỗi cho người dùng
+            });
+            window.location.reload();
+    }
 
+    function cartEvent() {
+        window.location.href = '/viewCart';
+    }
+    function loadQuantity() {
+        fetch('http://localhost:8081/api/cart/getAll')
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error! Status: ${response.status}`
+                    );
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Lấy thông tin người dùng từ localStorage
+                const user = JSON.parse(localStorage.getItem('user'));
+                if (user && user.id) {
+                    const cartItems = data.cartItems;
+                    let numberOfItemsInCart = 0;
 
-function logOutEvent() {
-  // Lấy token và user từ localStorage và xóa chúng
-  const token = localStorage.getItem('token');
-  const user = localStorage.getItem('user');
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+                    // Lặp qua mảng cartItems và đếm số lượng dòng với user_id trùng với user.id
+                    for (const item of cartItems) {
+                        if (item.user_id === user.id) {
+                            numberOfItemsInCart++;
+                        }
+                    }
 
-  console.log('Lay thong tin Logout');
-  const logoutUrl = API_URL + '/auth/logout'; // Thay API_URL bằng địa chỉ URL thực tế của API logout
-  fetch(logoutUrl, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token: token }), // Gửi token để xác định người dùng đăng xuất
-  })
-      .then((response) => response.json())
-      .then((data) => {
-          if (JSON.stringify(data.status) == 'success') {
-              // Đăng xuất thành công, chuyển hướng đến trang đăng nhập
-              window.location.href = '/';
-          } else {
-              // Xử lý lỗi đăng xuất nếu cần
-              console.error('Error logging out:', data.message);
-              // Có thể hiển thị thông báo lỗi cho người dùng
-          }
-      })
+                    console.log(numberOfItemsInCart);
 
-      .catch((error) => {
-          // Xử lý lỗi đăng xuất nếu có lỗi mạng hoặc lỗi server
-          console.error('Error logging out:', error);
-          // Có thể hiển thị thông báo lỗi cho người dùng
-      });
-};
-
-function cartEvent() {
-  window.location.href = '/viewCart';
-};
-
+                    // Cập nhật số lượng sản phẩm trên giao diện
+                    const showQuantity =
+                        document.getElementById('showQuantity');
+                    showQuantity.textContent = numberOfItemsInCart;
+                } else {
+                    console.log(
+                        'User information not found in localStorage.'
+                    );
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching cart data:', error);
+            });
+    }
+    function getInfo(){
+        window.location.href = '/user';
+    }
 </script>
-
-
 </body>
 </html>

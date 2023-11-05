@@ -5,6 +5,8 @@ import j2ee.project.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderService {
     @Autowired
@@ -14,4 +16,6 @@ public class OrderService {
         orderRepository.save(order);
         return order;
     }
+    public List<Order> getAllOrderByUserId(int user_Id){ return  orderRepository.findByUser_Id(user_Id); }
+
 }

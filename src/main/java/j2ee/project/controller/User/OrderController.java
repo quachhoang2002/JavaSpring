@@ -56,4 +56,13 @@ public class OrderController extends Controller {
         return successResponse("successfully",null);
 
     }
+    @GetMapping("/getByUserId/{userId}")
+    public ResponseEntity<?> getAllOrder(@PathVariable int userId) {
+       List<Order> orderList = orderService.getAllOrderByUserId(userId);
+       if(orderList != null ){
+           return  successResponse("Success", orderList);
+       }else {
+           return  errorResponse("fail");
+       }
+    }
 }

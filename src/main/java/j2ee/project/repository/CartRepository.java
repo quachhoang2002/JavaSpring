@@ -13,16 +13,18 @@ import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
+    @Query("SELECT c FROM Cart c WHERE c.productId = :productId and c.user_id = :user_id")
+    Optional<Cart> findCartByProductIdAndUser_Id(@Param("productId") int productId, @Param("user_id")int user_id);
     @Query("SELECT c FROM Cart c WHERE c.productId = :productId")
-    Optional<Cart> findByProductId(@Param("productId") int productId);
-
+    Optional<Cart> findCartByProductId(@Param("productId") int productId);
     @Query("SELECT c FROM Cart c WHERE c.user_id = :user_id")
     List<Cart> findByUserId(@Param("user_id") int user_id);
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Cart c WHERE c.productId = :productId AND c.user_id = :userId")
-    void deleteByProductIdAndUserId(@Param("productId") int productId, @Param("userId") int userId);
+    @Query("DELETE FROM Cart c WHERE c.productId = :productId AND c.user_id = :user_id")
+    void deleteByProductIdAndUserId(@Param("productId") int productId, @Param("user_id") int user_id);
+
 
 
 }
