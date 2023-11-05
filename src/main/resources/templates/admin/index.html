@@ -126,6 +126,7 @@
             break;
         case url.includes('?order'):
             contentDiv.innerHTML = RenderOrderTemplate();
+            renderOrderItems()
             break;
         case url.includes('?stock'):
             contentDiv.innerHTML = RenderStockTemplate();
