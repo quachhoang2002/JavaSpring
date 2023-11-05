@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findAll(Sort sort);
@@ -26,4 +27,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     }
 
     List<Product> findByCategory(Category category);
+
+    Optional<Product> findById(int productId);
 }

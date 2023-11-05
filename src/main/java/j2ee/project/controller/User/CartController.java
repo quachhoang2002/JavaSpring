@@ -29,9 +29,9 @@ public class CartController extends Controller {
         try {
             int productId = cart.getProductId();
             int quantity = cart.getQuantity();
-
+            int user_id = cart.getUser_id();
             // Check if the product with the given productId already exists in the cart
-            Optional<Cart> existingCartItem = cartService.findCartByProductId(productId);
+            Optional<Cart> existingCartItem = cartService.findCartByProductIdAndUser_Id(productId, user_id);
             Product product = productRepository.findById(productId).get();
 
             if (existingCartItem.isPresent()) {
@@ -94,11 +94,38 @@ public class CartController extends Controller {
             return errorResponse("Cart is empty");
         }
     }
+    @GetMapping("/getByUserId/{userId}")
+    public ResponseEntity<?> getByUserId(@PathVariable int userId) {
+        List<Cart> cart = cartRepository.findByUserId(userId);
+        List<Product> productsInCart = new ArrayList<>();
+
+        if (cart != null && !cart.isEmpty()) {
+            for (Cart cartItem : cart) {
+                Optional<Product> product = productRepository.findById(cartItem.getProductId());
+                product.ifPresent(productsInCart::add);
+            }
+
+            if (!productsInCart.isEmpty()) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("cartItems", cart);
+                response.put("productItems", productsInCart);
+                return ResponseEntity.ok(response);
+            } else {
+                return errorResponse("Products not found in the cart");
+            }
+        } else {
+            return errorResponse("Cart is empty");
+        }
+    }
+
     @PutMapping("/updateQuantity")
     public ResponseEntity<String> updateQuantity(@RequestBody Map<String, Object> request) {
         try {
-            int productId = (int) request.get("id"); // Lấy productId từ request
-            int newQuantity = (int) request.get("quantity"); // Lấy quantity từ request
+            int productId = Integer.parseInt(request.get("id").toString());
+            int user_id = Integer.parseInt(request.get("user_id").toString());
+            int newQuantity = Integer.parseInt(request.get("quantity").toString());
+
+
 
             Product product = productRepository.findById(productId).get();
             System.out.println(product);
@@ -107,7 +134,7 @@ public class CartController extends Controller {
                 return errorResponse("Product is out of stock.");
             }
 
-            Optional<Cart> existingCartItem = cartService.findCartByProductId(productId);
+            Optional<Cart> existingCartItem = cartService.findCartByProductIdAndUser_Id(productId, user_id);
             if (existingCartItem.isPresent()) {
 
                 Cart cartItem = existingCartItem.get();
@@ -121,6 +148,26 @@ public class CartController extends Controller {
             return errorResponse(e.getMessage());
         }
     }
+    @DeleteMapping("/deleteItem")
+    public ResponseEntity<String> deleteCartItem(@RequestBody Map<String, Object> request) {
+        try {
+            Integer productId = (Integer) request.get("productId");
+            Integer user_id = (Integer) request.get("user_id");
 
+            if (productId == null || user_id == null) {
+                return ResponseEntity.badRequest().body("Invalid parameters. Both user_id and id must be provided.");
+            }
 
+            // Call the service to delete the product from the cart based on userId and productId
+            boolean isDeleted = cartService.deleteCartItem(user_id, productId);
+
+            if (isDeleted) {
+                return successResponse("Xóa sản phẩm khỏi giỏ hàng thành công.", isDeleted);
+            } else {
+                return errorResponse("Thất bại");
+            }
+        } catch (Exception e) {
+            return errorResponse("Thất bại");
+        }
+    }
 }

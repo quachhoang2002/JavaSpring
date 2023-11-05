@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.token = ?1 ")
     User findByToken(String token);
 
-
+    User findById(int id);
 
 
 }

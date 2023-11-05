@@ -56,4 +56,6 @@ public class UserService {
         return userRepository.findByToken(token);
     }
 
+    public User findById(int id){ return userRepository.findById(id);}
+
 }
