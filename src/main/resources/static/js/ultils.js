@@ -48,9 +48,7 @@ function renderOptionManufacture(select = null) {
 
 function showToast(message, type) {
     let toast = document.createElement('div');
-    //    document.body.appendChild(toast);
-    const Test = document.querySelector('.container');
-    Test.appendChild(toast);
+    document.body.appendChild(toast);
 
     toast.className = 'toast';
     //z index: 9999
@@ -78,6 +76,7 @@ function showToast(message, type) {
         toast.style.opacity = 0;
         setTimeout(function () {
             document.body.classList.remove('body-animation');
+            document.body.removeChild(toast);
         }, 500);
     }, 3000);
 }
