@@ -2,7 +2,9 @@ package j2ee.project.controller.Admin;
 
 import j2ee.project.controller.Controller;
 import j2ee.project.models.Order;
+import j2ee.project.models.OrderDetails;
 import j2ee.project.repository.CartRepository;
+import j2ee.project.repository.OrderDetailsRepository;
 import j2ee.project.repository.OrderRepository;
 import j2ee.project.service.CartService;
 import j2ee.project.service.OrderDetailsService;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +32,11 @@ public class AOrderController extends Controller {
     private OrderDetailsService orderDetailsService;
     @Autowired
     private StockService stockService;
-
+    @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
 
     @GetMapping("")
     @ResponseBody
@@ -69,10 +75,10 @@ public class AOrderController extends Controller {
             if (order == null) {
                 return errorResponse("Order not found");
             }
-            if (order.getStatus() != 0) {
+            if (order.getStatus() == 2) {
                 return errorResponse("Order can not be canceled");
             }
-            order.setStatus(3);
+            order.setStatus(-1);
             orderRepository.save(order);
             return successResponse("Cancel order successfully", order);
         } catch (Exception e) {
@@ -84,7 +90,7 @@ public class AOrderController extends Controller {
     @ResponseBody
     public ResponseEntity<String> confirmOrder(@PathVariable("id") Integer id) {
         try {
-            Order order =orderRepository.findById(id).orElse(null);
+            Order order = orderRepository.findById(id).orElse(null);
             if (order == null) {
                 return errorResponse("Order not found");
             }
@@ -94,6 +100,41 @@ public class AOrderController extends Controller {
             order.setStatus(1);
             orderRepository.save(order);
             return successResponse("Confirm order successfully", order);
+        } catch (Exception e) {
+            return errorResponse(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/complete")
+    @ResponseBody
+    public ResponseEntity<String> completeOrder(@PathVariable("id") Integer id) {
+        try {
+            Order order = orderRepository.findById(id).orElse(null);
+            if (order == null) {
+                return errorResponse("Order not found");
+            }
+            if (order.getStatus() != 1) {
+                return errorResponse("Order can not be completed");
+            }
+            order.setStatus(2);
+            orderRepository.save(order);
+            return successResponse("Complete order successfully", order);
+        } catch (Exception e) {
+            return errorResponse(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/detail")
+    @ResponseBody
+    public ResponseEntity<String> orderDetail(@PathVariable("id") Integer id) {
+        try {
+            Order order = orderRepository.findById(id).orElse(null);
+            if (order == null) {
+                return errorResponse("Order not found");
+            }
+
+            List<OrderDetails> orderDetails = orderDetailsService.getOrderDetailsByOrder(order);
+            return successResponse("Confirm order successfully", orderDetails);
         } catch (Exception e) {
             return errorResponse(e.getMessage());
         }

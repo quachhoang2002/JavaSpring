@@ -46,6 +46,19 @@ function renderOptionManufacture(select = null) {
     getDataFromApi(MANUFACTURE_URL, successCallback, errorCallback);
 }
 
+function renderOptionStatus(select = null) {
+        if (select) {
+            select.innerHTML = '';
+            select.innerHTML= `<option value="" selected>All</option>`
+            select.innerHTML += `<option value="0">Pending</option>`
+            select.innerHTML += `<option value="1">Approved</option>`
+            select.innerHTML += `<option value="-1">Reject</option>`
+            select.innerHTML += `<option value="2">Complete</option>`
+
+        }
+}
+
+
 function showToast(message, type) {
     let toast = document.createElement('div');
     document.body.appendChild(toast);
@@ -112,6 +125,8 @@ function setFilterBox(select, type) {
         case "manufacture":
             renderOptionManufacture(select);
             break;
+        case "status":
+            renderOptionStatus(select)
         default:
             break;
     }

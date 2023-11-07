@@ -199,7 +199,6 @@ async function renderManufactureItems() {
 
 async function addManu() {
     let successCallback = (response) => {
-        alert(response.message);
         // const closeBtn = document.querySelector("#closeBtn");
         // closeBtn.click();
         bootstrap.Modal.getInstance(document.querySelector('#addManu')).hide();
@@ -209,7 +208,6 @@ async function addManu() {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     // const form = document.querySelector("#manufacturerForm");

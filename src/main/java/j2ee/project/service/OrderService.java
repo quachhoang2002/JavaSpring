@@ -16,11 +16,14 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Order createOrder(Order order){
+    public Order createOrder(Order order) {
         orderRepository.save(order);
         return order;
     }
-    public List<Order> getAllOrderByUserId(int user_Id){ return  orderRepository.findByUser_Id(user_Id); }
+
+    public List<Order> getAllOrderByUserId(int user_Id) {
+        return orderRepository.findByUser_Id(user_Id);
+    }
 
     public List<Order> getAllSort(int page, int limit, String sortBy, String sortType, Map<String, String> filters) {
         //get and sort by id
@@ -42,7 +45,10 @@ public class OrderService {
             String value = entry.getValue();
 
             if (key.equals("name")) {
-                products = products.filter(product -> product.getCustomerName().toLowerCase().contains(value.toLowerCase()));
+                products = products.filter(product ->
+                        product.getCustomerName().toLowerCase().contains(value.toLowerCase()) ||
+                                product.getCustomerPhone().toLowerCase().contains(value.toLowerCase())
+                );
             }
 
             if (key.equals("status")) {
@@ -52,7 +58,7 @@ public class OrderService {
             }
         }
 
-        if(page != 0 && limit != 0){
+        if (page != 0 && limit != 0) {
             products = products.skip((page - 1) * limit).limit(limit);
         }
 
