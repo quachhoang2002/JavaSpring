@@ -33,6 +33,10 @@ public class ClientController {
     public String user(){
         return "user/user.html";
     }
+    @GetMapping("/editInfo")
+    public String editInfo(){
+        return "user/editInfo.html";
+    }
 
     @GetMapping("/getItem/{productId}")
     public String getItem(@PathVariable("productId") Integer productId, Model model) {
