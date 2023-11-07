@@ -6,10 +6,9 @@ import j2ee.project.models.OrderDetails;
 import j2ee.project.service.OrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orderDetails/")
@@ -25,4 +24,16 @@ public class OrderDetailsController extends Controller {
             return errorResponse("Failed");
         }
     }
+    @GetMapping("/getOrderDetail/{orderid}")
+    public ResponseEntity<?> getOrderDetail(@PathVariable("orderid") Order order) {
+        // Sử dụng order.getId() để lấy id của order
+        Optional<OrderDetails> orderDetail = orderDetailsService.findByOrder(order.getId());
+        System.out.println(orderDetail);
+        if (orderDetail.isPresent()) {
+            return successResponse("successfully", orderDetail.get());
+        } else {
+            return errorResponse("Failed");
+        }
+    }
+
 }

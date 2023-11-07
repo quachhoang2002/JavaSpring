@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+
+    <!-- Font Awesome -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css"
+            rel="stylesheet"
+    />
+    <style>
+        .selected-page {
+     color: white; /* Màu chữ cho trang được chọn */
+     background-color: black;
+ }
+
+        .panel-order .row {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 2%;
+        }
+        .panel-order .row:last-child {
+            border: 0px;
+        }
+        .panel-order .row .col-md-1 {
+            text-align: center;
+            padding-top: 15px;
+        }
+        .panel-order .row .col-md-1 img {
+            width: 50px;
+            max-height: 50px;
+        }
+        .panel-order .row .row {
+            border-bottom: 0;
+        }
+        .panel-order .row .col-md-11 {
+            border-left: 1px solid #ccc;
+        }
+        .panel-order .row .row .col-md-12 {
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
+        .panel-order .row .row .col-md-12:last-child {
+            font-size: 11px;
+            color: #555;
+            background: #efefef;
+        }
+        .panel-order .btn-group {
+            margin: 0px;
+            padding: 0px;
+        }
+        .panel-order .panel-body {
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+        .panel-order .panel-deading {
+            margin-bottom: 0;
+        }
+        .pull-right {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .gradient-custom-2 {
+            /* fallback for old browsers */
+            background: #fbc2eb;
+
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(
+                to right,
+                rgba(251, 194, 235, 1),
+                rgba(166, 193, 238, 1)
+            );
+
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(
+                to right,
+                rgba(251, 194, 235, 1),
+                rgba(166, 193, 238, 1)
+            );
+        }
+
+
+    </style>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/dist/js/mdb.min.js"></script>
+<section class="h-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+        <div
+                class="row d-flex justify-content-center align-items-center h-100"
+        >
+            <div class="col col-lg-9 col-xl-7">
+                <div style="width: 5%">
+                    <button
+                            type="button"
+                            class="btn btn-outline-dark"
+                            data-mdb-ripple-color="secondary    "
+                            style="z-index: 1; margin: 2px"
+                    >
+                        Back
+                    </button>
+                </div>
+                <div class="card">
+                    <div
+                            class="rounded-top text-white d-flex flex-row"
+                            style="background-color: #000; height: 200px"
+                    >
+                        <div
+                                class="ms-4 mt-5 d-flex flex-column"
+                                style="width: 150px"
+                        >
+                            <img
+                                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                                    alt="Generic placeholder image"
+                                    class="img-fluid img-thumbnail mt-4 mb-2"
+                                    style="width: 150px; z-index: 1"
+                            />
+                            <button
+                                    type="button"
+                                    class="btn btn-outline-dark"
+                                    data-mdb-ripple-color="dark"
+                                    style="z-index: 1"
+                            >
+                                Edit profile
+                            </button>
+                        </div>
+                        <div
+                                class="ms-3"
+                                style="margin-top: 130px"
+                        >
+                            <h5>Andy Horwitz</h5>
+                            <p>New York</p>
+                        </div>
+                    </div>
+                    <div
+                            class="p-4 text-black"
+                            style="background-color: #f8f9fa; height: 90px"
+                    >
+                        <div
+                                class="d-flex justify-content-end text-center py-1"
+                        >
+                            <!-- <div class="px-2">
+            <p class="mb-1 h5">253</p>
+            <p class="small text-muted mb-0">Pending</p>
+          </div>
+          <div class="px-2">
+            <p class="mb-1 h5">1026</p>
+            <p class="small text-muted mb-0">Accepted</p>
+          </div>
+          <div class="px-2">
+            <p class="mb-1 h5">478</p>
+            <p class="small text-muted mb-0">Finished</p>
+          </div>
+          <div>
+            <p class="mb-1 h5">921</p>
+            <p class="small text-muted mb-0">Cancelled</p>
+          </div> -->
+                        </div>
+                    </div>
+                    <div class="card-body p-4 text-black">
+                        <div class="mb-5">
+                            <p class="lead fw-normal mb-1">ORDERS:</p>
+                            <div
+                                    class="p-4"
+                                    style="background-color: #f8f9fa"
+                            >
+                                <div class="container bootdey">
+                                    <div
+                                            class="panel panel-default panel-order"
+                                    >
+                                        <!-- <div class="panel-heading">
+                                            <strong
+                                                >Order history</strong
+                                            >
+                                            <div
+                                                class="btn-group pull-right"
+                                            >
+                                                <div class="btn-group">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-default btn-xs dropdown-toggle"
+                                                        data-toggle="dropdown"
+                                                    >
+                                                        Filter history
+                                                        <i
+                                                            class="fa fa-filter"
+                                                        ></i>
+                                                    </button>
+                                                    <ul
+                                                        class="dropdown-menu dropdown-menu-right"
+                                                    >
+                                                        <li>
+                                                            <a href="#"
+                                                                >Approved
+                                                                orders</a
+                                                            >
+                                                        </li>
+                                                        <li>
+                                                            <a href="#"
+                                                                >Pending
+                                                                orders</a
+                                                            >
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="panel-body" id="orderList">
+                                            <!-- <div class="row">
+                                                <div class="col-md-1">
+                                                    <img
+                                                        src="https://bootdey.com/img/Content/user_3.jpg"
+                                                        class="media-object img-thumbnail"
+                                                    />
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <div class="row">
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            <div
+                                                                class="pull-right"
+                                                            >
+                                                                <label
+                                                                    class="label label-danger"
+                                                                    >Cancelled</label
+                                                                ><button
+                                                                    class="btn btn-outline-dark"
+                                                                >
+                                                                    Infomation
+                                                                </button>
+                                                            </div>
+                                                            Quantity :
+                                                            2, cost:
+                                                            $323.13
+                                                            <br />
+                                                        </div>
+
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            order made
+                                                            on:
+                                                            05/31/2014
+                                                            by
+                                                            <a href="#"
+                                                                >Jane
+                                                                Doe
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <img
+                                                        src="https://bootdey.com/img/Content/user_1.jpg"
+                                                        class="media-object img-thumbnail"
+                                                    />
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <div class="row">
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            <div
+                                                                class="pull-right"
+                                                            >
+                                                                <label
+                                                                    class="label label-info"
+                                                                    >Accepted</label
+                                                                ><button
+                                                                    class="btn btn-outline-dark"
+                                                                >
+                                                                    Infomation
+                                                                </button>
+                                                            </div>
+
+                                                            Quantity :
+                                                            12, cost:
+                                                            $12623.13<br />
+                                                        </div>
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            order made
+                                                            on:
+                                                            06/12/2014
+                                                            by
+                                                            <a href="#"
+                                                                >Jane
+                                                                Doe
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <img
+                                                        src="https://bootdey.com/img/Content/user_3.jpg"
+                                                        class="media-object img-thumbnail"
+                                                    />
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <div class="row">
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            <div
+                                                                class="pull-right"
+                                                            >
+                                                                <label
+                                                                    class="label label-success"
+                                                                    >Finished</label
+                                                                ><button
+                                                                    class="btn btn-outline-dark"
+                                                                >
+                                                                    Infomation
+                                                                </button>
+                                                            </div>
+
+                                                            Quantity :
+                                                            4, cost:
+                                                            $523.13<br />
+                                                        </div>
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            order made
+                                                            on:
+                                                            06/20/2014
+                                                            by
+                                                            <a href="#"
+                                                                >Jane
+                                                                Doe</a
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <img
+                                                        src="https://bootdey.com/img/Content/user_2.jpg"
+                                                        class="media-object img-thumbnail"
+                                                    />
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <div class="row">
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            <div
+                                                                class="pull-right"
+                                                            >
+                                                                <label
+                                                                    class="label label-warning"
+                                                                    >Pending</label
+                                                                ><button
+                                                                    class="btn btn-outline-dark"
+                                                                >
+                                                                    Infomation
+                                                                </button>
+                                                            </div>
+
+                                                            Quantity :
+                                                            4, cost:
+                                                            $523.13<br />
+                                                        </div>
+                                                        <div
+                                                            class="col-md-12"
+                                                        >
+                                                            order made
+                                                            on:
+                                                            06/20/2014
+                                                            by
+                                                            <a href="#"
+                                                                >Jane
+                                                                Doe</a
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                        <div id="pagination" style="display: flex; gap: 1%"></div>
+                                        <!-- <div class="panel-footer">Put here some note for example: bootdey si a gallery of free bootstrap snippets bootdeys</div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- <script>
+    window.onload = function () {
+        getOderById();
+    };
+    function getOderById() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        fetch(`http://localhost:8081/api/order/getByUserId/${user.id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                console.log(response);
+
+                let ordersHTML = ''; // Tạo một chuỗi HTML để chứa tất cả các đơn hàng
+
+                response.data.forEach((element) => {
+                    switch (element.status) {
+                        case 0:
+                            ordersHTML += `<div class="row">
+                    <div class="col-md-1">
+                        <img src="https://bootdey.com/img/Content/user_3.jpg" class="media-object img-thumbnail" />
+                    </div>
+                    <div class="col-md-11">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <label class="label label-danger">Pending</label>
+                                    <button class="btn btn-outline-dark">Information</button>
+                                </div>
+                                Cost: ${element.total_price}<br />
+                            </div>
+                            <div class="col-md-12">
+                                Order made on: ${element.createdAt}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                            break;
+                        case 1:
+                            // Xử lý cho trạng thái khác
+                            break;
+                        case 2:
+                            // Xử lý cho trạng thái khác
+                            break;
+                        case -1:
+                            // Xử lý cho trạng thái khác
+                            break;
+                    }
+                });
+
+                // Gán chuỗi HTML vào phần .panel-body
+                document.querySelector('.panel-body').innerHTML =
+                    ordersHTML;
+            });
+    }
+</script> -->
+<script>
+    const itemsPerPage = 5; // Số đơn hàng trên mỗi trang
+    let currentPage = 1; // Trang hiện tại
+
+    function displayOrders(data, page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const orders = data.slice(start, end);
+
+        let ordersHTML = '';
+
+        orders.forEach((element) => {
+            // Thêm order_id vào mỗi nút "Information"
+            ordersHTML += `<div class="row">
+                <div class="col-md-1">
+                    <img src="https://bootdey.com/img/Content/user_3.jpg" class="media-object img-thumbnail" />
+                </div>
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <label class="label label-danger">${element.status === 0 ? 'Pending' : element.status === 1 ? 'Approved' : element.status === 2 ? 'Finished' : 'Cancelled'}</label>
+                                <button class="btn btn-outline-dark information-button" data-orderid="${element.id}">Information</button>
+                            </div>
+                            Cost: ${element.total_price}<br />
+                        </div>
+                        <div class="col-md-12">
+                            Order made on: ${element.createdAt}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+        });
+
+        document.getElementById('orderList').innerHTML = ordersHTML;
+
+        // Gắn sự kiện click cho các nút "Information"
+        const informationButtons = document.querySelectorAll('.information-button');
+        informationButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const orderID = event.currentTarget.getAttribute('data-orderid');
+                // Thực hiện xử lý khi nút "Information" được nhấn.
+                // Ví dụ: chuyển hướng đến trang chi tiết đơn hàng với orderID.
+                window.location.href = `/getOrderDetail/${orderID}`;
+            });
+        });
+    }
+
+    function createPagination(data) {
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    for (let i = 1; i <= totalPages; i++) {
+        const ordersPageButton = document.createElement('button');
+        ordersPageButton.innerText = i;
+        ordersPageButton.className = "btn btn-outline-dark ordersPageButton mr-2";
+        if (i === 1) {
+            ordersPageButton.classList.add('selected-page');
+        }
+        ordersPageButton.addEventListener('click', () => {
+            // Loại bỏ lớp 'selected-page' từ tất cả các nút trang
+            const allPageButtons = document.querySelectorAll('button.ordersPageButton');
+            allPageButtons.forEach(button => {
+                button.classList.remove('selected-page');
+            });
+
+            // Áp dụng lớp 'selected-page' cho nút trang được chọn
+            ordersPageButton.classList.add('selected-page');
+
+            currentPage = i;
+            displayOrders(data, currentPage);
+        });
+
+        pagination.appendChild(ordersPageButton);
+    }
+}
+
+
+    function getOrders() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        fetch(`http://localhost:8081/api/order/getByUserId/${user.id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                console.log(response);
+                createPagination(response.data);
+                displayOrders(response.data, currentPage);
+            });
+    }
+
+    window.onload = function () {
+        getOrders();
+    };
+</script>
+</body>
+</html>

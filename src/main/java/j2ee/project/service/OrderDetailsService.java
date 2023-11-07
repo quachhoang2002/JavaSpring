@@ -5,6 +5,8 @@ import j2ee.project.repository.OrderDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class OrderDetailsService {
     @Autowired
@@ -13,4 +15,5 @@ public class OrderDetailsService {
         orderDetailsRepository.save(orderDetails);
         return orderDetails;
     }
+    public Optional<OrderDetails> findByOrder(int orderid){ return orderDetailsRepository.findByOrder(orderid);}
 }

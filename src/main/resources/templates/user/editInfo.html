@@ -297,6 +297,13 @@
     window.onload = function () {
         loadData();
     };
+    function isValidPhoneNumber(phoneNumber) {
+    // Biểu thức chính quy kiểm tra số điện thoại Việt Nam (không kiểm tra xác thực thực tế của số điện thoại)
+    const vietnamPhoneNumberRegex = /^(0[1-9][0-9]{8}|84[1-9][0-9]{8})$/;
+
+    // Sử dụng test() để kiểm tra chuỗi phoneNumber với biểu thức chính quy
+    return vietnamPhoneNumberRegex.test(phoneNumber);
+}
     function loadData() {
         const user = JSON.parse(localStorage.getItem('user'));
         document.getElementById('typeEmail').value = user.email;
@@ -347,6 +354,15 @@
                 'bi-check-circle',
                 'Error',
                 'Email không hợp lệ'
+            );
+            return;
+        }
+        if (!isValidPhoneNumber(phone)){
+            createToast(
+                'error',
+                'bi-check-circle',
+                'Error',
+                'Số điện thoại không hợp lệ'
             );
             return;
         }
