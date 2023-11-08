@@ -24,16 +24,4 @@ public class OrderDetailsController extends Controller {
             return errorResponse("Failed");
         }
     }
-    @GetMapping("/getOrderDetail/{orderid}")
-    public ResponseEntity<?> getOrderDetail(@PathVariable("orderid") Order order) {
-        // Sử dụng order.getId() để lấy id của order
-        Optional<OrderDetails> orderDetail = orderDetailsService.findByOrder(order.getId());
-        System.out.println(orderDetail);
-        if (orderDetail.isPresent()) {
-            return successResponse("successfully", orderDetail.get());
-        } else {
-            return errorResponse("Failed");
-        }
-    }
-
 }

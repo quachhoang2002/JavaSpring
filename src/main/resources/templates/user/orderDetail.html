@@ -22,6 +22,15 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css"
             rel="stylesheet"
     />
+    <link
+            rel="icon"
+            type="image/x-icon"
+            href="assets/favicon.ico"
+    />
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+            rel="stylesheet"
+    />
     <style>
         .gradient-custom-2 {
             /* fallback for old browsers */
@@ -42,7 +51,114 @@
             );
         }
     </style>
+    <style>
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        .buttons-noti {
+            padding: 10px;
+        }
+        .notifications {
+            display: flex;
+            position: fixed;
+            z-index: 999;
+            top: 30px;
+            right: 200px;
+            height: 200px;
+            width: 200px;
+        }
+        .toastPopup {
+            cursor: pointer;
+            position: relative;
+            padding: 10px;
+            color: #fff;
+            margin-bottom: 10px;
+            width: 400px;
+            display: grid;
+            grid-template-columns: 70px 1fr 70px;
+            border-radius: 5px;
+            --color: #0abf30;
+            background-image: linear-gradient(
+                to right,
+                #0abf3055,
+                #22242f 30%
+            );
+            animation: show 0.3s ease 1 forwards;
+        }
+        .toastPopup i {
+            color: var(--color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: x-large;
+        }
+        .toastPopup .title {
+            font-size: x-large;
+            font-weight: bold;
+        }
+        .toastPopup span,
+        .toastPopup i:nth-child(3) {
+            color: #fff;
+            opacity: 0.6;
+        }
+        @keyframes show {
+            0% {
+                transform: translateX(100%);
+            }
+            40% {
+                transform: translateX(-5%);
+            }
+            80% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-10%);
+            }
+        }
+        .toastPopup::before {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: var(--color);
+            width: 100%;
+            height: 3px;
+            content: '';
+            box-shadow: 0 0 10px var(--color);
+            animation: timeOut 5s linear 1 forwards;
+        }
+        @keyframes timeOut {
+            to {
+                width: 0;
+            }
+        }
+        .toastPopup.error {
+            --color: #f24d4c;
+            background-image: linear-gradient(
+                to right,
+                #f24d4c55,
+                #22242f 30%
+            );
+        }
+        .toastPopup.warning {
+            --color: #e9bd0c;
+            background-image: linear-gradient(
+                to right,
+                #e9bd0c55,
+                #22242f 30%
+            );
+        }
+        .toastPopup.info {
+            --color: #3498db;
+            background-image: linear-gradient(
+                to right,
+                #3498db55,
+                #22242f 30%
+            );
+        }
+    </style>
 </head>
+
 <body>
 <section class="h-100 gradient-custom-2">
     <div class="container py-5 h-100">
@@ -77,13 +193,13 @@
                             />
 
                             <!-- <button
-            type="button"
-            class="btn btn-outline-dark"
-            data-mdb-ripple-color="dark"
-            style="z-index: 1; margin-top: 2px"
-          >
-            Save changes
-          </button> -->
+type="button"
+class="btn btn-outline-dark"
+data-mdb-ripple-color="dark"
+style="z-index: 1; margin-top: 2px"
+>
+Save changes
+</button> -->
                         </div>
                         <div
                                 class="ms-3"
@@ -94,25 +210,25 @@
                         </div>
                     </div>
                     <!-- <div class="p-4 text-black" style="background-color: #f8f9fa">
-        <div class="d-flex justify-content-end text-center py-1">
-          <div class="px-2">
-            <p class="mb-1 h5">253</p>
-            <p class="small text-muted mb-0">Pending</p>
-          </div>
-          <div class="px-2">
-            <p class="mb-1 h5">1026</p>
-            <p class="small text-muted mb-0">Accepted</p>
-          </div>
-          <div class="px-2">
-            <p class="mb-1 h5">478</p>
-            <p class="small text-muted mb-0">Finished</p>
-          </div>
-          <div>
-            <p class="mb-1 h5">921</p>
-            <p class="small text-muted mb-0">Cancelled</p>
-          </div>
-        </div>
-      </div> -->
+<div class="d-flex justify-content-end text-center py-1">
+<div class="px-2">
+<p class="mb-1 h5">253</p>
+<p class="small text-muted mb-0">Pending</p>
+</div>
+<div class="px-2">
+<p class="mb-1 h5">1026</p>
+<p class="small text-muted mb-0">Accepted</p>
+</div>
+<div class="px-2">
+<p class="mb-1 h5">478</p>
+<p class="small text-muted mb-0">Finished</p>
+</div>
+<div>
+<p class="mb-1 h5">921</p>
+<p class="small text-muted mb-0">Cancelled</p>
+</div>
+</div>
+</div> -->
                     <div
                             class="p-4 text-black"
                             style="background-color: #f8f9fa; height: 90px"
@@ -139,481 +255,312 @@
                                     <div
                                             class="row d-flex justify-content-center align-items-center h-100"
                                     >
-                                        <div class="">
-                                            <div
-                                                    class="card"
-                                                    style="
-                                                            border-radius: 10px;
-                                                        "
-                                            >
-                                                <div
-                                                        class="card-header px-4 py-5"
-                                                >
-                                                    <h5
-                                                            class="text-muted mb-0"
-                                                    >
-                                                        Thanks for your
-                                                        Order,
-                                                        <span
-                                                                style="
-                                                                        color: violet;
-                                                                    "
-                                                        >HOANG</span
-                                                        >!
-                                                    </h5>
-                                                </div>
-                                                <div
-                                                        class="card-body p-4"
-                                                >
-                                                    <div
-                                                            class="d-flex justify-content-between align-items-center mb-4"
-                                                    >
-                                                        <p
-                                                                class="lead fw-normal mb-0"
-                                                                style="
-                                                                        color: violet;
-                                                                    "
-                                                        >
-                                                            Receipt
-                                                        </p>
-                                                        <p
-                                                                class="small text-muted mb-0"
-                                                        >
-                                                            Receipt
-                                                            Voucher :
-                                                            1KAU9-84UIL
-                                                        </p>
-                                                    </div>
-                                                    <div
-                                                            class="card shadow-0 border mb-4"
-                                                    >
-                                                        <div
-                                                                class="card-body"
-                                                        >
-                                                            <div
-                                                                    class="row"
-                                                            >
-                                                                <div
-                                                                        class="col-md-2"
-                                                                >
-                                                                    <img
-                                                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/13.webp"
-                                                                            class="img-fluid"
-                                                                            alt="Phone"
-                                                                    />
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0"
-                                                                    >
-                                                                        Samsung
-                                                                        Galaxy
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        White
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        Capacity:
-                                                                        64GB
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        Qty:
-                                                                        1
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        $499
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <hr
-                                                                    class="mb-4"
-                                                                    style="
-                                                                            background-color: #e0e0e0;
-                                                                            opacity: 1;
-                                                                        "
-                                                            />
-                                                            <div
-                                                                    class="row d-flex align-items-center"
-                                                            >
-                                                                <div
-                                                                        class="col-md-2"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        Track
-                                                                        Order
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-10"
-                                                                >
-                                                                    <div
-                                                                            class="progress"
-                                                                            style="
-                                                                                    height: 6px;
-                                                                                    border-radius: 16px;
-                                                                                "
-                                                                    >
-                                                                        <div
-                                                                                class="progress-bar"
-                                                                                role="progressbar"
-                                                                                style="
-                                                                                        width: 75%;
-                                                                                        border-radius: 16px;
-                                                                                        background: linear-gradient(
-                                                                                            to
-                                                                                                right,
-                                                                                            rgba(
-                                                                                                251,
-                                                                                                194,
-                                                                                                235,
-                                                                                                1
-                                                                                            ),
-                                                                                            rgba(
-                                                                                                166,
-                                                                                                193,
-                                                                                                238,
-                                                                                                1
-                                                                                            )
-                                                                                        );
-                                                                                    "
-                                                                                aria-valuenow="0"
-                                                                                aria-valuemin="-1"
-                                                                                aria-valuemax="2"
-                                                                        ></div>
-                                                                    </div>
-                                                                    <div
-                                                                            class="d-flex justify-content-around mb-1"
-                                                                    >
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Pending
-                                                                        </p>
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Accepted
-                                                                        </p>
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Delivered
-                                                                        </p>
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Finished
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                            class="card shadow-0 border mb-4"
-                                                    >
-                                                        <div
-                                                                class="card-body"
-                                                        >
-                                                            <div
-                                                                    class="row"
-                                                            >
-                                                                <div
-                                                                        class="col-md-2"
-                                                                >
-                                                                    <img
-                                                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
-                                                                            class="img-fluid"
-                                                                            alt="Phone"
-                                                                    />
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0"
-                                                                    >
-                                                                        iPad
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        Pink
-                                                                        rose
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        Capacity:
-                                                                        32GB
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        Qty:
-                                                                        1
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        $399
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <hr
-                                                                    class="mb-4"
-                                                                    style="
-                                                                            background-color: #e0e0e0;
-                                                                            opacity: 1;
-                                                                        "
-                                                            />
-                                                            <div
-                                                                    class="row d-flex align-items-center"
-                                                            >
-                                                                <div
-                                                                        class="col-md-2"
-                                                                >
-                                                                    <p
-                                                                            class="text-muted mb-0 small"
-                                                                    >
-                                                                        Track
-                                                                        Order
-                                                                    </p>
-                                                                </div>
-                                                                <div
-                                                                        class="col-md-10"
-                                                                >
-                                                                    <div
-                                                                            class="progress"
-                                                                            style="
-                                                                                    height: 6px;
-                                                                                    border-radius: 16px;
-                                                                                "
-                                                                    >
-                                                                        <div
-                                                                                class="progress-bar"
-                                                                                role="progressbar"
-                                                                                style="
-                                                                                        width: 20%;
-                                                                                        border-radius: 16px;
-                                                                                        background: linear-gradient(
-                                                                                            to
-                                                                                                right,
-                                                                                            rgba(
-                                                                                                251,
-                                                                                                194,
-                                                                                                235,
-                                                                                                1
-                                                                                            ),
-                                                                                            rgba(
-                                                                                                166,
-                                                                                                193,
-                                                                                                238,
-                                                                                                1
-                                                                                            )
-                                                                                        );
-                                                                                    "
-                                                                                aria-valuenow="2"
-                                                                                aria-valuemin="-1"
-                                                                                aria-valuemax="2"
-                                                                        ></div>
-                                                                    </div>
-                                                                    <div
-                                                                            class="d-flex justify-content-around mb-1"
-                                                                    >
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Pending
-                                                                        </p>
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Accepted
-                                                                        </p>
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Delivered
-                                                                        </p>
-                                                                        <p
-                                                                                class="text-muted mt-1 mb-0 small ms-xl-5"
-                                                                        >
-                                                                            Finished
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        <div
+                                                class=""
+                                                id="printOrderDetail"
+                                        >
+                                            <!-- <div
+        class="card"
+        style="
+            border-radius: 10px;
+        "
+    >
+        <div
+            class="card-header px-4 py-5"
+        >
+            <h5
+                class="text-muted mb-0"
+            >
+                Thanks for your
+                Order,
+                <span
+                    style="
+                        color: violet;
+                    "
+                    >HOANG</span
+                >!
+            </h5>
+        </div>
+        <div
+            class="card-body p-4"
+        >
+            <div
+                class="d-flex justify-content-between align-items-center mb-4"
+            >
+                <p
+                    class="lead fw-normal mb-0"
+                    style="
+                        color: violet;
+                    "
+                >
+                    Receipt
+                </p>
+                <p
+                    class="small text-muted mb-0"
+                >
+                    Receipt
+                    Voucher :
+                    1KAU9-84UIL
+                </p>
+            </div>
+            <div
+                class="card shadow-0 border mb-4"
+            >
+                <div
+                    class="card-body"
+                >
+                    <div
+                        class="row"
+                    >
+                        <div
+                            class="col-md-2"
+                        >
+                            <img
+                                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/13.webp"
+                                class="img-fluid"
+                                alt="Phone"
+                            />
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0"
+                            >
+                                Samsung
+                                Galaxy
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                White
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                Capacity:
+                                64GB
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                Qty:
+                                1
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                $499
+                            </p>
+                        </div>
+                    </div>
+                    <hr
+                        class="mb-4"
+                        style="
+                            background-color: #e0e0e0;
+                            opacity: 1;
+                        "
+                    />
+                </div>
+            </div>
+            <div
+                class="card shadow-0 border mb-4"
+            >
+                <div
+                    class="card-body"
+                >
+                    <div
+                        class="row"
+                    >
+                        <div
+                            class="col-md-2"
+                        >
+                            <img
+                                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
+                                class="img-fluid"
+                                alt="Phone"
+                            />
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0"
+                            >
+                                iPad
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                Pink
+                                rose
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                Capacity:
+                                32GB
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                Qty:
+                                1
+                            </p>
+                        </div>
+                        <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                        >
+                            <p
+                                class="text-muted mb-0 small"
+                            >
+                                $399
+                            </p>
+                        </div>
+                    </div>
+                    <hr
+                        class="mb-4"
+                        style="
+                            background-color: #e0e0e0;
+                            opacity: 1;
+                        "
+                    />
+                </div>
+            </div>
 
-                                                    <div
-                                                            class="d-flex justify-content-between pt-2"
-                                                    >
-                                                        <p
-                                                                class="fw-bold mb-0"
-                                                        >
-                                                            Order
-                                                            Details
-                                                        </p>
-                                                        <p
-                                                                class="text-muted mb-0"
-                                                        >
-                                                                    <span
-                                                                            class="fw-bold me-4"
-                                                                    >Total</span
-                                                                    >
-                                                            $898.00
-                                                        </p>
-                                                    </div>
+            <div
+                class="d-flex justify-content-between pt-2"
+            >
+                <p
+                    class="fw-bold mb-0"
+                >
+                    Order
+                    Details
+                </p>
+                <p
+                    class="text-muted mb-0"
+                >
+                    <span
+                        class="fw-bold me-4"
+                        >Total</span
+                    >
+                    $898.00
+                </p>
+            </div>
 
-                                                    <div
-                                                            class="d-flex justify-content-between pt-2"
-                                                    >
-                                                        <p
-                                                                class="text-muted mb-0"
-                                                        >
-                                                            Invoice
-                                                            Number :
-                                                            788152
-                                                        </p>
-                                                        <p
-                                                                class="text-muted mb-0"
-                                                        >
-                                                                    <span
-                                                                            class="fw-bold me-4"
-                                                                    >Discount</span
-                                                                    >
-                                                            $19.00
-                                                        </p>
-                                                    </div>
-
-                                                    <div
-                                                            class="d-flex justify-content-between"
-                                                    >
-                                                        <p
-                                                                class="text-muted mb-0"
-                                                        >
-                                                            Invoice Date
-                                                            : 22
-                                                            Dec,2019
-                                                        </p>
-                                                        <p
-                                                                class="text-muted mb-0"
-                                                        >
-                                                                    <span
-                                                                            class="fw-bold me-4"
-                                                                    >GST
-                                                                        18%</span
-                                                                    >
-                                                            123
-                                                        </p>
-                                                    </div>
-
-                                                    <div
-                                                            class="d-flex justify-content-between mb-5"
-                                                    >
-                                                        <p
-                                                                class="text-muted mb-0"
-                                                        >
-                                                            Recepits
-                                                            Voucher :
-                                                            18KU-62IIK
-                                                        </p>
-                                                        <p
-                                                                class="text-muted mb-0"
-                                                        >
-                                                                    <span
-                                                                            class="fw-bold me-4"
-                                                                    >Delivery
-                                                                        Charges</span
-                                                                    >
-                                                            Free
-                                                        </p>
-                                                    </div>
-                                                    <button
-                                                            class="btn btn-light btn-lg btn-outline-danger"
-                                                    >
-                                                        Cancel Order
-                                                    </button>
-                                                </div>
-                                                <div
-                                                        class="card-footer border-0 px-4 py-5"
-                                                        style="
-                                                                background: linear-gradient(
-                                                                    to right,
-                                                                    rgba(
-                                                                        251,
-                                                                        194,
-                                                                        235,
-                                                                        1
-                                                                    ),
-                                                                    rgba(
-                                                                        166,
-                                                                        193,
-                                                                        238,
-                                                                        1
-                                                                    )
-                                                                );
-                                                                border-bottom-left-radius: 10px;
-                                                                border-bottom-right-radius: 10px;
-                                                            "
-                                                >
-                                                    <h5
-                                                            class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0"
-                                                    >
-                                                        Total paid:
-                                                        <span
-                                                                class="h2 mb-0 ms-2"
-                                                        >$1040</span
-                                                        >
-                                                    </h5>
-                                                </div>
-                                            </div>
+            <div
+                class="d-flex justify-content-between pt-2"
+            >
+                <p
+                    class="text-muted mb-0"
+                >
+                    Invoice
+                    Number :
+                    788152
+                </p>
+            </div>
+            <div
+                class="d-flex justify-content-between"
+            >
+                <p
+                    class="text-muted mb-0"
+                >
+                    Invoice Date
+                    : 22
+                    Dec,2019
+                </p>
+                <p
+                    class="text-muted mb-0"
+                >
+                    <span
+                        class="fw-bold me-4"
+                        >GST
+                        18%</span
+                    >
+                    123
+                </p>
+            </div>
+            <div
+                class="d-flex justify-content-between mb-5"
+            >
+                <p
+                    class="text-muted mb-0"
+                >
+                    <span
+                        class="fw-bold me-4"
+                        >Delivery
+                        Charges</span
+                    >
+                    Free
+                </p>
+            </div>
+            <button
+                class="btn btn-light btn-lg btn-outline-danger"
+            >
+                Cancel Order
+            </button>
+        </div>
+        <div
+            class="card-footer border-0 px-4 py-5"
+            style="
+                background: linear-gradient(
+                    to right,
+                    rgba(
+                        251,
+                        194,
+                        235,
+                        1
+                    ),
+                    rgba(
+                        166,
+                        193,
+                        238,
+                        1
+                    )
+                );
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+            "
+        >
+            <h5
+                class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0"
+            >
+                Total paid:
+                <span
+                    class="h2 mb-0 ms-2"
+                    >$1040</span
+                >
+            </h5>
+        </div>
+    </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -624,12 +571,247 @@
             </div>
         </div>
     </div>
+    <div
+            class="notifications"
+            id="notifications"
+    ></div>
 </section>
+<script src="/js/ultils.js"></script>
 <script>
+    let status = 0;
     const pathArray = window.location.pathname.split('/');
     const orderId = pathArray[pathArray.length - 1]; // Get the last part of the path
-    fetch(`http://localhost:8081/api/order/getByUserId/${user.id}`)
+    window.onload = function () {
+        loadData();
+    };
+    function loadData() {
+        fetch(`http://localhost:8081/api/admin/order/${orderId}/detail`)
+            .then((response) => response.json())
+            .then((response) => {
+                let statusText = 'Pending';
+                let statusWidth = '40%'; // Mặc định là "Pending"
+                status = response.data[0].order.status;
+                if (response.data[0].order.status === -1) {
+                    statusText = 'Cancelled';
+                    statusWidth = '15%';
+                } else if (response.data[0].order.status === 1) {
+                    statusText = 'Accepted';
+                    statusWidth = '65%';
+                } else if (response.data[0].order.status === 2) {
+                    statusText = 'Finished';
+                    statusWidth = '100%';
+                }
 
+                let innerHTML = `
+            <div class="card" style="border-radius: 10px;">
+                <div class="card-header px-4 py-5">
+                    <h5 class="text-muted mb-0">
+                        Thanks for your Order,
+                        <span style="color: violet;">${response.data[0].order.customerName}</span>!
+                    </h5>
+                    <div class="row d-flex align-items-center" style="margin-top: 40px">
+                        <div class="col-md-2">
+                            <p class="text-muted mb-0 small">Track Order</p>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="progress" style="height: 6px; border-radius: 16px">
+                                <div class="progress-bar" role="progressbar" style="width: ${statusWidth}; border-radius: 16px; background: linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1);" aria-valuenow="2" aria-valuemin="-1" aria-valuemax="2"></div>
+                            </div>
+                            <div class="d-flex justify-content-around mb-1">
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Cancelled</p>
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Pending</p>
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Accepted</p>
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Finished</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <p class="lead fw-normal mb-0" style="color: violet;">Receipt</p>
+                    </div>
+        `;
+
+                console.log(response.data);
+
+                response.data.forEach((product) => {
+                    console.log(product);
+                    innerHTML += `
+
+        <div class="card shadow-0 border mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="../${
+                            product.product.imagePath
+                        }" class="img-fluid" alt="${product.name}" />
+                    </div>
+                    <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                        <p class="text-muted mb-0">${
+                            product.product.name
+                        }</p>
+                    </div>
+
+
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                        <p class="text-muted mb-0 small">Qty: ${
+                            product.quantity
+                        }</p>
+                    </div>
+                    <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                        <p class="text-muted mb-0 small">Giá: ${formatPrice(
+                            product.price
+                        )} VND</p>
+                    </div>
+                </div>
+                <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;" />
+            </div>
+
+        </div>
+`;
+                });
+                innerHTML += `
+                <div
+                    class="d-flex justify-content-between pt-2"
+                >
+                        <p
+                            class="fw-bold mb-0"
+                        >
+                            Order
+                            Details
+                        </p>
+                        <p
+                            class="text-muted mb-0"
+                        >
+                            <span
+                                class="fw-bold me-4"
+                                >Total</span
+                            >
+                            ${formatPrice(
+                                response.data[0].order.total_price
+                            )}
+                        </p>
+                </div>
+                <div
+                        class="d-flex justify-content-between mb-5"
+                    >
+                        <p
+                            class="text-muted mb-0"
+                        >
+                            Invoice Date:
+
+                            ${response.data[0].order.createdAt}
+                        </p>
+                        <p
+                            class="text-muted mb-0"
+                        >
+                            <span
+                                class="fw-bold me-4"
+                                >Delivery
+                                Charges</span
+                            >
+                            Free
+                        </p>
+
+                </div>
+
+                <button class="btn btn-light btn-lg btn-outline-danger" onclick="cancelOrder()">
+                    Cancel Order
+                </button>
+            </div>
+
+            <div
+                    class="card-footer border-0 px-4 py-5"
+                    style="
+                        background: linear-gradient(
+                            to right,
+                            rgba(
+                                251,
+                                194,
+                                235,
+                                1
+                            ),
+                            rgba(
+                                166,
+                                193,
+                                238,
+                                1
+                            )
+                        );
+                        border-bottom-left-radius: 10px;
+                        border-bottom-right-radius: 10px;
+                    "
+                >
+                    <h5
+                        class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0"
+                    >
+                        Total paid:
+                        <span
+                            class="h2 mb-0 ms-2"
+                            >${formatPrice(
+                                response.data[0].order.total_price
+                            )}</span
+                        >
+                    </h5>
+                </div>
+        </div>`;
+                document.getElementById('printOrderDetail').innerHTML =
+                    innerHTML;
+            });
+    }
+    function formatPrice(price) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
+    }
+    function cancelOrder() {
+        if (status == -1 || status == 2) {
+            if (status == -1) {
+                createToast(
+                    'error',
+                    'bi-check-circle',
+                    'Error',
+                    'Đơn hàng đã hủy từ trước'
+                );
+            } else {
+                createToast(
+                    'error',
+                    'bi-check-circle',
+                    'Error',
+                    'Đơn hàng đã được hoàn thành'
+                );
+            }
+        } else {
+            if (confirm('Bạn có chắc chắn muốn hủy đơn hàng?')) {
+                fetch(
+                    `http://localhost:8081/api/admin/order/${orderId}/cancel`,
+                    {
+                        method: 'POST',
+                    }
+                )
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Request failed.');
+                        }
+                    })
+                    .then((response) => {
+                        createToast(
+                            'success',
+                            'bi-check-circle',
+                            'Success',
+                            'Đơn hàng đã bị hủy'
+                        );
+                        loadData();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        }
+    }
 </script>
 </body>
 </html>
