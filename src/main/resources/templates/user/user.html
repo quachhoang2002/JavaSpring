@@ -68,6 +68,7 @@
                             <button
                                     type="button"
                                     class="btn btn-outline-dark"
+                                    onclick="editInfo()"
                                     data-mdb-ripple-color="dark"
                                     style="z-index: 1"
                             >
@@ -77,6 +78,7 @@
                                     type="button"
                                     class="btn btn-outline-dark"
                                     data-mdb-ripple-color="dark"
+                                    onclick="getOrders()"
                                     style="z-index: 1; margin-top: 2px"
                             >
                                 Orders
@@ -90,34 +92,79 @@
                             <p id="customerPhone"></p>
                         </div>
                     </div>
-                    <!-- <div class="p-4 text-black" style="background-color: #f8f9fa;">
-<div class="d-flex justify-content-end text-center py-1">
-<div class="px-2">
-<p class="mb-1 h5">253</p>
-<p class="small text-muted mb-0">Pending</p>
-</div>
-<div class="px-2">
-<p class="mb-1 h5">1026</p>
-<p class="small text-muted mb-0">Accepted</p>
-</div>
-<div class="px-2">
-<p class="mb-1 h5">478</p>
-<p class="small text-muted mb-0">Finished</p>
-</div>
-<div>
-<p class="mb-1 h5">921</p>
-<p class="small text-muted mb-0">Cancelled</p>
-</div>
-</div>
-</div> -->
                     <div
                             class="p-4 text-black"
-                            style="background-color: #f8f9fa; height: 105px"
+                            style="background-color: #f8f9fa"
                     >
                         <div
                                 class="d-flex justify-content-end text-center py-1"
-                        ></div>
+                        >
+                            <div class="px-2">
+                                <p
+                                        class="mb-1 h5"
+                                        id="pending"
+                                >
+                                    253
+                                </p>
+                                <p
+                                        class="small mb-0"
+                                        style="color: yellow"
+                                >
+                                    Pending
+                                </p>
+                            </div>
+                            <div class="px-2">
+                                <p
+                                        class="mb-1 h5"
+                                        id="accepted"
+                                >
+                                    1026
+                                </p>
+                                <p
+                                        class="small mb-0"
+                                        style="color: orange"
+                                >
+                                    Accepted
+                                </p>
+                            </div>
+                            <div class="px-2">
+                                <p
+                                        class="mb-1 h5"
+                                        id="finished"
+                                >
+                                    478
+                                </p>
+                                <p
+                                        class="small mb-0"
+                                        style="color: green"
+                                >
+                                    Finished
+                                </p>
+                            </div>
+                            <div>
+                                <p
+                                        class="mb-1 h5"
+                                        id="cancelled"
+                                >
+                                    921
+                                </p>
+                                <p
+                                        class="small mb-0"
+                                        style="color: red"
+                                >
+                                    Cancelled
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                    <!-- <div
+        class="p-4 text-black"
+        style="background-color: #f8f9fa; height: 105px"
+    >
+        <div
+            class="d-flex justify-content-end text-center py-1"
+        ></div>
+    </div> -->
                     <div class="card-body p-4 text-black">
                         <div class="mb-5">
                             <p class="lead fw-normal mb-1">INFO</p>
@@ -157,6 +204,7 @@
 <script>
     window.onload = function () {
         loadInfo();
+        getOderById();
     };
 
     function loadInfo() {
@@ -207,6 +255,50 @@
             return dateWithoutTime;
         }
         return null;
+    }
+    function getOderById() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        fetch(`http://localhost:8081/api/order/getByUserId/${user.id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                console.log(response);
+                let pending = 0;
+                let accepted = 0;
+                let finished = 0;
+                let cancelled = 0;
+                response.data.forEach((element) => {
+                    switch (element.status) {
+                        case 0:
+                            pending += 1;
+                            break;
+                        case 1:
+                            accepted += 1;
+                            break;
+                        case 2:
+                            finished += 1;
+                            break;
+                        case -1:
+                            cancelled += 1;
+                            break;
+                    }
+                });
+                document.getElementById('pending').textContent =
+                    pending;
+                document.getElementById('accepted').textContent =
+                    accepted;
+                document.getElementById('finished').textContent =
+                    finished;
+                document.getElementById('cancelled').textContent =
+                    cancelled;
+            });
+    }
+    function getOrders(){
+        window.location.href = '/getOrders';
+    }
+    function editInfo(){
+        window.location.href = '/editInfo';
     }
 </script>
 </body>

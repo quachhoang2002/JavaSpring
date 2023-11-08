@@ -764,6 +764,13 @@
                 );
             });
     }
+    function isValidPhoneNumber(phoneNumber) {
+    // Biểu thức chính quy kiểm tra số điện thoại Việt Nam (không kiểm tra xác thực thực tế của số điện thoại)
+    const vietnamPhoneNumberRegex = /^(0[1-9][0-9]{8}|84[1-9][0-9]{8})$/;
+
+    // Sử dụng test() để kiểm tra chuỗi phoneNumber với biểu thức chính quy
+    return vietnamPhoneNumberRegex.test(phoneNumber);
+}
 
     function checkout() {
         // Lấy thông tin từ các trường nhập liệu (tên, địa chỉ, số điện thoại)
@@ -772,7 +779,7 @@
         const phone = document.getElementById('typePhone').value;
         const user = localStorage.getItem('user');
         const parsedUser = JSON.parse(user);
-
+        const createdAt = Date.now();
         console.log(parsedUser.email);
         console.log(totalPriceForCheckout);
         // Kiểm tra xem các trường có dữ liệu hợp lệ không
@@ -789,6 +796,16 @@
             );
             return;
         }
+        if (!isValidPhoneNumber(phone)){
+            createToast(
+                'error',
+                'bi-check-circle',
+                'Error',
+                'Số điện thoại không hợp lệ'
+            );
+            return;
+        }
+
 
         // Tạo một đối tượng chứa thông tin thanh toán
         const paymentData = {
@@ -801,6 +818,7 @@
             user: {
                 id: parsedUser.id,
             },
+            createdAt: createdAt
         };
         console.log(paymentData);
         // Gửi thông tin thanh toán đến máy chủ (backend) bằng một yêu cầu HTTP, ví dụ sử dụng fetch

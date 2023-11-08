@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,6 +26,19 @@ public class UserService {
             throw new RuntimeException("Email existed");
         }
         return userRepository.save(user);
+    }
+    public User updateUserByEmail(String email, User updatedUser) {
+        User existingUser = userRepository.findByEmail(email);
+        if (existingUser != null) {
+            existingUser.setName(updatedUser.getName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setPhone(updatedUser.getPhone());
+            existingUser.setPassword(updatedUser.getPassword());
+            return userRepository.save(existingUser);
+        } else {
+            // Xử lý trường hợp không tìm thấy người dùng theo email
+            throw new RuntimeException("Không tìm thấy người dùng với email: " + email);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -57,5 +71,6 @@ public class UserService {
     }
 
     public User findById(int id){ return userRepository.findById(id);}
+    public User findByEmail(String email){ return userRepository.findByEmail(email);}
 
 }
