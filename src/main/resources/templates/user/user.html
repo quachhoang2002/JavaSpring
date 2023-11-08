@@ -68,6 +68,7 @@
                             <button
                                     type="button"
                                     class="btn btn-outline-dark"
+                                    onclick="editInfo()"
                                     data-mdb-ripple-color="dark"
                                     style="z-index: 1"
                             >
@@ -77,6 +78,7 @@
                                     type="button"
                                     class="btn btn-outline-dark"
                                     data-mdb-ripple-color="dark"
+                                    onclick="getOrders()"
                                     style="z-index: 1; margin-top: 2px"
                             >
                                 Orders
@@ -291,6 +293,12 @@
                 document.getElementById('cancelled').textContent =
                     cancelled;
             });
+    }
+    function getOrders(){
+        window.location.href = '/getOrders';
+    }
+    function editInfo(){
+        window.location.href = '/editInfo';
     }
 </script>
 </body>
