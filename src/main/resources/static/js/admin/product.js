@@ -276,7 +276,6 @@ async function addProduct() {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     const form = document.querySelector("#addForm");
@@ -303,7 +302,6 @@ async function deleteProduct(url) {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     await deleteDataFromApi(url, successCallback, errorCallback);

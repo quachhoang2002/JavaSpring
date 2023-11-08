@@ -13,8 +13,8 @@ public class OrderDetails {
 
     @ManyToOne
     private Order order;
-
     @ManyToOne
+
     private Product product;
     private Integer quantity;
     private double price;

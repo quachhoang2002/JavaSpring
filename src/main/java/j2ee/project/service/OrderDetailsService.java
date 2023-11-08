@@ -1,11 +1,13 @@
 package j2ee.project.service;
 
+import j2ee.project.models.Order;
 import j2ee.project.models.OrderDetails;
 import j2ee.project.repository.OrderDetailsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class OrderDetailsService {
@@ -15,5 +17,9 @@ public class OrderDetailsService {
         orderDetailsRepository.save(orderDetails);
         return orderDetails;
     }
-    public Optional<OrderDetails> findByOrder(int orderid){ return orderDetailsRepository.findByOrder(orderid);}
+
+    @Transactional
+    public List<OrderDetails> getOrderDetailsByOrder(Order order) {
+        return orderDetailsRepository.findByOrder(order);
+    }
 }

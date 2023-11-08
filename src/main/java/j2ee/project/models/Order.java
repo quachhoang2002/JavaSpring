@@ -131,8 +131,11 @@ public class Order {
         createdAt = new Timestamp(new Date().getTime());
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public String getCreatedAt() {
+        if (createdAt == null) {
+            return null;
+        }
+        return createdAt.toString().substring(0, 19);
     }
 
     @PreUpdate
@@ -141,7 +144,12 @@ public class Order {
         updatedAt = new Timestamp(new Date().getTime());
     }
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
+    public String getUpdatedAt() {
+        if (updatedAt == null) {
+            return null;
+        }
+        return updatedAt.toString().substring(0, 19);
     }
+
+
 }
