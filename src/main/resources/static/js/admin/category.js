@@ -15,6 +15,10 @@ function RenderCategoryTemplate() {
                               <i class="fas fa-table me-1"></i>
                                  DataTable Example
                                  
+<!--                          filter box here-->
+                            <div id ="filter" class="float-start">
+                              </div>
+                                 
                              <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
                                  data-bs-target="#addCategory"
                                >
@@ -117,6 +121,21 @@ function RenderCategoryTemplate() {
 
 
 async function renderCategoryItems() {
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page") ?? 1;
+    let limit = url.searchParams.get("limit") ?? LIMIT;
+    GET_URL = `${CATEGORY_URL}?page=${page}&size=${limit}`;
+
+    filterArr = [
+        'name',
+    ];
+    renderFilterBox(filterArr);
+    filterArr.forEach(item => {
+        let value = url.searchParams.get(item);
+        if (value) {
+            GET_URL += `&${item}=${value}`;
+        }
+    }, GET_URL);
 
     let successCallback = (response) => {
         const tableBody = document.querySelector("#content tbody");
@@ -155,17 +174,9 @@ async function renderCategoryItems() {
         }
     }
 
-    //get page from url
-    let url = new URL(window.location.href);
-    let page = url.searchParams.get("page") ?? 1;
-    let limit = url.searchParams.get("limit") ?? LIMIT;
-
     let errorCallback = (error) => {
     }
 
-
-    GET_URL = `${CATEGORY_URL}?page=${page}&size=${limit}`;
-    console.log(GET_URL);
 
     await getDataFromApi(GET_URL, successCallback, errorCallback);
 }
@@ -197,12 +208,11 @@ async function addCategory() {
     formData.append('description', form.description.value);
 
     await postDataToApi(CATEGORY_URL, formData, successCallback, errorCallback);
-
 }
 
 async function deleteCategory(url) {
     let successCallback = (response) => {
-        renderCategoryItems();
+        window.location.reload()
     }
 
     let errorCallback = (error) => {
@@ -214,12 +224,10 @@ async function deleteCategory(url) {
 async function editCategory(id) {
     const errorCallback = (error) => {
         console.log(error);
-        alert(error);
     }
     const successCallback = async (response) => {
-        alert(response.message);
         bootstrap.Modal.getInstance(document.querySelector("#editCategory")).hide();
-        await renderCategoryItems();
+        window.location.reload()
     }
 
     editUrl = `${CATEGORY_URL}/${id}`;
@@ -247,7 +255,6 @@ async function editCategoryForm(id) {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
     editUrl = `${CATEGORY_URL}/${id}`;
 

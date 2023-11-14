@@ -106,6 +106,7 @@
 <script src="/js/admin/product.js"></script>
 <script src="/js/admin/order.js"></script>
 <script src="/js/admin/stock.js"></script>
+<script src="/js/admin/account.js"></script>
 <script>
     const contentDiv = document.getElementById('layoutSidenav_content');
 
@@ -132,6 +133,10 @@
             contentDiv.innerHTML = RenderStockTemplate();
             renderStockItems()
             break;
+        case url.includes('?account'):
+            contentDiv.innerHTML = RenderAccountTemplate();
+            RenderAccountItems()
+            break;
         default:
             contentDiv.innerHTML = RenderDashboard();
     }
@@ -143,7 +148,8 @@
         'category',
         'product',
         'order',
-        'stock'
+        'stock',
+        'account'
     ]
 
     leftMenu = document.getElementById('left_menu_list');

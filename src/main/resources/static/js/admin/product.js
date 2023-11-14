@@ -13,6 +13,7 @@ function RenderProductTemplate() {
                       </div>
                       <div class="card mb-4">
                           <div class="card-header">
+<!--                          filter box here-->
                                <div id ="filter" class="float-start">
                                </div>
                                  

@@ -27,13 +27,14 @@ public class ManufactureController extends Controller {
     public ResponseEntity<String> getAllManufacture(@RequestParam(defaultValue = "1") int page,
                                                     @RequestParam(defaultValue = "10") int size,
                                                     @RequestParam(defaultValue = "id") String sortBy,
-                                                    @RequestParam(defaultValue = "ASC") String sortType
-    ) {
+                                                    @RequestParam(defaultValue = "ASC") String sortType,
+                                                    @RequestParam(defaultValue = "") String name
+                                                    ) {
         try {
-            List<Manufacture> listManufacture = manufactureService.getAllManufacture(page, size, sortBy, sortType);
+            List<Manufacture> listManufacture = manufactureService.getAllManufacture(page, size, sortBy, sortType,name);
             //foreach to set image path
             //meta data
-            long totalItems = manufactureService.countAllManufacture();
+            long totalItems = manufactureService.count(name);
             Map<String, Object> metaData = buildPage(totalItems, page, size);
             return this.successResponse("Get all manufacture.js successfully", listManufacture, metaData);
         } catch (Exception e) {
@@ -86,7 +87,7 @@ public class ManufactureController extends Controller {
 
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
-                String imagePath = this.manufactureService.buildImagePath(imageFile,IMAGE_FOLDER);
+                String imagePath = this.manufactureService.buildImagePath(imageFile, IMAGE_FOLDER);
                 updatedManufacture.setImagePath(imagePath);
             }
             Manufacture updated = manufactureService.updateManufacture(id, updatedManufacture);

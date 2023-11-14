@@ -22,13 +22,14 @@ public class CategoryController extends Controller {
     public ResponseEntity<String> getAllManufacture(@RequestParam(defaultValue = "1") int page,
                                                     @RequestParam(defaultValue = "10") int size,
                                                     @RequestParam(defaultValue = "id") String sortBy,
-                                                    @RequestParam(defaultValue = "ASC") String sortType
+                                                    @RequestParam(defaultValue = "ASC") String sortType,
+                                                    @RequestParam(defaultValue = "") String name
     ) {
         try {
-            List<Category> listManufacture = categoryService.getAllSort(page, size, sortBy, sortType);
+            List<Category> listManufacture = categoryService.getAllSort(page, size, sortBy, sortType,name);
             //foreach to set image path
             //meta data
-            long totalItems = categoryService.countAllManufacture();
+            long totalItems = categoryService.count(name);
             Map<String, Object> metaData = buildPage(totalItems, page, size);
             return this.successResponse("Get all manufacture.js successfully", listManufacture, metaData);
         } catch (Exception e) {

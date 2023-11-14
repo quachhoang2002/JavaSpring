@@ -15,6 +15,10 @@ function RenderManufactureTemplate() {
                               <i class="fas fa-table me-1"></i>
                                  DataTable Example
                                  
+<!--                                filter box here -->
+                                <div id ="filter" class="float-start">
+                               </div>
+                                 
                              <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
                                  data-bs-target="#addManu"
                                >
@@ -142,6 +146,22 @@ function RenderManufactureTemplate() {
 
 async function renderManufactureItems() {
 
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page") ?? 1;
+    let limit = url.searchParams.get("limit") ?? LIMIT;
+    GET_URL = `${MANUFACTURE_URL}?page=${page}&size=${limit}`;
+
+    filterArr = [
+        'name',
+    ];
+    renderFilterBox(filterArr);
+    filterArr.forEach(item => {
+        let value = url.searchParams.get(item);
+        if (value) {
+            GET_URL += `&${item}=${value}`;
+        }
+    }, GET_URL);
+
     let successCallback = (response) => {
         const tableBody = document.querySelector("#content tbody");
         tableBody.innerHTML = ''; // Clear existing rows
@@ -182,11 +202,6 @@ async function renderManufactureItems() {
             pagination.innerHTML += `<a href="${urlPage}" class="btn btn-secondary ${i == page ? 'active' : ''}">${i}</a>`
         }
     }
-
-    //get page from url
-    let url = new URL(window.location.href);
-    let page = url.searchParams.get("page") ?? 1;
-    let limit = url.searchParams.get("limit") ?? LIMIT;
 
     let errorCallback = (error) => {
     }
@@ -238,12 +253,11 @@ async function addManu() {
 
 async function deleteItem(url) {
     let successCallback = (response) => {
-        alert(response.message);
-        renderManufactureItems();
+        window.location.reload()
+
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     await deleteDataFromApi(url, successCallback, errorCallback);
@@ -252,12 +266,10 @@ async function deleteItem(url) {
 async function edit(id) {
     const errorCallback = (error) => {
         console.log(error);
-        alert(error);
     }
     const successCallback = async (response) => {
-        alert(response.message);
         bootstrap.Modal.getInstance(document.querySelector("#editManu")).hide();
-        await renderManufactureItems();
+        window.location.reload()
     }
 
     editUrl = `${MANUFACTURE_URL}/${id}`;
@@ -293,7 +305,6 @@ async function editForm(id) {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
     editUrl = `${MANUFACTURE_URL}/${id}`;
 
