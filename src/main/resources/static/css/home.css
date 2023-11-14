@@ -10993,5 +10993,11 @@ align-items: center;
             );
         }
 
+.login-option{
+color: black;
+text-decoration: none
+}
 
-
+.login-option:hover{
+color:white;
+}

@@ -211,7 +211,7 @@
                 </button>
                 <button
                         id="user-btn"
-                        class-="btn btn-outlinedark"
+                        class="btn btn-outline-dark"
                         onclick="userEvent()"
                         type="button"
                         style="
@@ -634,7 +634,7 @@
                                     deleteCartItem(data);
                                 }
                             );
-                            productDetails.appendChild(deleteButton);
+
                             productDetails.appendChild(closeIcon);
                             productDetails.appendChild(productName);
                             productDetails.appendChild(productColor);
@@ -643,6 +643,7 @@
                             );
                             priceAndQuantity.appendChild(productPrice);
                             priceAndQuantity.appendChild(quantityInput);
+                            productDetails.appendChild(deleteButton);
 
                             productItem.appendChild(productImage);
                             productItem.appendChild(productDetails);

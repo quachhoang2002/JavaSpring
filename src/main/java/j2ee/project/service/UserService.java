@@ -27,8 +27,8 @@ public class UserService {
         }
         return userRepository.save(user);
     }
-    public User updateUserByEmail(String email, User updatedUser) {
-        User existingUser = userRepository.findByEmail(email);
+    public User updateUserByEmail(int id , User updatedUser) {
+        User existingUser = userRepository.findById(id);
         if (existingUser != null) {
             existingUser.setName(updatedUser.getName());
             existingUser.setEmail(updatedUser.getEmail());
@@ -37,7 +37,7 @@ public class UserService {
             return userRepository.save(existingUser);
         } else {
             // Xử lý trường hợp không tìm thấy người dùng theo email
-            throw new RuntimeException("Không tìm thấy người dùng với email: " + email);
+            throw new RuntimeException("Không tìm thấy người dùng với id: " + id);
         }
     }
 

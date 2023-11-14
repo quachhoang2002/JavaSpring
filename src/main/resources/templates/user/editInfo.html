@@ -370,15 +370,18 @@
 
         // Tạo một đối tượng chứa thông tin người dùng
         const updatedUser = {
+            id: storedUser.id,
             email: email,
             name: name,
             phone: phone,
+            password: storedUser.password
         };
-
         // Kiểm tra mật khẩu có thay đổi không
         if (password !== storedUser.password) {
-            updatedUser.password = password;
+            updatedUser.password = password
         }
+        console.log(updatedUser)
+
 
         // Gửi yêu cầu PUT đến API
         fetch('http://localhost:8081/api/auth/editUser', {
@@ -406,6 +409,7 @@
                         'error',
                         'Cập nhật thông tin thất bại'
                     );
+                    console.log(data)
                 }
             })
             .catch((error) => {
