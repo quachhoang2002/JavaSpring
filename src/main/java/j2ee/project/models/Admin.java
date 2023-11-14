@@ -1,6 +1,6 @@
 package j2ee.project.models;
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -12,13 +12,13 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @NotNull(message = "Name is mandatory")
     private String name;
 
-    @Column(nullable = false)
+    @NotNull(message = "Email is mandatory")
     private String email;
 
-    @Column(nullable = false)
+    @NotNull(message = "Password is mandatory")
     private String password;
 
     @Column(nullable = true)

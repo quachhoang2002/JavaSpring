@@ -237,3 +237,5 @@ function renderFilterBox(filterAttributes) {
 
     filter.appendChild(filterContainer);
 }
+
+

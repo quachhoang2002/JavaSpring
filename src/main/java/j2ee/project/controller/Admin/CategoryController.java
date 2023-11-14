@@ -50,6 +50,9 @@ public class CategoryController extends Controller {
     @PostMapping("")
     public ResponseEntity<String> addManufacture(@ModelAttribute Category category) {
         try {
+            if (category.getName() == null || category.getName().isEmpty()) {
+                return errorResponse("Name is required");
+            }
             Category data = categoryService.addCategory(category);
             return successResponse("Add manufacture.js successfully", data);
         } catch (Exception e) {
@@ -60,6 +63,9 @@ public class CategoryController extends Controller {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateManufacture(@PathVariable int id, @ModelAttribute Category category) {
         try {
+            if (category.getName() == null || category.getName().isEmpty()){
+                return errorResponse("Name is required");
+            }
             category.setId(id);
             Category data = categoryService.updateCategory(category);
             return successResponse("Update manufacture.js successfully", data);
@@ -74,7 +80,8 @@ public class CategoryController extends Controller {
             categoryService.deleteCategory(id);
             return successResponse("Delete manufacture.js successfully", null);
         } catch (Exception e) {
-            return errorResponse(e.getMessage());
+            String message = "Item is referenced by other tables or not found";
+            return errorResponse(message);
         }
     }
 

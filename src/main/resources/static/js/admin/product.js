@@ -71,36 +71,36 @@ function RenderProductTemplate() {
                      <div class="modal-body">
                          <form id="addForm">
                              <div class="mb-3">
-                                 <label for="name" class="form-label">Name</label>
+                                 <label for="name" class="form-label">Name *</label>
                                  <input type="text" class="form-control" id="name" name="name" required>
                              </div>
                               <!-- select category -->
                              <div class="mb-3">
-                                <label for="category"  class="form-label"> Category </label>  
+                                <label for="category"  class="form-label"> Category *</label>  
                                 <select class="form-select" aria-label="Default select example" id="category" name="category" required>
                                </select> 
                               </div>
                             
                              <!-- select manufacture -->
                              <div class="mb-3">
-                                <label for="manufacture" class="form-label"> Manufacture </label>
+                                <label for="manufacture" class="form-label"> Manufacture *</label>
                                 <select class="form-select" aria-label="Default select example" id="manufacture" name="manufacture" required>
                                 </select>
                               </div>
                                       
                                       
                               <div class="mb-3">
-                                    <label for="price" class="form-label">Price</label>
+                                    <label for="price" class="form-label">Price *</label>
                                     <input type="number" class="form-control" id="price" name="price" required>
                               </div>
                               
                              <div class="mb-3">
-                                 <label for="description" class="form-label">Description</label>
+                                 <label for="description" class="form-label">Description *</label>
                                  <input type="text" class="form-control" id="description" name="description" required>
                              </div>
                              
                               <div class="mb-3">
-                                    <label for="image" class="form-label">Image</label>
+                                    <label for="image" class="form-label">Image *</label>
                                     <input type="file" class="form-control" id="image" name="image" required>
                               </div>
                              

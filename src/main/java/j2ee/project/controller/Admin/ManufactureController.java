@@ -29,9 +29,9 @@ public class ManufactureController extends Controller {
                                                     @RequestParam(defaultValue = "id") String sortBy,
                                                     @RequestParam(defaultValue = "ASC") String sortType,
                                                     @RequestParam(defaultValue = "") String name
-                                                    ) {
+    ) {
         try {
-            List<Manufacture> listManufacture = manufactureService.getAllManufacture(page, size, sortBy, sortType,name);
+            List<Manufacture> listManufacture = manufactureService.getAllManufacture(page, size, sortBy, sortType, name);
             //foreach to set image path
             //meta data
             long totalItems = manufactureService.count(name);
@@ -64,6 +64,17 @@ public class ManufactureController extends Controller {
                 // Set the image path in the Manufacture object
                 manufacture.setImagePath(imagePath);
             }
+            //check empty manufacture.js
+            if (manufacture.getName() == null || manufacture.getName().isEmpty()) {
+                return errorResponse("Manufacture name is empty");
+            }
+            if (manufacture.getAddress() == null || manufacture.getAddress().isEmpty()) {
+                return errorResponse("Manufacture address is empty");
+            }
+            if (manufacture.getPhone() == null || manufacture.getPhone().isEmpty()) {
+                return errorResponse("Manufacture phone is empty");
+            }
+
             Manufacture newManufacture = manufactureService.addManufactory(manufacture);
             return successResponse("Add manufacture.js successfully", newManufacture);
         } catch (Exception e) {
@@ -73,16 +84,19 @@ public class ManufactureController extends Controller {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateManufacture(@PathVariable int id,
-                                                    @Valid @ModelAttribute Manufacture updatedManufacture,
-                                                    @RequestParam(value = "image", required = false) MultipartFile imageFile,
-                                                    BindingResult bindingResult
+                                                    @ModelAttribute Manufacture updatedManufacture,
+                                                    @RequestParam(value = "image", required = false) MultipartFile imageFile
     ) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder("Validation errors: ");
-            bindingResult.getAllErrors().forEach(error -> {
-                errorMessage.append(error.getDefaultMessage()).append("; ");
-            });
-            return errorResponse(errorMessage.toString());
+
+        //check empty manufacture.js
+        if (updatedManufacture.getName() == null || updatedManufacture.getName().isEmpty()) {
+            return errorResponse("Manufacture name is empty");
+        }
+        if (updatedManufacture.getAddress() == null || updatedManufacture.getAddress().isEmpty()) {
+            return errorResponse("Manufacture address is empty");
+        }
+        if (updatedManufacture.getPhone() == null || updatedManufacture.getPhone().isEmpty()) {
+            return errorResponse("Manufacture phone is empty");
         }
 
         try {
@@ -101,8 +115,14 @@ public class ManufactureController extends Controller {
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteManufactory(@PathVariable int id) {
-        manufactureService.deleteManufacture(id);
-        return successResponse("Delete manufacture.js successfully", null);
+        try {
+            manufactureService.deleteManufacture(id);
+            return successResponse("Delete manufacture.js successfully", null);
+        } catch (Exception e) {
+            //forgrein key error
+            String message = "Item is referenced by other tables or not found";
+            return errorResponse(message);
+        }
     }
 
 

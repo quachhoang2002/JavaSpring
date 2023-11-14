@@ -78,14 +78,9 @@ public class LoginController extends Controller {
     @PutMapping("/editUser")
     @ResponseBody
     public ResponseEntity<?> editUser(@RequestBody User user) {
-        User existedUser = userService.findByEmail(user.getEmail());
-        if (user.getPassword() == null){
-            user.setPassword(existedUser.getPassword());
-        }else if (user.getPassword().equals(existedUser.getPassword())) {
-            return errorResponse("Không đặt mật khẩu trùng");
-        }
-        userService.updateUserByEmail(user.getEmail(), user);
-        return successResponse("success", userService.updateUserByEmail(user.getEmail(), user));
+        User existedUser = userService.findById(user.getId());
+        userService.updateUserByEmail(user.getId(), user);
+        return successResponse("success", userService.updateUserByEmail(user.getId(), user));
     }
 
 }

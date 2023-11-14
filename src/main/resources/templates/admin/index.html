@@ -51,16 +51,17 @@
             <div class="sb-sidenav-menu">
                 <div class="nav" id="left_menu_list">
                     <div class="sb-sidenav-menu-heading">Core</div>
-                    <a class="nav-link" href="/admin/login">
+                    <a class="nav-link" href="/admin?dashboard">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Dashboard
+                       Dashboard
                     </a>
                     <div class="sb-sidenav-menu-heading">Interface</div>
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Logged in as:</div>
-                Start Bootstrap
+                <div class="small" id="user_name"></div>
+                <div id="user_role"></div>
+                <button class="btn btn-primary" id="logout">Logout</button>
             </div>
         </nav>
     </div>
@@ -108,8 +109,24 @@
 <script src="/js/admin/stock.js"></script>
 <script src="/js/admin/account.js"></script>
 <script>
-    const contentDiv = document.getElementById('layoutSidenav_content');
+    const user = JSON.parse(localStorage.getItem('admin'));
+    if (!user  || !user.token) {
+        window.location.href = '/admin/login';
+    }
+    const token = user.token;
+    const checkTokenUrl = ACCOUNT_URL + '/check-token' + '?token=' + token;
+    getDataFromApi(checkTokenUrl,() => {
+    }, () => {
+        window.location.href = '/admin/login';
+    })
 
+    //render user name and role
+    const userName = document.getElementById('user_name');
+    const userRole = document.getElementById('user_role');
+    userName.innerHTML = user.name;
+    userRole.innerHTML = user.role === 0 ? 'Admin' : 'Staff';
+
+    const contentDiv = document.getElementById('layoutSidenav_content');
     //check url for render like ?manufacture or ?dashboard
     const url = window.location.href;
     switch (true) {
@@ -134,6 +151,9 @@
             renderStockItems()
             break;
         case url.includes('?account'):
+            if (user.role !== 0) {
+                window.location.href = '/admin/login';
+            }
             contentDiv.innerHTML = RenderAccountTemplate();
             RenderAccountItems()
             break;
@@ -143,7 +163,6 @@
 
     //render left menu
     const leftMenuParams = [
-        'dashboard',
         'manufacture',
         'category',
         'product',
@@ -155,6 +174,13 @@
     leftMenu = document.getElementById('left_menu_list');
     leftMenuParams.forEach((item) => {
         leftMenu.innerHTML += renderLeftMenuItem(item)
+    })
+
+    //logout
+    const logoutBtn = document.getElementById('logout');
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('admin');
+        window.location.href = '/admin/login';
     })
 
 

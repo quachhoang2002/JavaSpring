@@ -201,11 +201,7 @@ async function addCategory() {
     //     phone: form.phone.value
     // }
     const form = document.querySelector("#addForm");
-
-
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('description', form.description.value);
+    const formData = createCateFormData(form)
 
     await postDataToApi(CATEGORY_URL, formData, successCallback, errorCallback);
 }
@@ -233,9 +229,7 @@ async function editCategory(id) {
     editUrl = `${CATEGORY_URL}/${id}`;
 
     const form = document.querySelector("#editCategoryForm");
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('description', form.description.value);
+    const formData = createCateFormData(form)
 
     await putDataToApi(editUrl, formData, successCallback, errorCallback);
     //remove event listener
@@ -261,3 +255,14 @@ async function editCategoryForm(id) {
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
 
+
+function createCateFormData(form) {
+    const formData = new FormData();
+    if (form.name.value){
+        formData.append('name', form.name.value);
+    }
+    if (form.description.value) {
+        formData.append('description', form.description.value);
+    }
+    return formData;
+}

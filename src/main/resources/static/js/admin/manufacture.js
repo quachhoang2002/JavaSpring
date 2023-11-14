@@ -167,7 +167,7 @@ async function renderManufactureItems() {
         tableBody.innerHTML = ''; // Clear existing rows
 
         const editBtn = (id) => {
-            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editManu" onclick="editForm(${id})">Edit</button>`
+            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editManu" onclick="editFormManu(${id})">Edit</button>`
         }
 
         const deleteBtn = (id) => {
@@ -235,10 +235,7 @@ async function addManu() {
     const form = document.querySelector("#manufacturerForm");
 
 
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('address', form.address.value);
-    formData.append('phone', form.phone.value);
+    const formData = createManuFormData(form)
 
     const imageInput = document.querySelector("#formFile");
 
@@ -275,15 +272,7 @@ async function edit(id) {
     editUrl = `${MANUFACTURE_URL}/${id}`;
 
     const form = document.querySelector("#editManufacturerForm");
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('address', form.address.value);
-    formData.append('phone', form.phone.value);
-    const imageInput = form.querySelector("#formFile");
-    if (imageInput.files.length > 0) {
-        // Append the selected image to the FormData
-        formData.append('image', imageInput.files[0]);
-    }
+    const formData = createManuFormData(form)
 
 
     await putDataToApi(editUrl, formData, successCallback, errorCallback);
@@ -291,7 +280,7 @@ async function edit(id) {
 }
 
 //get detail
-async function editForm(id) {
+async function editFormManu(id) {
     let successCallback = (response) => {
         console.log(response);
         const form = document.querySelector("#editManufacturerForm");
@@ -311,5 +300,19 @@ async function editForm(id) {
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
 
+
+function createManuFormData(form){
+    const formData = new FormData();
+    if (form.name.value) formData.append('name', form.name.value);
+    if (form.address.value) formData.append('address', form.address.value);
+    if (form.phone.value) formData.append('phone', form.phone.value);
+    const imageInput = form.querySelector("#formFile");
+    if (imageInput.files.length > 0) {
+        // Append the selected image to the FormData
+        formData.append('image', imageInput.files[0]);
+    }
+    return formData;
+
+}
 
 

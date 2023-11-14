@@ -63,19 +63,19 @@ function RenderAccountTemplate() {
             <div class="modal-body">
                 <form id="addForm">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
+                        <label for="name" class="form-label">Name *</label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="email" name="email" required>
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Phone</label>
+                        <label for="phone" class="form-label">Phone *</label>
                         <input type="text" class="form-control" id="phone" name="phone" required>
                     </div>
                     <div class="mb-3">
-                          <label for="password" class="form-label">password</label>
+                          <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="mb-3">
@@ -109,15 +109,15 @@ function RenderAccountTemplate() {
                      <div class="modal-body">
                          <form id="editAccountForm">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name *</label>                                  
                                     <input type="text" class="form-control" id="name" name="name" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="email" name="email" required>
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
+                                    <label for="phone" class="form-label">Phone *</label>
                                     <input type="text" class="form-control" id="phone" name="phone" required>
                                 </div>
                                 <div class="mb-3">
@@ -210,6 +210,11 @@ async function RenderAccountItems() {
 
 
 async function addAccount() {
+
+    if (!validateForm("#addForm")) {
+        return;
+    }
+
     let successCallback = (response) => {
         // const closeBtn = document.querySelector("#closeBtn");
         // closeBtn.click();
@@ -223,15 +228,7 @@ async function addAccount() {
 
 
     const form = document.querySelector("#addForm");
-
-
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('email', form.email.value);
-    formData.append('phone', form.phone.value);
-    formData.append('role', form.role.value);
-    formData.append('password', form.password.value);
-
+    const formData = createFormData(form);
     
     await postDataToApi(ACCOUNT_URL, formData, successCallback, errorCallback);
 }
@@ -248,6 +245,10 @@ async function deleteItem(url) {
 }
 
 async function editAccount(id) {
+    if (!validateForm("#editAccountForm")) {
+        return;
+    }
+
     const errorCallback = (error) => {
         console.log(error);
     }
@@ -259,12 +260,7 @@ async function editAccount(id) {
     editUrl = `${ACCOUNT_URL}/${id}`;
 
     const form = document.querySelector("#editAccountForm");
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('email', form.email.value);
-    formData.append('phone', form.phone.value);
-    formData.append('role', form.role.value);
-    formData.append('password', form.password.value);
+    const formData = createFormData(form);
 
     await putDataToApi(editUrl, formData, successCallback, errorCallback);
     //remove event listener
@@ -272,6 +268,7 @@ async function editAccount(id) {
 
 //get detail
 async function editForm(id) {
+
     let successCallback = (response) => {
         console.log(response.data.name);
         const form = document.querySelector("#editAccountForm");
@@ -293,3 +290,63 @@ async function editForm(id) {
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
 
+function createFormData(form) {
+    const formData = new FormData();
+    if (form.name.value){
+        formData.append('name', form.name.value);
+    }
+    if (form.email.value){
+        //check email is valid or no
+        formData.append('email', form.email.value);
+    }
+
+    if (form.phone.value){
+        formData.append('phone', form.phone.value);
+    }
+
+    if (form.role.value){
+        formData.append('role', form.role.value);
+    }
+
+    if (form.password.value){
+        formData.append('password', form.password.value);
+    }
+
+    return formData;
+}
+
+function validateForm(formId) {
+    form = document.querySelector(formId);
+    if (!form.name.value) {
+        showToast("Name is required", "error");
+        return false;
+    }
+
+    if (!form.email.value) {
+        showToast("Email is required", "error")
+        return false;
+    }
+
+    if (form.email.value.indexOf('@') === -1 || form.email.value.indexOf('.') === -1) {
+        showToast("Email is invalid", "error")
+        return false;
+    }
+
+    if (!form.phone.value) {
+        showToast("Phone is required", "error");
+        return false;
+    }
+
+    if (!form.role.value) {
+        showToast("Role is required", "error");
+        return false;
+    }
+
+    if (!form.password.value) {
+        showToast("Password is required", "error");
+        return false;
+    }
+
+
+    return true;
+}
