@@ -48,6 +48,11 @@ public class AdminInterceptor implements HandlerInterceptor {
             if (path.contains("/api/admin/product")) {
                 return true;
             }
+
+            //contain oder + {number}
+            if (path.contains("/api/admin/order") && path.matches("/api/admin/order/[0-9]+/detail")) {
+                return true;
+            }
         }
 
 
