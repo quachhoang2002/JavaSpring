@@ -618,12 +618,13 @@
                                 'btn-danger'
                             );
                             deleteButton.innerText = 'Xóa';
-                            deleteButton.addEventListener(
-                                'click',
-                                () => {
-                                    const productId =
-                                        userCartItem.productId;
+                            deleteButton.addEventListener('click', () => {
+                                // Display a confirmation dialog
+                                const isConfirmed = window.confirm('Are you sure you want to delete this item?');
 
+                                // Check if the user confirmed the action
+                                if (isConfirmed) {
+                                    const productId = userCartItem.productId;
                                     const userId = userCartItem.user_id;
                                     const data = {
                                         productId: productId,
@@ -633,7 +634,8 @@
 
                                     deleteCartItem(data);
                                 }
-                            );
+                            });
+
 
                             productDetails.appendChild(closeIcon);
                             productDetails.appendChild(productName);
@@ -945,10 +947,16 @@
                 // Handle the response from the controller
                 console.log('Delete response:', response);
                 if (response.status === 'success') {
-                    // If the delete is successful, update the total price
-                    renderProductItems();
-                    removeProductFromUI(data.productId);
-                    ư;
+
+                    createToast(
+                        'success',
+                        'bi-check-circle',
+                        'Success',
+                        'Xóa sản phẩm thành công'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
                 } else {
                     alert(response.message); // Display an error message if the delete is not successful
                     console.error('Delete error:', response.message);
