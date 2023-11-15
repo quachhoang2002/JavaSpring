@@ -79,10 +79,11 @@ public class AccountController extends Controller {
         try {
             String email = body.get("email");
             String password = body.get("password");
-            if (email == "admin" && password == "admin") {
+            if (email.equals("admin@gmail.com") && password.equals( "admin")) {
                 Admin admin = new Admin();
                 admin.setToken(createToken());
                 admin.setName("admin");
+                admin.setRole(0);
                 admin.setEmail("admin");
                 admin.setPassword("admin");
                 return this.successResponse("Login successfully", admin);

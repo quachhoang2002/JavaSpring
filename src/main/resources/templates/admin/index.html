@@ -130,27 +130,27 @@
     //check url for render like ?manufacture or ?dashboard
     const url = window.location.href;
     switch (true) {
-        case url.includes('?manufacture'):
+        case url.includes('?Manufacture'):
             contentDiv.innerHTML = RenderManufactureTemplate();
             renderManufactureItems()
             break;
-        case url.includes('?category'):
+        case url.includes('?Category'):
             contentDiv.innerHTML = RenderCategoryTemplate();
             renderCategoryItems()
             break;
-        case url.includes('?product'):
+        case url.includes('?Product'):
             contentDiv.innerHTML = RenderProductTemplate();
             renderProductItems()
             break;
-        case url.includes('?order'):
+        case url.includes('?Order'):
             contentDiv.innerHTML = RenderOrderTemplate();
             renderOrderItems()
             break;
-        case url.includes('?stock'):
+        case url.includes('?Stock'):
             contentDiv.innerHTML = RenderStockTemplate();
             renderStockItems()
             break;
-        case url.includes('?account'):
+        case url.includes('?Account'):
             if (user.role !== 0) {
                 window.location.href = '/admin/login';
             }
@@ -162,14 +162,18 @@
     }
 
     //render left menu
-    const leftMenuParams = [
-        'manufacture',
-        'category',
-        'product',
-        'order',
-        'stock',
-        'account'
+    let leftMenuParams = [
+        'Manufacture',
+        'Category',
+        'Product',
+        'Order',
+        'Stock',
+
     ]
+
+    if(user.role == 0){
+        leftMenuParams = [...leftMenuParams, "Account"];
+    }
 
     leftMenu = document.getElementById('left_menu_list');
     leftMenuParams.forEach((item) => {

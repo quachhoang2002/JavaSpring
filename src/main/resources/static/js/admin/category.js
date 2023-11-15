@@ -13,13 +13,13 @@ function RenderCategoryTemplate() {
                       <div class="card mb-4">
                           <div class="card-header">
                               <i class="fas fa-table me-1"></i>
-                                 DataTable Example
+
                                  
 <!--                          filter box here-->
                             <div id ="filter" class="float-start">
                               </div>
                                  
-                             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                             <button type="button" class="btn btn-outline-dark float-end" data-bs-toggle="modal"
                                  data-bs-target="#addCategory"
                                >
                                 Add Category
@@ -79,7 +79,7 @@ function RenderCategoryTemplate() {
                      <!-- Modal Footer -->
                      <div class="modal-footer">
                          <button type="button" class="btn btn-secondary" id="closeBtn" data-bs-dismiss="modal" >Close</button>
-                         <button type="button" class="btn btn-primary" onclick="addCategory()">Submit</button>
+                         <button type="button" class="btn btn-outline-dark" onclick="addCategory()">Submit</button>
                      </div>
             </div>
         </div>
@@ -142,7 +142,7 @@ async function renderCategoryItems() {
         tableBody.innerHTML = ''; // Clear existing rows
 
         const editBtn = (id) => {
-            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryForm(${id})">editCategory</button>`
+            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryForm(${id})">Edit</button>`
         }
 
         const deleteBtn = (id) => {

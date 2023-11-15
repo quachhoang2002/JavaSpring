@@ -138,7 +138,7 @@ function renderFilterBox(filterAttributes) {
     const filterContainer = document.createElement('div');
     filterContainer.className = 'filter-container';
     filterContainer.style.width = '100%';
-    filterContainer.style.marginBottom = '10px';
+//    filterContainer.style.marginBottom = '10px';
 
     // Create and append labels and select elements
     filterAttributes.forEach((labelText) => {
@@ -168,14 +168,14 @@ function renderFilterBox(filterAttributes) {
 
         if (labelText == 'name') {
             let label = document.createElement('label');
-            label.textContent = labelText + ':';
+//            label.textContent = labelText + ':';
             let input = document.createElement('input');
             input.type = 'text';
             input.id = 'name';
             input.placeholder = 'Search by name';
             input.className = 'form-control';
             input.style.width = '100%';
-            input.style.marginBottom = '10px';
+//            input.style.marginBottom = '10px';
             filterContainer.appendChild(label);
             filterContainer.appendChild(input);
             return;
@@ -183,8 +183,8 @@ function renderFilterBox(filterAttributes) {
 
         const label = document.createElement('label');
         label.textContent = labelText + ':';
-        label.style.marginRight = '10px';
-        label.style.marginBottom = '10px';
+//        label.style.marginRight = '10px';
+//        label.style.marginBottom = '10px';
         select = document.createElement('select');
         select.id = labelText;
         setFilterBox(select, labelText);
@@ -198,15 +198,15 @@ function renderFilterBox(filterAttributes) {
             console.log(`Selected value for ${labelText}: ${selectedValue}`);
         });
 
-        filterContainer.style.marginLeft = '10px';
+//        filterContainer.style.marginLeft = '10px';
         filterContainer.style.textTransform = 'capitalize';
     });
 
     //submit filter
     const submitBtn = document.createElement('button');
     submitBtn.textContent = 'Submit';
-    submitBtn.className = 'btn btn-primary';
-    submitBtn.style.marginTop = '10px';
+    submitBtn.className = 'btn btn-outline-dark';
+//    submitBtn.style.marginTop = '10px';
     submitBtn.addEventListener(
         'click',
         function () {

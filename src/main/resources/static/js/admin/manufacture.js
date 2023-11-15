@@ -13,13 +13,13 @@ function RenderManufactureTemplate() {
                       <div class="card mb-4">
                           <div class="card-header">
                               <i class="fas fa-table me-1"></i>
-                                 DataTable Example
+
                                  
 <!--                                filter box here -->
                                 <div id ="filter" class="float-start">
                                </div>
                                  
-                             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                             <button type="button" class="btn btn-outline-dark float-end" data-bs-toggle="modal"
                                  data-bs-target="#addManu"
                                >
                                  Add Manufacture
