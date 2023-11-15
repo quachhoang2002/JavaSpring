@@ -16,7 +16,7 @@ function RenderStockTemplate() {
                                <div id ="filter" class="float-start">
                                </div>
                                  
-                             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                             <button type="button" class="btn btn-outline-dark float-end" data-bs-toggle="modal"
                                  data-bs-target="#addStock"
                                >
                                 Add Stock
