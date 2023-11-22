@@ -238,4 +238,16 @@ function renderFilterBox(filterAttributes) {
     filter.appendChild(filterContainer);
 }
 
+function renderLeftMenuItem(name) {
+    ucFirstName = name.charAt(0).toUpperCase() + name.slice(1);
+    return (
+        `
+        <a class="nav-link collapsed" href="/admin?${name}" aria-expanded="false" aria-controls="collapseLayouts">
+            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+            ${ucFirstName}
+        </a>
+        `
+    );
+}
+
 
