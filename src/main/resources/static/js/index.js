@@ -70,7 +70,7 @@
             gap: 10px;
             align-items: center;
             > select {
-                width: 9%;
+                width: 5%;
                 border: none;
             }
         }
@@ -253,34 +253,41 @@
                 class="filter-container"
                 style="width: 100%; margin-bottom: 10px; justify-content: space-between"
         >
-            <label for="type">Type: </label>
+            <label for="brand">Brand: </label>
             <select
-                    id="type"
+                    id="brand"
                     style="border: 2px solid black; border-radius: 5%"
-                    onchange="onTypeSort(event), resetOtherSelects(this)"
+                    onchange="onBrandSortChange(event)"
             >
                 <option value=""></option>
+                <option value="ASC">A -> Z</option>
+                <option value="DES">Z -> A</option>
 
             </select>
 
             <label for="date">Date: </label>
-            <select id="date"  style="border: 2px solid black; border-radius: 5%" onchange="onDateSort(event), resetOtherSelects(this)">
-                <option value=""></option>
+            <select id="date"  style="border: 2px solid black; border-radius: 5%" onchange="onDateSortChange(event)">
                 <option value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
             </select>
 
-            <label for="brand">Brand: </label>
-            <select id="brand"  style="border: 2px solid black; border-radius: 5%" onchange="onBrandSort(event), resetOtherSelects(this)">
+            <label for="type">Type: </label>
+            <select id="type"  style="border: 2px solid black; border-radius: 5%" onchange="onCatSortChange(event)">
                 <option value=""></option>
-
+                <option value="ASC">A -> Z</option>
+                <option value="DES">Z -> A</option>
             </select>
 
-            <label for="price">Price: </label>
-            <select id="price"  style="border: 2px solid black; border-radius: 5%" onchange="onPriceSort(event), resetOtherSelects(this)">
+            <label for="price">Brand: </label>
+            <select
+                    id="price"
+                    style="border: 2px solid black; border-radius: 5%"
+                    onchange="onPriceSortChange(event)"
+            >
                 <option value=""></option>
-                <option value="ASC">Low to high</option>
-                <option value="DES">High to low</option>
+                <option value="price_low">low to high</option>
+                <option value="price_high">high to low</option>
+
             </select>
 
             <label>Price: </label>
@@ -292,7 +299,7 @@
                     value="0"
                     class="slider"
                     id="myRange"
-                    oninput="this.nextElementSibling.value = this.value, updateMinPrice(this)"
+                    oninput="this.nextElementSibling.value = this.value"
             />
             <output>0</output>
             <div class="input-group" style="width: 20%">
@@ -307,22 +314,65 @@
                 id="product-list-container"
         >
             <div class="col mb-5">
+                <!--                <div class="card h-100">-->
+                <!--                    &lt;!&ndash; Product image&ndash;&gt;-->
+                <!--                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />-->
+                <!--                    &lt;!&ndash; Product details&ndash;&gt;-->
+                <!--                    <div class="card-body p-4">-->
+                <!--                        <div class="text-center">-->
+                <!--                            &lt;!&ndash; Product name&ndash;&gt;-->
+                <!--                            <h5 class="fw-bolder">Fancy Product</h5>-->
+                <!--                            &lt;!&ndash; Product price&ndash;&gt;-->
+                <!--                            $40.00 - $80.00-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
+                <!--                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
+                <!--                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
             </div>
-
         </div>
-        <div class="pagination-container text-center" id="pagination-container">
-            <div class="button-container" id="prev-page">
-                <a class="page-link" href="#">Previous</a>
+        <div
+                class="pagination-container text-center"
+                id="pagination-container"
+        >
+            <div
+                    class="button-container { disabled: !canPreviousPage }"
+                    id="prev-page"
+                    onclick="onPreviousPage()"
+            >
+                <a
+                        class="page-link"
+                        href="#"
+                >Previous</a
+                >
             </div>
 
             <ul class="pagination">
-                <li class="page-item active button-container" id="page-1">
-                    <a class="page-link" href="#">1</a>
+                <li
+                        class="page-item active button-container"
+                        id="page-1"
+                >
+                    <a
+                            class="page-link"
+                            href="#"
+                    >1</a
+                    >
                 </li>
+                <!-- Thêm các nút phân trang ở đây (số trang được tự động cập nhật) -->
             </ul>
 
-            <div class="button-container" id="next-page">
-                <a class="page-link" href="#">Next</a>
+            <div
+                    class="button-container { disabled: !canNextPage }"
+                    id="next-page"
+                    onclick="onNextPage()"
+            >
+                <a
+                        class="page-link"
+                        href="#"
+                >Next</a
+                >
             </div>
         </div>
     </div>
@@ -341,6 +391,7 @@
 <script src="/js/scripts.js"></script>
 <script src="/js/fetch.js"></script>
 <script src="/js/ultils.js"></script>
+<script src="/js/index.js"></script>
 <script
         type="text/javascript"
         src="https://code.jquery.com/jquery-1.7.1.min.js"
@@ -348,168 +399,12 @@
 <script>
     window.onload = function () {
         loadQuantity();
-        updateTotalProductsAndPages();
-
-
+        fetchProducts();
+        TrangChu.fetchData();
     };
-
-    const productBrandsList = document.querySelector("#brand");
-    const productTypesList = document.querySelector("#type");
-    let addedBrands = new Set();
-    let addedTypes = new Set();
-    let allProduct;
-    let products;
-    let productBrands; let productTypes;
-    function fetchProducts(page, size, sortBy, sortType, searchTerm) {
-        const startIndex = (page - 1) * size;
-        const endIndex = startIndex + size;
-
-        fetch(`/api/admin/product/getAll`)
-            .then((response) => response.json())
-            .then((data) => {
-                let productArray = data.data.slice(startIndex, endIndex);
-                allProduct = data.data;
-                products = productArray;
-<!--                productArray.forEach((product) => {console.log(product.name)});-->
-
-                if(searchTerm != ""){
-                   products = productArray.filter((product) => {
-
-                        return product.name.toLowerCase() == searchTerm.toLowerCase();
-                   });
-                }
-
-                console.log(products);
-
-                generateFilter(allProduct);
-                renderProducts(products);
-                updatePagination();
-            })
-            .catch((error) => {
-                console.error('Error fetching products:', error);
-            });
-    }
-
-
     const productListContainer = document.getElementById(
         'product-list-container'
     );
-    let totalProducts = 0;
-    let totalPages = 1;
-    const productsPerPage = 8;
-    let currentPage = 1;
-
-    function resetOtherSelects(selectedSelect) {
-    const allSelects = document.querySelectorAll('select');
-
-    allSelects.forEach(select => {
-      if (select !== selectedSelect) {
-        select.value = "";
-      }
-    });
-  }
-
-
-    console.log(allProduct);
-
-
-    function generateFilter(allProduct) {
-    allProduct.forEach(product => {
-    if(!addedBrands.has(product.manufacture.name)){
-        let brandsOption = document.createElement("option");
-        brandsOption.value = product.manufacture.name;
-        brandsOption.textContent = product.manufacture.name;
-
-
-        productBrandsList.appendChild(brandsOption);
-        addedBrands.add(product.manufacture.name);
-        }
-
-    if(!addedTypes.has(product.category.name)){
-        let typeOptions = document.createElement("option");
-        typeOptions.value = product.category.name;
-        typeOptions.textContent = product.category.name;
-
-        productTypesList.appendChild(typeOptions);
-        addedTypes.add(product.category.name);
-    }
-    });}
-
-
-    function updateMinPrice(e){
-        let sliderValue = parseInt(e.value);
-
-        let sortProducts = allProduct.filter(product => product.price >= sliderValue).sort((a, b) => a.price - b.price);
-        renderProducts(sortProducts);
-    }
-
-    function onPriceSort(e) {
-        if(e.target.value != ""){
-            let sortProducts;
-            switch (e.target.value){
-            case 'DES':
-            sortProducts = allProduct.sort((a, b) => {
-                return b.price - a.price;
-            });
-            break;
-            case 'ASC':
-            sortProducts = allProduct.sort((a, b) => {
-                return a.price - b.price;
-            });
-            break;
-            }
-            renderProducts(sortProducts);
-        } else{ renderProducts(products);
-            updatePagination();
-                }
-    };
-
-    function onBrandSort(e) {
-        if(e.target.value != ""){
-            let sortProducts;
-            sortProducts = allProduct.filter(product => {
-                return product.manufacture.name == e.target.value;
-                })
-            renderProducts(sortProducts);
-        } else{ renderProducts(products);
-            updatePagination();
-                }
-    };
-
-    function onTypeSort(e) {
-        if(e.target.value != ""){
-            let sortProducts;
-            sortProducts = allProduct.filter(product => {
-                return product.category.name == e.target.value;
-                })
-            console.log(allProduct);
-            console.log(sortProducts);
-            renderProducts(sortProducts);
-        } else{ renderProducts(products);
-            updatePagination();
-                }
-    };
-
-    function onDateSort(e) {
-        if(e.target.value != ""){
-            let sortProducts;
-            switch (e.target.value){
-            case 'newest':
-                sortProducts = allProduct.sort((a, b) => {
-                    return new Date(b.createdAt) - new Date(a.createdAt);
-                });
-                break;
-            case 'oldest':
-                sortProducts = allProduct.sort((a, b) => {
-                    return new Date(a.createdAt) - new Date(b.createdAt);
-                });
-                break;
-            }
-            renderProducts(sortProducts);
-        } else{ renderProducts(products);
-            updatePagination();
-                }
-    };
 
     const signInButton = document.getElementById('login-btn');
     const logOutButton = document.getElementById('logout-btn');
@@ -521,95 +416,35 @@
     const searchButton = document.getElementById('search-btn');
 
 
+    let products;
+    function fetchProducts(page, size, sortBy, sortType, searchTerm) {
+        const startIndex = (page - 1) * size;
+        const endIndex = startIndex + size;
 
+        fetch(`/api/admin/product/getAll`)
+            .then((response) => response.json())
+            .then((data) => {
 
-    function handleSearch () {
-    let searchTerm = document.getElementById('home-searchBar').value;
-        fetchProducts(
-                    currentPage,
-                    productsPerPage,
-                    'id',
-                    'ASC',
-                    searchTerm
-                );
-        console.log(searchTerm);
-        updatePagination();
-    };
+                let productArray = data.data.slice(startIndex, endIndex);
+                products = productArray;
+<!--                productArray.forEach((product) => {console.log(product.name)});-->
 
+                if(searchTerm != ""){
+                   products = productArray.filter((product) => {
 
-    function calculateTotalPages(totalProducts, productsPerPage) {
-        return Math.ceil(totalProducts / productsPerPage);
-    }
+                        return product.name == searchTerm;
+                   });
+                }
 
-    document
-        .getElementById('prev-page')
-        .addEventListener('click', () => {
-            if (currentPage > 1) {
-<!--            let searchTerm = document.getElementById('home-searchBar').value;-->
-                currentPage--;
-                console.log(currentPage);
-                fetchProducts(
-                    currentPage,
-                    productsPerPage,
-                    'id',
-                    'ASC',
-                    ""
-                );
+                console.log(products);
+
+                renderProducts(products);
                 updatePagination();
-            }
-        });
-
-    document
-        .getElementById('next-page')
-        .addEventListener('click', () => {
-            if (currentPage < totalPages) {
-<!--            let searchTerm = document.getElementById('home-searchBar').value;-->
-                currentPage++;
-                console.log(currentPage);
-                fetchProducts(
-                    currentPage,
-                    productsPerPage,
-                    'id',
-                    'ASC',
-                    ""
-                );
-                updatePagination();
-            }
-        });
-
-    function updatePagination() {
-        const pageLinks = document.querySelectorAll('.pagination li');
-        pageLinks.forEach((pageLink) => {
-            pageLink.classList.remove('active');
-        });
-
-        document
-            .getElementById(`page-${currentPage}`)
-            .classList.add('active');
-
-        if (currentPage === 1) {
-            document
-                .getElementById('prev-page')
-                .classList.add('disabled');
-        } else {
-            document
-                .getElementById('prev-page')
-                .classList.remove('disabled');
-        }
-
-        if (currentPage === totalPages) {
-            document
-                .getElementById('next-page')
-                .classList.add('disabled');
-        } else {
-            document
-                .getElementById('next-page')
-                .classList.remove('disabled');
-        }
+            })
+            .catch((error) => {
+                console.error('Error fetching products:', error);
+            });
     }
-
-
-
 
 
 
@@ -624,15 +459,6 @@
                     totalProducts,
                     productsPerPage
                 );
-                populatePagination();
-
-                fetchProducts(
-                    currentPage,
-                    productsPerPage,
-                    'id',
-                    'ASC',
-                    searchTerm
-                );
             })
             .catch((error) => {
                 console.error('Error fetching products:', error);
@@ -643,7 +469,7 @@
         const paginationList = document.querySelector('.pagination');
         paginationList.innerHTML = '';
 
-        for (let i = 1; i <= totalPages; i++) {
+        for (let i = 1; i <= total; i++) {
             const pageItem = document.createElement('li');
             pageItem.classList.add('page-item');
             pageItem.id = `page-${i}`;
@@ -658,14 +484,6 @@
             pageItem.addEventListener('click', () => {
             let searchTerm = document.getElementById('home-searchBar').value;
                 currentPage = i;
-                fetchProducts(
-                    currentPage,
-                    productsPerPage,
-                    'id',
-                    'ASC',
-                    searchTerm
-                );
-                updatePagination();
             });
         }
     }
@@ -702,8 +520,7 @@
         });
     }
 
-        updateTotalProductsAndPages();
-
+    updateTotalProductsAndPages();
 
     onSuccessfulLogin = (response) => {
         console.log(response);

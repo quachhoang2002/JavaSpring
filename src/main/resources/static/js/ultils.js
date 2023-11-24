@@ -251,3 +251,104 @@ function renderLeftMenuItem(name) {
 }
 
 
+
+
+
+
+
+  const SORT_BY = {
+    NEWEST: "newest",
+    OLDEST: "oldest",
+    PRICE_HIGH: "price_high",
+    PRICE_LOW: "price_low",
+    BRAND_ASC: "A -> Z",
+    BRAND_DES: "Z -> A",
+    CAT_ASC: "A -> Z",
+    CAT_DES: "Z -> A",
+  };
+
+  function getProductById(productId) {
+    return products.find((product) => product.id === +productId);
+  }
+
+  function getPaginatedProducts({
+    pageIndex,
+    productsPerPage,
+    sortByPrice,
+    sortByBrand,
+    sortByCategory,
+    sortByDate,
+    searchKey = "",
+    minPrice = "",
+  }) {
+    const startIndex = pageIndex * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+
+    let data = products;
+    console.log(data);
+
+    // Filter data by criteria
+    // if (filterBy.manufacture) {
+    //   data = data.filter(item => filterBy.manufacture.name.includes(item.brand));
+    // }
+
+    // if (filterBy.category) {
+    //   data = data.filter((product) => product.category === filterBy.category);
+    // }
+
+    // Filter data by search key
+    data = data.filter((product) =>
+      product.name.toLowerCase().includes(searchKey.toLowerCase())
+    );
+
+    //Filter data by price
+    data = data.filter((product) => product.price > minPrice);
+
+    // data = data.filter((product) => product.price < maxPrice);
+
+    // Sort data
+    switch (sortByDate) {
+      case SORT_BY.NEWEST:
+        data = [...data].sort((a, b) => a.createdAt - b.createdAt);
+        break;
+      case SORT_BY.OLDEST:
+        data = [...data].sort((a, b) => b.createdAt - a.createdAt);
+        break;
+    }
+
+    switch (sortByPrice) {
+      case SORT_BY.PRICE_HIGH:
+        data = [...data].sort((a, b) => a.price - b.price);
+        break;
+      case SORT_BY.PRICE_LOW:
+        data = [...data].sort((a, b) => b.price - a.price);
+        break;
+    }
+
+    switch (sortByBrand) {
+      case SORT_BY.BRAND_ASC:
+        data = [...data].sort((a, b) => (a.brand > b.brand) ? 1 : -1);
+        break;
+      case SORT_BY.BRAND_DESC:
+        data = [...data].sort((a, b) => (a.brand < b.brand) ? 1 : -1);
+        break;
+    }
+
+    switch (sortByCategory) {
+      case SORT_BY.BRAND_ASC:
+        data = [...data].sort((a, b) => (a.category.name > b.category.name) ? 1 : -1);
+        break;
+      case SORT_BY.BRAND_DESC:
+        data = [...data].sort((a, b) => (a.category.name < b.category.name) ? 1 : -1);
+        break;
+    }
+
+    // Paginating
+    const paginatedData = data.slice(startIndex, endIndex);
+
+    return {
+      pageIndex,
+      total: data.length,
+      data: paginatedData,
+    };
+  }
