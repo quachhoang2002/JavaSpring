@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/admin.css">
+
     <link rel="">
     <title>Title</title>
 </head>
@@ -24,7 +26,8 @@
 
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="loginEmail">Email</label>
-                                    <input type="email" id="loginEmail" placeholder="example@gmail.com" class="form-control form-control-lg"/>
+                                    <input type="email" id="loginEmail" placeholder="example@gmail.com"
+                                           class="form-control form-control-lg"/>
                                 </div>
 
                                 <div class="form-outline mb-4" style="margin-bottom: 0">
@@ -42,7 +45,6 @@
                                             class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login
                                     </button>
                                 </div>
-
 
 
                                 <p class="text-center text-muted mt-3 mb-0">Don't have an account?
@@ -72,28 +74,41 @@
     //login scope
     const loginUrl = API_URL + '/auth/login';
 
+
+    const token = localStorage.getItem('token');
+    if (token != null){
+        const checkTokenUrl = API_URL + '/auth/check-token' + '?token=' + token;
+        getDataFromApi(checkTokenUrl,() => {
+           window.location.href = '/';
+        }, () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        })
+    }
+
+
     onSuccessfulLogin = (response) => {
         console.log(response);
-        if (response.data.token) {
-            console.log(response.data);
-            localStorage.setItem('user', response.data);
-            localStorage.setItem('token', response.data.token);
-        }
+        let data = JSON.stringify(response.data);
+        localStorage.setItem('user', data);
+        localStorage.setItem('token', response.data.token);
+
         window.location.href = '/';
     }
 
     onFailedLogin = (error) => {
-        document.getElementById('error-message').innerHTML = error;
-        document.getElementById('error-message').style.display = 'block';
     }
 
     console.log(localStorage.getItem('token'));
     // check if have token in local storage
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('remember') && localStorage.getItem('token') != null) {
         const data = {
-            token: localStorage.getItem('token')
+            email: localStorage.getItem('email'),
+            password: localStorage.getItem('password'),
         }
-        onTokenLogin = (response) => {}
+        onTokenLogin = (response) => {
+        }
         postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
     }
 
@@ -108,7 +123,11 @@
             password: password,
             remember: checkbox
         }
-        console.log(data);
+        if (checkbox) {
+            localStorage.setItem('email', email);
+            localStorage.setItem('password', password);
+            localStorage.setItem('remember', checkbox);
+        }
 
         postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
 

@@ -475,6 +475,19 @@
     }
 </script> -->
 <script>
+    const token = localStorage.getItem('token');
+    if (token != null){
+        const checkTokenUrl = API_URL + '/auth/check-token' + '?token=' + token;
+        getDataFromApi(checkTokenUrl,() => {
+        }, () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        })
+    }else{
+        window.location.href = '/login';
+    }
+
     const itemsPerPage = 5; // Số đơn hàng trên mỗi trang
     let currentPage = 1; // Trang hiện tại
 

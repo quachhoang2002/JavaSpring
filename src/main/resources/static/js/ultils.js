@@ -63,7 +63,7 @@ function showToast(message, type) {
     let toast = document.createElement('div');
     document.body.appendChild(toast);
 
-    toast.className = 'toast';
+    toast.className = 'show-toast';
     //z index: 9999
     toast.style.zIndex = '999999';
 
