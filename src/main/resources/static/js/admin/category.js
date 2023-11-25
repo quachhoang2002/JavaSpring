@@ -13,9 +13,13 @@ function RenderCategoryTemplate() {
                       <div class="card mb-4">
                           <div class="card-header">
                               <i class="fas fa-table me-1"></i>
-                                 DataTable Example
+
                                  
-                             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+<!--                          filter box here-->
+                            <div id ="filter" class="float-start">
+                              </div>
+                                 
+                             <button type="button" class="btn btn-outline-dark float-end" data-bs-toggle="modal"
                                  data-bs-target="#addCategory"
                                >
                                 Add Category
@@ -75,7 +79,7 @@ function RenderCategoryTemplate() {
                      <!-- Modal Footer -->
                      <div class="modal-footer">
                          <button type="button" class="btn btn-secondary" id="closeBtn" data-bs-dismiss="modal" >Close</button>
-                         <button type="button" class="btn btn-primary" onclick="addCategory()">Submit</button>
+                         <button type="button" class="btn btn-outline-dark" onclick="addCategory()">Submit</button>
                      </div>
             </div>
         </div>
@@ -117,13 +121,28 @@ function RenderCategoryTemplate() {
 
 
 async function renderCategoryItems() {
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page") ?? 1;
+    let limit = url.searchParams.get("limit") ?? LIMIT;
+    GET_URL = `${CATEGORY_URL}?page=${page}&size=${limit}`;
+
+    filterArr = [
+        'name',
+    ];
+    renderFilterBox(filterArr);
+    filterArr.forEach(item => {
+        let value = url.searchParams.get(item);
+        if (value) {
+            GET_URL += `&${item}=${value}`;
+        }
+    }, GET_URL);
 
     let successCallback = (response) => {
         const tableBody = document.querySelector("#content tbody");
         tableBody.innerHTML = ''; // Clear existing rows
 
         const editBtn = (id) => {
-            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryForm(${id})">editCategory</button>`
+            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCategory" onclick="editCategoryForm(${id})">Edit</button>`
         }
 
         const deleteBtn = (id) => {
@@ -155,17 +174,9 @@ async function renderCategoryItems() {
         }
     }
 
-    //get page from url
-    let url = new URL(window.location.href);
-    let page = url.searchParams.get("page") ?? 1;
-    let limit = url.searchParams.get("limit") ?? LIMIT;
-
     let errorCallback = (error) => {
     }
 
-
-    GET_URL = `${CATEGORY_URL}?page=${page}&size=${limit}`;
-    console.log(GET_URL);
 
     await getDataFromApi(GET_URL, successCallback, errorCallback);
 }
@@ -190,19 +201,14 @@ async function addCategory() {
     //     phone: form.phone.value
     // }
     const form = document.querySelector("#addForm");
-
-
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('description', form.description.value);
+    const formData = createCateFormData(form)
 
     await postDataToApi(CATEGORY_URL, formData, successCallback, errorCallback);
-
 }
 
 async function deleteCategory(url) {
     let successCallback = (response) => {
-        renderCategoryItems();
+        window.location.reload()
     }
 
     let errorCallback = (error) => {
@@ -214,20 +220,16 @@ async function deleteCategory(url) {
 async function editCategory(id) {
     const errorCallback = (error) => {
         console.log(error);
-        alert(error);
     }
     const successCallback = async (response) => {
-        alert(response.message);
         bootstrap.Modal.getInstance(document.querySelector("#editCategory")).hide();
-        await renderCategoryItems();
+        window.location.reload()
     }
 
     editUrl = `${CATEGORY_URL}/${id}`;
 
     const form = document.querySelector("#editCategoryForm");
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('description', form.description.value);
+    const formData = createCateFormData(form)
 
     await putDataToApi(editUrl, formData, successCallback, errorCallback);
     //remove event listener
@@ -247,10 +249,20 @@ async function editCategoryForm(id) {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
     editUrl = `${CATEGORY_URL}/${id}`;
 
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
 
+
+function createCateFormData(form) {
+    const formData = new FormData();
+    if (form.name.value){
+        formData.append('name', form.name.value);
+    }
+    if (form.description.value) {
+        formData.append('description', form.description.value);
+    }
+    return formData;
+}

@@ -63,7 +63,7 @@ function showToast(message, type) {
     let toast = document.createElement('div');
     document.body.appendChild(toast);
 
-    toast.className = 'toast';
+    toast.className = 'show-toast';
     //z index: 9999
     toast.style.zIndex = '999999';
 
@@ -138,7 +138,7 @@ function renderFilterBox(filterAttributes) {
     const filterContainer = document.createElement('div');
     filterContainer.className = 'filter-container';
     filterContainer.style.width = '100%';
-    filterContainer.style.marginBottom = '10px';
+//    filterContainer.style.marginBottom = '10px';
 
     // Create and append labels and select elements
     filterAttributes.forEach((labelText) => {
@@ -168,14 +168,14 @@ function renderFilterBox(filterAttributes) {
 
         if (labelText == 'name') {
             let label = document.createElement('label');
-            label.textContent = labelText + ':';
+//            label.textContent = labelText + ':';
             let input = document.createElement('input');
             input.type = 'text';
             input.id = 'name';
             input.placeholder = 'Search by name';
             input.className = 'form-control';
             input.style.width = '100%';
-            input.style.marginBottom = '10px';
+//            input.style.marginBottom = '10px';
             filterContainer.appendChild(label);
             filterContainer.appendChild(input);
             return;
@@ -183,8 +183,8 @@ function renderFilterBox(filterAttributes) {
 
         const label = document.createElement('label');
         label.textContent = labelText + ':';
-        label.style.marginRight = '10px';
-        label.style.marginBottom = '10px';
+//        label.style.marginRight = '10px';
+//        label.style.marginBottom = '10px';
         select = document.createElement('select');
         select.id = labelText;
         setFilterBox(select, labelText);
@@ -198,15 +198,15 @@ function renderFilterBox(filterAttributes) {
             console.log(`Selected value for ${labelText}: ${selectedValue}`);
         });
 
-        filterContainer.style.marginLeft = '10px';
+//        filterContainer.style.marginLeft = '10px';
         filterContainer.style.textTransform = 'capitalize';
     });
 
     //submit filter
     const submitBtn = document.createElement('button');
     submitBtn.textContent = 'Submit';
-    submitBtn.className = 'btn btn-primary';
-    submitBtn.style.marginTop = '10px';
+    submitBtn.className = 'btn btn-outline-dark';
+//    submitBtn.style.marginTop = '10px';
     submitBtn.addEventListener(
         'click',
         function () {
@@ -237,3 +237,118 @@ function renderFilterBox(filterAttributes) {
 
     filter.appendChild(filterContainer);
 }
+
+function renderLeftMenuItem(name) {
+    ucFirstName = name.charAt(0).toUpperCase() + name.slice(1);
+    return (
+        `
+        <a class="nav-link collapsed" href="/admin?${name}" aria-expanded="false" aria-controls="collapseLayouts">
+            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+            ${ucFirstName}
+        </a>
+        `
+    );
+}
+
+
+
+
+
+
+
+  const SORT_BY = {
+    NEWEST: "newest",
+    OLDEST: "oldest",
+    PRICE_HIGH: "price_high",
+    PRICE_LOW: "price_low",
+    BRAND_ASC: "A -> Z",
+    BRAND_DES: "Z -> A",
+    CAT_ASC: "A -> Z",
+    CAT_DES: "Z -> A",
+  };
+
+  function getProductById(productId) {
+    return products.find((product) => product.id === +productId);
+  }
+
+  function getPaginatedProducts({
+    pageIndex,
+    productsPerPage,
+    sortByPrice,
+    sortByBrand,
+    sortByCategory,
+    sortByDate,
+    searchKey = "",
+    minPrice = "",
+  }) {
+    const startIndex = pageIndex * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+
+    let data = products;
+    console.log(data);
+
+    // Filter data by criteria
+    // if (filterBy.manufacture) {
+    //   data = data.filter(item => filterBy.manufacture.name.includes(item.brand));
+    // }
+
+    // if (filterBy.category) {
+    //   data = data.filter((product) => product.category === filterBy.category);
+    // }
+
+    // Filter data by search key
+    data = data.filter((product) =>
+      product.name.toLowerCase().includes(searchKey.toLowerCase())
+    );
+
+    //Filter data by price
+    data = data.filter((product) => product.price > minPrice);
+
+    // data = data.filter((product) => product.price < maxPrice);
+
+    // Sort data
+    switch (sortByDate) {
+      case SORT_BY.NEWEST:
+        data = [...data].sort((a, b) => a.createdAt - b.createdAt);
+        break;
+      case SORT_BY.OLDEST:
+        data = [...data].sort((a, b) => b.createdAt - a.createdAt);
+        break;
+    }
+
+    switch (sortByPrice) {
+      case SORT_BY.PRICE_HIGH:
+        data = [...data].sort((a, b) => a.price - b.price);
+        break;
+      case SORT_BY.PRICE_LOW:
+        data = [...data].sort((a, b) => b.price - a.price);
+        break;
+    }
+
+    switch (sortByBrand) {
+      case SORT_BY.BRAND_ASC:
+        data = [...data].sort((a, b) => (a.brand > b.brand) ? 1 : -1);
+        break;
+      case SORT_BY.BRAND_DESC:
+        data = [...data].sort((a, b) => (a.brand < b.brand) ? 1 : -1);
+        break;
+    }
+
+    switch (sortByCategory) {
+      case SORT_BY.BRAND_ASC:
+        data = [...data].sort((a, b) => (a.category.name > b.category.name) ? 1 : -1);
+        break;
+      case SORT_BY.BRAND_DESC:
+        data = [...data].sort((a, b) => (a.category.name < b.category.name) ? 1 : -1);
+        break;
+    }
+
+    // Paginating
+    const paginatedData = data.slice(startIndex, endIndex);
+
+    return {
+      pageIndex,
+      total: data.length,
+      data: paginatedData,
+    };
+  }

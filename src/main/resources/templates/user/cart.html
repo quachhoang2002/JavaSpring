@@ -455,6 +455,19 @@
 <script src="/js/ultils.js"></script>
 <script src="/js/fetch.js"></script>
 <script>
+    const token = localStorage.getItem('token');
+    if (token != null){
+        const checkTokenUrl = API_URL + '/auth/check-token' + '?token=' + token;
+        getDataFromApi(checkTokenUrl,() => {
+        }, () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        })
+    }else{
+        window.location.href = '/login';
+    }
+
     window.onload = function () {
         renderProductItems();
         loadQuantity();

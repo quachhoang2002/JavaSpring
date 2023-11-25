@@ -1,8 +1,10 @@
 package j2ee.project.controller.User;
 
 import j2ee.project.controller.Controller;
+import j2ee.project.models.Admin;
 import j2ee.project.models.User;
 import j2ee.project.service.UserService;
+import j2ee.project.ultils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,31 @@ public class LoginController extends Controller {
     @Autowired
     private UserService userService;
 
+
+    private String createToken() {
+        //random 10 character + time is 1 day
+        String token = java.util.UUID.randomUUID().toString();
+        token = token.substring(0, 10) + System.currentTimeMillis();
+        return token;
+    }
+
+    @GetMapping("/check-token")
+    @ResponseBody
+    public ResponseEntity<String> checkToken(@RequestParam String token) {
+        try {
+            if (ultils.isValidToken(token)) {
+                return this.successResponse("Token is valid", null);
+            }
+            //find by token
+            User user = userService.findByToken(token);
+            if (user != null) {
+                return this.successResponse("Token is valid", null);
+            }
+            return this.errorResponse("Token is invalid");
+        } catch (Exception e) {
+            return errorResponse(e.getMessage());
+        }
+    }
 
     @PostMapping("/register")
     @ResponseBody
@@ -32,9 +59,9 @@ public class LoginController extends Controller {
     public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
         try {
             String token = body.get("token");
-            if (token != null){
+            if (token != null) {
                 User user = userService.findByToken(token);
-                if (user != null){
+                if (user != null) {
                     return successResponse("Login successfully", user);
                 }
             }
@@ -42,20 +69,17 @@ public class LoginController extends Controller {
             String email = body.get("email");
             String password = body.get("password");
             //if have remember me;
-            boolean remember = Boolean.parseBoolean(body.get("remember"));
-            System.out.println("email: " + email + " password: " + password);
+
             User user = userService.login(email, password);
-            if (remember){
-                //random token
-                String newToken = java.util.UUID.randomUUID().toString();
-                user.setToken(newToken);
-                userService.remember(user);
-            }
+            String newToken = createToken();
+            user.setToken(newToken);
+            userService.remember(user);
             return successResponse("Login successfully", user);
         } catch (Exception e) {
             return errorResponse(e.getMessage());
         }
     }
+
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public ResponseEntity<String> logout(@RequestBody Map<String, String> body) {
         try {
@@ -75,6 +99,7 @@ public class LoginController extends Controller {
             return errorResponse(e.getMessage());
         }
     }
+
     @PutMapping("/editUser")
     @ResponseBody
     public ResponseEntity<?> editUser(@RequestBody User user) {

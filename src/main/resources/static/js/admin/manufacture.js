@@ -13,9 +13,13 @@ function RenderManufactureTemplate() {
                       <div class="card mb-4">
                           <div class="card-header">
                               <i class="fas fa-table me-1"></i>
-                                 DataTable Example
+
                                  
-                             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+<!--                                filter box here -->
+                                <div id ="filter" class="float-start">
+                               </div>
+                                 
+                             <button type="button" class="btn btn-outline-dark float-end" data-bs-toggle="modal"
                                  data-bs-target="#addManu"
                                >
                                  Add Manufacture
@@ -142,12 +146,28 @@ function RenderManufactureTemplate() {
 
 async function renderManufactureItems() {
 
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page") ?? 1;
+    let limit = url.searchParams.get("limit") ?? LIMIT;
+    GET_URL = `${MANUFACTURE_URL}?page=${page}&size=${limit}`;
+
+    filterArr = [
+        'name',
+    ];
+    renderFilterBox(filterArr);
+    filterArr.forEach(item => {
+        let value = url.searchParams.get(item);
+        if (value) {
+            GET_URL += `&${item}=${value}`;
+        }
+    }, GET_URL);
+
     let successCallback = (response) => {
         const tableBody = document.querySelector("#content tbody");
         tableBody.innerHTML = ''; // Clear existing rows
 
         const editBtn = (id) => {
-            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editManu" onclick="editForm(${id})">Edit</button>`
+            return `<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editManu" onclick="editFormManu(${id})">Edit</button>`
         }
 
         const deleteBtn = (id) => {
@@ -183,11 +203,6 @@ async function renderManufactureItems() {
         }
     }
 
-    //get page from url
-    let url = new URL(window.location.href);
-    let page = url.searchParams.get("page") ?? 1;
-    let limit = url.searchParams.get("limit") ?? LIMIT;
-
     let errorCallback = (error) => {
     }
 
@@ -220,10 +235,7 @@ async function addManu() {
     const form = document.querySelector("#manufacturerForm");
 
 
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('address', form.address.value);
-    formData.append('phone', form.phone.value);
+    const formData = createManuFormData(form)
 
     const imageInput = document.querySelector("#formFile");
 
@@ -238,12 +250,11 @@ async function addManu() {
 
 async function deleteItem(url) {
     let successCallback = (response) => {
-        alert(response.message);
-        renderManufactureItems();
+        window.location.reload()
+
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
 
     await deleteDataFromApi(url, successCallback, errorCallback);
@@ -252,26 +263,16 @@ async function deleteItem(url) {
 async function edit(id) {
     const errorCallback = (error) => {
         console.log(error);
-        alert(error);
     }
     const successCallback = async (response) => {
-        alert(response.message);
         bootstrap.Modal.getInstance(document.querySelector("#editManu")).hide();
-        await renderManufactureItems();
+        window.location.reload()
     }
 
     editUrl = `${MANUFACTURE_URL}/${id}`;
 
     const form = document.querySelector("#editManufacturerForm");
-    const formData = new FormData();
-    formData.append('name', form.name.value);
-    formData.append('address', form.address.value);
-    formData.append('phone', form.phone.value);
-    const imageInput = form.querySelector("#formFile");
-    if (imageInput.files.length > 0) {
-        // Append the selected image to the FormData
-        formData.append('image', imageInput.files[0]);
-    }
+    const formData = createManuFormData(form)
 
 
     await putDataToApi(editUrl, formData, successCallback, errorCallback);
@@ -279,7 +280,7 @@ async function edit(id) {
 }
 
 //get detail
-async function editForm(id) {
+async function editFormManu(id) {
     let successCallback = (response) => {
         console.log(response);
         const form = document.querySelector("#editManufacturerForm");
@@ -293,12 +294,25 @@ async function editForm(id) {
     }
 
     let errorCallback = (error) => {
-        alert(error.message);
     }
     editUrl = `${MANUFACTURE_URL}/${id}`;
 
     await getDataFromApi(editUrl, successCallback, errorCallback);
 }
 
+
+function createManuFormData(form){
+    const formData = new FormData();
+    if (form.name.value) formData.append('name', form.name.value);
+    if (form.address.value) formData.append('address', form.address.value);
+    if (form.phone.value) formData.append('phone', form.phone.value);
+    const imageInput = form.querySelector("#formFile");
+    if (imageInput.files.length > 0) {
+        // Append the selected image to the FormData
+        formData.append('image', imageInput.files[0]);
+    }
+    return formData;
+
+}
 
 

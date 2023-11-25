@@ -8,13 +8,14 @@
         <meta name="author" content="" />
         <title>Login - SB Admin</title>
         <link href="/css/admin_page.css" rel="stylesheet" />
+        <link href="/css/admin.css" rel="stylesheet"/>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
-    <body class="bg-primary">
+    <body class="gradient-custom-3">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
-                    <div class="container">
+                    <div class="container" style="margin-top:8%">
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
@@ -22,26 +23,20 @@
                                     <div class="card-body">
                                         <form>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" required />
                                                 <label for="inputEmail">Email address</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                                <input class="form-control" id="inputPassword" type="password" placeholder="Password" required />
                                                 <label for="inputPassword">Password</label>
                                             </div>
-                                            <div class="form-check mb-3">
-                                                <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                                                <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                                            </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small" href="password.html">Forgot Password?</a>
-                                                <a class="btn btn-primary" href="index.html">Login</a>
+
+                                                <button class="btn btn-primary" type="submit">Login</button>
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -64,6 +59,36 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
+        <script src="/js/ultils.js"></script>
+        <script src="/js/fetch.js"></script>
+        <script src="/js/admin/datatables-simple-demo.js"></script>
+        <script src="/js/admin/stock.js"></script>
+        <script src="/js/admin/account.js"></script>
+
+        <script>
+            //buton submit
+            const loginURL = ACCOUNT_URL + '/login';
+
+            document.querySelector("form").addEventListener("submit", function (e) {
+                e.preventDefault();
+                const email = document.querySelector("#inputEmail").value;
+                const password = document.querySelector("#inputPassword").value;
+                const data = {
+                    email: email,
+                    password: password,
+                };
+                console.log(data);
+                postDataToApi(loginURL,data,(res) => {
+                    let adminData = {
+                        email: res.data.email,
+                        name: res.data.name,
+                        role: res.data.role,
+                        token: res.data.token
+                    };
+                    localStorage.setItem("admin", JSON.stringify(adminData));
+                    window.location.href = "/admin";
+                }, {})
+            });
+        </script>
     </body>
 </html>

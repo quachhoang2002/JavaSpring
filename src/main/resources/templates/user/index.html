@@ -70,7 +70,7 @@
             gap: 10px;
             align-items: center;
             > select {
-                width: 5%;
+                width: 9%;
                 border: none;
             }
         }
@@ -251,29 +251,36 @@
     <div class="container px-4 px-lg-5 mt-5">
         <div
                 class="filter-container"
-                style="width: 100%; margin-bottom: 10px"
+                style="width: 100%; margin-bottom: 10px; justify-content: space-between"
         >
             <label for="type">Type: </label>
             <select
                     id="type"
-                    style=""
+                    style="border: 2px solid black; border-radius: 5%"
+                    onchange="onTypeSort(event), resetOtherSelects(this)"
             >
-                <option value="A">A</option>
+                <option value=""></option>
+
             </select>
 
             <label for="date">Date: </label>
-            <select id="date">
-                <option value="A">A</option>
+            <select id="date"  style="border: 2px solid black; border-radius: 5%" onchange="onDateSort(event), resetOtherSelects(this)">
+                <option value=""></option>
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
             </select>
 
-            <label for="sort">Sort: </label>
-            <select id="sort">
-                <option value="A">A</option>
+            <label for="brand">Brand: </label>
+            <select id="brand"  style="border: 2px solid black; border-radius: 5%" onchange="onBrandSort(event), resetOtherSelects(this)">
+                <option value=""></option>
+
             </select>
 
-            <label for="country">Country: </label>
-            <select id="country">
-                <option value="A">A</option>
+            <label for="price">Price: </label>
+            <select id="price"  style="border: 2px solid black; border-radius: 5%" onchange="onPriceSort(event), resetOtherSelects(this)">
+                <option value=""></option>
+                <option value="ASC">Low to high</option>
+                <option value="DES">High to low</option>
             </select>
 
             <label>Price: </label>
@@ -285,72 +292,37 @@
                     value="0"
                     class="slider"
                     id="myRange"
-                    oninput="this.nextElementSibling.value = this.value"
+                    oninput="this.nextElementSibling.value = this.value, updateMinPrice(this)"
             />
             <output>0</output>
+            <div class="input-group" style="width: 20%">
+                <input type="text" id="home-searchBar" class="form-control" placeholder="name..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <i class="btn btn-outline-dark bi bi-search search-btn" onclick="handleSearch()" type="button"></i>
+                </div>
+            </div>
         </div>
         <div
                 class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"
                 id="product-list-container"
         >
             <div class="col mb-5">
-                <!--                <div class="card h-100">-->
-                <!--                    &lt;!&ndash; Product image&ndash;&gt;-->
-                <!--                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />-->
-                <!--                    &lt;!&ndash; Product details&ndash;&gt;-->
-                <!--                    <div class="card-body p-4">-->
-                <!--                        <div class="text-center">-->
-                <!--                            &lt;!&ndash; Product name&ndash;&gt;-->
-                <!--                            <h5 class="fw-bolder">Fancy Product</h5>-->
-                <!--                            &lt;!&ndash; Product price&ndash;&gt;-->
-                <!--                            $40.00 - $80.00-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
-                <!--                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">-->
-                <!--                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
             </div>
+
         </div>
-        <div
-                class="pagination-container text-center"
-                id="pagination-container"
-        >
-            <div
-                    class="button-container"
-                    id="prev-page"
-            >
-                <a
-                        class="page-link"
-                        href="#"
-                >Previous</a
-                >
+        <div class="pagination-container text-center" id="pagination-container">
+            <div class="button-container" id="prev-page">
+                <a class="page-link" href="#">Previous</a>
             </div>
 
             <ul class="pagination">
-                <li
-                        class="page-item active button-container"
-                        id="page-1"
-                >
-                    <a
-                            class="page-link"
-                            href="#"
-                    >1</a
-                    >
+                <li class="page-item active button-container" id="page-1">
+                    <a class="page-link" href="#">1</a>
                 </li>
-                <!-- Thêm các nút phân trang ở đây (số trang được tự động cập nhật) -->
             </ul>
 
-            <div
-                    class="button-container"
-                    id="next-page"
-            >
-                <a
-                        class="page-link"
-                        href="#"
-                >Next</a
-                >
+            <div class="button-container" id="next-page">
+                <a class="page-link" href="#">Next</a>
             </div>
         </div>
     </div>
@@ -366,7 +338,7 @@
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->
-<script src="js/scripts.js"></script>
+<script src="/js/scripts.js"></script>
 <script src="/js/fetch.js"></script>
 <script src="/js/ultils.js"></script>
 <script
@@ -376,7 +348,49 @@
 <script>
     window.onload = function () {
         loadQuantity();
+        updateTotalProductsAndPages();
+
+
     };
+
+    const productBrandsList = document.querySelector("#brand");
+    const productTypesList = document.querySelector("#type");
+    let addedBrands = new Set();
+    let addedTypes = new Set();
+    let allProduct;
+    let products;
+    let productBrands; let productTypes;
+    function fetchProducts(page, size, sortBy, sortType, searchTerm) {
+        const startIndex = (page - 1) * size;
+        const endIndex = startIndex + size;
+
+        fetch(`/api/admin/product/getAll`)
+            .then((response) => response.json())
+            .then((data) => {
+                let productArray = data.data.slice(startIndex, endIndex);
+                allProduct = data.data;
+                products = productArray;
+<!--                productArray.forEach((product) => {console.log(product.name)});-->
+
+                if(searchTerm != ""){
+                   products = productArray.filter((product) => {
+
+                        return product.name.toLowerCase() == searchTerm.toLowerCase();
+                   });
+                }
+
+                console.log(products);
+
+                generateFilter(allProduct);
+                renderProducts(products);
+                updatePagination();
+            })
+            .catch((error) => {
+                console.error('Error fetching products:', error);
+            });
+    }
+
+
     const productListContainer = document.getElementById(
         'product-list-container'
     );
@@ -385,12 +399,143 @@
     const productsPerPage = 8;
     let currentPage = 1;
 
+    function resetOtherSelects(selectedSelect) {
+    const allSelects = document.querySelectorAll('select');
+
+    allSelects.forEach(select => {
+      if (select !== selectedSelect) {
+        select.value = "";
+      }
+    });
+  }
+
+
+    console.log(allProduct);
+
+
+    function generateFilter(allProduct) {
+    allProduct.forEach(product => {
+    if(!addedBrands.has(product.manufacture.name)){
+        let brandsOption = document.createElement("option");
+        brandsOption.value = product.manufacture.name;
+        brandsOption.textContent = product.manufacture.name;
+
+
+        productBrandsList.appendChild(brandsOption);
+        addedBrands.add(product.manufacture.name);
+        }
+
+    if(!addedTypes.has(product.category.name)){
+        let typeOptions = document.createElement("option");
+        typeOptions.value = product.category.name;
+        typeOptions.textContent = product.category.name;
+
+        productTypesList.appendChild(typeOptions);
+        addedTypes.add(product.category.name);
+    }
+    });}
+
+
+    function updateMinPrice(e){
+        let sliderValue = parseInt(e.value);
+
+        let sortProducts = allProduct.filter(product => product.price >= sliderValue).sort((a, b) => a.price - b.price);
+        renderProducts(sortProducts);
+    }
+
+    function onPriceSort(e) {
+        if(e.target.value != ""){
+            let sortProducts;
+            switch (e.target.value){
+            case 'DES':
+            sortProducts = allProduct.sort((a, b) => {
+                return b.price - a.price;
+            });
+            break;
+            case 'ASC':
+            sortProducts = allProduct.sort((a, b) => {
+                return a.price - b.price;
+            });
+            break;
+            }
+            renderProducts(sortProducts);
+        } else{ renderProducts(products);
+            updatePagination();
+                }
+    };
+
+    function onBrandSort(e) {
+        if(e.target.value != ""){
+            let sortProducts;
+            sortProducts = allProduct.filter(product => {
+                return product.manufacture.name == e.target.value;
+                })
+            renderProducts(sortProducts);
+        } else{ renderProducts(products);
+            updatePagination();
+                }
+    };
+
+    function onTypeSort(e) {
+        if(e.target.value != ""){
+            let sortProducts;
+            sortProducts = allProduct.filter(product => {
+                return product.category.name == e.target.value;
+                })
+            console.log(allProduct);
+            console.log(sortProducts);
+            renderProducts(sortProducts);
+        } else{ renderProducts(products);
+            updatePagination();
+                }
+    };
+
+    function onDateSort(e) {
+        if(e.target.value != ""){
+            let sortProducts;
+            switch (e.target.value){
+            case 'newest':
+                sortProducts = allProduct.sort((a, b) => {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                });
+                break;
+            case 'oldest':
+                sortProducts = allProduct.sort((a, b) => {
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                });
+                break;
+            }
+            renderProducts(sortProducts);
+        } else{ renderProducts(products);
+            updatePagination();
+                }
+    };
+
     const signInButton = document.getElementById('login-btn');
     const logOutButton = document.getElementById('logout-btn');
     const cartButton = document.getElementById('cart-btn');
     const userButton = document.getElementById('user-btn');
     const userName = document.getElementById('userName');
     const cart = document.getElementById('cart');
+
+    const searchButton = document.getElementById('search-btn');
+
+
+
+
+    function handleSearch () {
+    let searchTerm = document.getElementById('home-searchBar').value;
+        fetchProducts(
+                    currentPage,
+                    productsPerPage,
+                    'id',
+                    'ASC',
+                    searchTerm
+                );
+        console.log(searchTerm);
+        updatePagination();
+    };
+
 
     function calculateTotalPages(totalProducts, productsPerPage) {
         return Math.ceil(totalProducts / productsPerPage);
@@ -400,12 +545,15 @@
         .getElementById('prev-page')
         .addEventListener('click', () => {
             if (currentPage > 1) {
+<!--            let searchTerm = document.getElementById('home-searchBar').value;-->
                 currentPage--;
+                console.log(currentPage);
                 fetchProducts(
                     currentPage,
                     productsPerPage,
                     'id',
-                    'ASC'
+                    'ASC',
+                    ""
                 );
                 updatePagination();
             }
@@ -415,12 +563,15 @@
         .getElementById('next-page')
         .addEventListener('click', () => {
             if (currentPage < totalPages) {
+<!--            let searchTerm = document.getElementById('home-searchBar').value;-->
                 currentPage++;
+                console.log(currentPage);
                 fetchProducts(
                     currentPage,
                     productsPerPage,
                     'id',
-                    'ASC'
+                    'ASC',
+                    ""
                 );
                 updatePagination();
             }
@@ -457,37 +608,30 @@
         }
     }
 
-    function fetchProducts(page, size, sortBy, sortType) {
-        const startIndex = (page - 1) * size;
-        const endIndex = startIndex + size;
 
-        fetch(`/api/admin/product/getAll`)
-            .then((response) => response.json())
-            .then((data) => {
-                const products = data.data.slice(startIndex, endIndex);
-                renderProducts(products);
-                updatePagination();
-            })
-            .catch((error) => {
-                console.error('Error fetching products:', error);
-            });
-    }
+
+
+
+
 
     function updateTotalProductsAndPages() {
         fetch(`/api/admin/product/getAll`)
             .then((response) => response.json())
             .then((data) => {
+                let searchTerm = document.getElementById('home-searchBar').value;
                 totalProducts = data.data.length;
                 totalPages = calculateTotalPages(
                     totalProducts,
                     productsPerPage
                 );
                 populatePagination();
+
                 fetchProducts(
                     currentPage,
                     productsPerPage,
                     'id',
-                    'ASC'
+                    'ASC',
+                    searchTerm
                 );
             })
             .catch((error) => {
@@ -512,12 +656,14 @@
 
             // Lắng nghe sự kiện khi nhấn vào trang
             pageItem.addEventListener('click', () => {
+            let searchTerm = document.getElementById('home-searchBar').value;
                 currentPage = i;
                 fetchProducts(
                     currentPage,
                     productsPerPage,
                     'id',
-                    'ASC'
+                    'ASC',
+                    searchTerm
                 );
                 updatePagination();
             });
@@ -527,7 +673,7 @@
     function renderProducts(products) {
         // Clear the current content of the productListContainer
         productListContainer.innerHTML = '';
-        console.log(products);
+
         // Iterate through the list of products and render each product
         products.forEach((product) => {
             // Create a div to display product information
@@ -556,7 +702,8 @@
         });
     }
 
-    updateTotalProductsAndPages();
+        updateTotalProductsAndPages();
+
 
     onSuccessfulLogin = (response) => {
         console.log(response);

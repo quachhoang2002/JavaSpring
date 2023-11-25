@@ -192,10 +192,22 @@ function renderOrderDetailItems(orderDetails) {
         let itemElement = document.createElement('div');
         itemElement.className = 'order-item';
         itemElement.innerHTML = `
-            <p>Product Name: ${detail.product.name}</p>
-            <p>Quantity: ${detail.quantity}</p>
-            <p>Price: ${detail.price}</p>
-        `;
+        <div class="item-detail">
+            <span class="item-label">Product Name:</span>
+            <span class="item-value">${detail.product.name}</span>
+        </div>
+        <div class="item-detail">
+            <span class="item-label">Quantity:</span>
+            <span class="item-value">${detail.quantity}</span>
+        </div>
+        <div class="item-detail">
+            <span class="item-label">Price:</span>
+            <span class="item-value">${detail.price}</span>
+        </div>
+        <div class="item-detail">
+            --------------------------
+        </div>
+    `;
         itemsContainer.appendChild(itemElement);
     });
 

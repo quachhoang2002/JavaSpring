@@ -59,11 +59,12 @@ public class StockController extends Controller {
     public ResponseEntity<String> get(@RequestParam(defaultValue = "1") int page,
                                               @RequestParam(defaultValue = "8") int size,
                                               @RequestParam(defaultValue = "id") String sortBy,
-                                              @RequestParam(defaultValue = "ASC") String sortType
+                                              @RequestParam(defaultValue = "ASC") String sortType,
+                                              @RequestParam(defaultValue = "") String name
     ) {
         try {
-            List<Stock> products = stockService.getAllSort(page, size, sortBy, sortType);
-            long totalItems = stockService.count();
+            List<Stock> products = stockService.getAllSort(page, size, sortBy, sortType,name);
+            long totalItems = stockService.count(name);
             Map<String, Object> metaData = buildPage(totalItems, page, size);
             return this.successResponse("Get all stock successfully", products, metaData);
         } catch (Exception e) {

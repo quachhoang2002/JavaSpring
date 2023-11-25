@@ -12,10 +12,11 @@ function RenderStockTemplate() {
                       </div>
                       <div class="card mb-4">
                           <div class="card-header">
-                              <i class="fas fa-table me-1"></i>
-                                 DataTable Example
+<!--                          filter box -->
+                               <div id ="filter" class="float-start">
+                               </div>
                                  
-                             <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                             <button type="button" class="btn btn-outline-dark float-end" data-bs-toggle="modal"
                                  data-bs-target="#addStock"
                                >
                                 Add Stock
@@ -91,6 +92,23 @@ function RenderStockTemplate() {
 
 async function renderStockItems() {
 
+    let url = new URL(window.location.href);
+    let page = url.searchParams.get("page") ?? 1;
+    let limit = url.searchParams.get("limit") ?? LIMIT;
+    GET_URL = `${STOCK_URL}?page=${page}&size=${limit}`;
+
+    filterArr = [
+        'name',
+    ];
+    renderFilterBox(filterArr);
+    filterArr.forEach(item => {
+        let value = url.searchParams.get(item);
+        if (value) {
+            GET_URL += `&${item}=${value}`;
+        }
+    }, GET_URL);
+
+
     productSelect = document.querySelector("#product");
     renderOptionProduct(productSelect);
 
@@ -118,16 +136,11 @@ async function renderStockItems() {
         }
     }
 
-    //get page from url
-    let url = new URL(window.location.href);
-    let page = url.searchParams.get("page") ?? 1;
-    let limit = url.searchParams.get("limit") ?? LIMIT;
 
     let errorCallback = (error) => {
     }
 
-    GET_URL = `${STOCK_URL}?page=${page}&size=${limit}`;
-    console.log(GET_URL);
+
 
     await getDataFromApi(GET_URL, successCallback, errorCallback);
 }

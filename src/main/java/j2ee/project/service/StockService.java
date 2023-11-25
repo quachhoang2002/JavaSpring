@@ -1,5 +1,6 @@
 package j2ee.project.service;
 
+import j2ee.project.models.Category;
 import j2ee.project.models.Product;
 import j2ee.project.models.Stock;
 import j2ee.project.repository.ProductRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class StockService {
@@ -21,17 +23,23 @@ public class StockService {
         this.productRepository = productRepository;
     }
 
-    public List<Stock> getAllSort(int page, long limit, String sortBy, String sortType) {
+    public List<Stock> getAllSort(int page, long limit, String sortBy, String sortType,String name) {
         //get and sort by id
-        return stockRepository.findWithOrder(sortBy, sortType).stream().skip((page - 1) * limit).limit(limit).toList();
+        Stream<Stock> data = stockRepository.findWithOrder(sortBy, sortType).stream();
+
+
+        data = data.filter(product -> product.getProduct().getName().toLowerCase().contains(name.toLowerCase()));
+        return data.skip((page - 1) * limit).limit(limit).toList();
     }
 
     public List<Stock> getAll() {
         return stockRepository.findAll();
     }
 
-    public long count() {
-        return stockRepository.count();
+    public long count(String name) {
+        Stream<Stock> data = stockRepository.findAll().stream();
+        data = data.filter(product -> product.getProduct().getName().toLowerCase().contains(name.toLowerCase()));
+        return data.count();
     }
 
 

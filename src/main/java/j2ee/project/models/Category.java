@@ -1,6 +1,7 @@
 package j2ee.project.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -13,6 +14,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotNull(message = "Name is required")
     private String name;
     @Lob
     private String description;
