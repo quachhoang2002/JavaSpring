@@ -36,7 +36,6 @@ function RenderProductTemplate() {
                                        <th>Price</th>
                                        <th>Description</th>
                                        <th>Created At</th>
-                                        <th>Updated At</th>
                                        <th>Actions</th>
                                    </tr>
                                    </thead>
@@ -229,9 +228,8 @@ async function renderProductItems() {
                             <td>${item.category.name}</td>
                             <td>${item.manufacture.name}</td>
                             <td>${item.price}</td>
-                            <td>${item.description}</td>
+                            <td style="max-width: 200px">${item.description}</td>
                             <td>${item.createdAt || ''}</td>
-                            <td>${item.updatedAt || ''}</td>
                             <td>
                                 ${editBtn(item.id)}
                                 ${deleteBtn(item.id)} 

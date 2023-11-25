@@ -141,6 +141,13 @@ public class ProductService extends BaseService {
                 // Use the parsed integer for filtering
                 products = products.filter(product -> product.getManufacture().getId() == manufacture);
             }
+
+            if (key.equals("price")) {
+                // Parse the value string to an integer
+                int price = Integer.parseInt(value);
+                // Use the parsed integer for filtering
+                products = products.filter(product -> product.getPrice() <= price);
+            }
         }
 
         if(page != 0 && limit != 0){

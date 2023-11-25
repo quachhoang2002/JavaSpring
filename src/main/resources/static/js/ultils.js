@@ -164,13 +164,24 @@ function renderFilterBox(filterAttributes) {
             const priceInput = document.createElement('input');
             priceInput.type = 'range';
             priceInput.min = '1';
-            priceInput.max = '10000000';
+            priceInput.max = '10000';
             priceInput.value = '0';
+            //increate speed
+            priceInput.step = '1';
             priceInput.className = 'slider';
+            //moore slow
+            priceInput.style.width = '100%';
+
             priceInput.id = 'price';
             priceInput.oninput = function () {
                 priceOutput.textContent = this.value; // Update the output value as the input changes
             };
+
+            //text
+            const priceInputText = document.createElement('input');
+            priceInputText.type = 'text';
+
+
 
             const priceOutput = document.createElement('output');
             priceOutput.textContent = priceInput.value;

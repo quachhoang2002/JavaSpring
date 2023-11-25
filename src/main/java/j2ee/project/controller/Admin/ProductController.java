@@ -33,7 +33,8 @@ public class ProductController extends Controller {
                                               @RequestParam(defaultValue = "ASC") String sortType,
                                               @RequestParam(defaultValue = "") String name,
                                               @RequestParam(defaultValue = "") String category,
-                                              @RequestParam(defaultValue = "") String manufacture
+                                              @RequestParam(defaultValue = "") String manufacture,
+                                              @RequestParam(defaultValue = "") String price
     ) {
         try {
             HashMap<String, String> filters = new HashMap<>();
@@ -47,6 +48,10 @@ public class ProductController extends Controller {
 
             if (!manufacture.isEmpty()) {
                 filters.put("manufacture", manufacture);
+            }
+
+            if (!price.isEmpty()) {
+                filters.put("price", price);
             }
 
             List<Product> products = productService.getAllSort(page, size, sortBy, sortType, filters);
