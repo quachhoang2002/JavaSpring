@@ -23,6 +23,9 @@ public class Order {
     private String email_receive;
     @NotNull
     private double total_price;
+
+    private Integer employeeID;
+
     @NotNull
     @ManyToOne
     private User user;
@@ -125,6 +128,15 @@ public class Order {
     public void setTotal_price(double total_price) {
         this.total_price = total_price;
     }
+
+    public Integer getEmployeeID() {
+        return employeeID;
+    }
+
+    public void setEmployeeID(Integer employeeID) {
+        this.employeeID = employeeID;
+    }
+
     @PrePersist
     private void setCreatedAt() {
         // Set the createdAt field to the current timestamp when persisting the entity

@@ -180,7 +180,7 @@ public class AccountController extends Controller {
                 return errorResponse(errorMessage.toString());
             }
 
-            if (adminRepository.findByEmail(admin.getEmail()) != null) {
+            if (adminRepository.findByEmail(admin.getEmail()) != null && adminRepository.findByEmail(admin.getEmail()).getId() != id) {
                 return errorResponse("Email is exist");
             }
 

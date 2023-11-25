@@ -151,7 +151,7 @@ async function addStock() {
         // closeBtn.click();
         bootstrap.Modal.getInstance(document.querySelector('#addStock')).hide();
         //get current page
-        renderStockItems();
+        window.location.reload();
     }
 
     let errorCallback = (error) => {

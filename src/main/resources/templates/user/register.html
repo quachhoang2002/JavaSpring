@@ -10,6 +10,10 @@
             rel="stylesheet"
             href="/css/login.css"
     />
+    <link
+            rel="stylesheet"
+            href="/css/admin.css"
+    />
     <link rel="" />
     <title>Title</title>
 </head>
@@ -46,7 +50,7 @@
                                     <label
                                             class="form-label"
                                             for="name"
-                                    >Your Name</label
+                                    >Your Name *</label
                                     >
                                 </div>
 
@@ -59,7 +63,7 @@
                                     <label
                                             class="form-label"
                                             for="email"
-                                    >Your Email</label
+                                    >Your Email *</label
                                     >
                                 </div>
 
@@ -72,7 +76,7 @@
                                     <label
                                             class="form-label"
                                             for="phone"
-                                    >Your Phone</label
+                                    >Your Phone *</label
                                     >
                                 </div>
 
@@ -85,7 +89,7 @@
                                     <label
                                             class="form-label"
                                             for="password"
-                                    >Password</label
+                                    >Password *</label
                                     >
                                 </div>
 
@@ -98,7 +102,7 @@
                                     <label
                                             class="form-label"
                                             for="repeat-password"
-                                    >Repeat your password</label
+                                    >Repeat your password *</label
                                     >
                                 </div>
 
@@ -118,7 +122,7 @@
                                 >
                                     Have already an account?
                                     <a
-                                            href="#!"
+                                            href="/login"
                                             class="fw-bold text-body"
                                     ><u>Login here</u></a
                                     >
@@ -139,8 +143,50 @@
 </section>
 </body>
 <script src="/js/fetch.js"></script>
+<script src="/js/ultils.js"></script>
 <script>
     apiUrl = API_URL + '/auth/register';
+
+    function validateCustomerForm(data) {
+        if (!data.name) {
+            showToast("Name is required", "error");
+            return false;
+        }
+
+        if (!data.email) {
+            showToast("Email is required", "error")
+            return false;
+        }
+
+        if (data.email.indexOf('@') === -1 || data.email.indexOf('.') === -1) {
+            showToast("Email is invalid", "error")
+            return false;
+        }
+
+        if (!data.phone) {
+            showToast("Phone is required", "error");
+            return false;
+        }
+
+        if (!data.password) {
+            showToast("Password is required", "error");
+            return false;
+        }
+
+        if (data.password.length < 6) {
+            showToast("Password must be at least 6 characters", "error");
+            return false;
+        }
+
+        //2 password must be the same
+        if (data.password !== data.repeatPassword) {
+            showToast("Password and repeat password must be the same", "error");
+            return false;
+        }
+
+
+        return true;
+    }
 
     const registerUser = async (event) => {
         event.preventDefault();
@@ -158,36 +204,25 @@
             password: password,
             repeatPassword: repeatPassword,
         };
+        if (!validateCustomerForm(data)) {
+            return;
+        }
 
         onSuccessfulRegistration = () => {
             window.location.href = '/login';
         };
 
         onFailedRegistration = (error) => {
-            document.getElementById('error-message').innerHTML = error;
-            document.getElementById('error-message').style.display =
-                'block';
         };
 
-        try {
-            const response = await postDataToApi(apiUrl, data);
-            console.log(response);
 
-            if (response.ok) {
-                onSuccessfulRegistration();
-            } else {
-                const errorData = await response.json(); // Assuming error message is in JSON format
-                onFailedRegistration(errorData.message);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            // Handle the error appropriately
-            onFailedRegistration('An error occurred during registration.');
-        }
+        await postDataToApi(apiUrl, data,onSuccessfulRegistration(),onFailedRegistration());
+
     };
 
     document
         .getElementById('registrationForm')
         .addEventListener('submit', registerUser);
+
 </script>
 </html>

@@ -542,6 +542,19 @@
 <script src="/js/fetch.js"></script>
 
 <script>
+    const token = localStorage.getItem('token');
+    if (token != null){
+        const checkTokenUrl = API_URL + '/auth/check-token' + '?token=' + token;
+        getDataFromApi(checkTokenUrl,() => {
+        }, () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        })
+    }else{
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+    }
+
     window.onload = function () {
         loadQuantity();
     };

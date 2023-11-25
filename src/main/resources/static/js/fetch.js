@@ -111,6 +111,11 @@ function deleteDataFromApi(apiUrl, onSuccess, onError) {
                 return response.json();
             }
 
+            //status 400
+            if (response.status === 400) {
+                return response.json();
+            }
+
             if (response.status === 500) {
                 throw new Error('Server error');
             }

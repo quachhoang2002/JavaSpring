@@ -219,7 +219,8 @@ async function addManu() {
         bootstrap.Modal.getInstance(document.querySelector('#addManu')).hide();
         //get current page
         const currentPage = document.querySelector(".btn-secondary.active").innerText;
-        renderManufactureItems();
+        //reload current page
+        window.location.reload()
     }
 
     let errorCallback = (error) => {

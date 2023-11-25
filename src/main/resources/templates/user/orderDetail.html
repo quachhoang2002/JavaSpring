@@ -579,6 +579,19 @@ Save changes
 </section>
 <script src="/js/ultils.js"></script>
 <script>
+    const token = localStorage.getItem('token');
+    if (token != null){
+        const checkTokenUrl = API_URL + '/auth/check-token' + '?token=' + token;
+        getDataFromApi(checkTokenUrl,() => {
+        }, () => {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+        })
+    }else{
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+    }
+
     let status = 0;
     const pathArray = window.location.pathname.split('/');
     const orderId = pathArray[pathArray.length - 1]; // Get the last part of the path

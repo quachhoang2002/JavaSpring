@@ -67,6 +67,8 @@ public class CategoryController extends Controller {
                 return errorResponse("Name is required");
             }
             category.setId(id);
+            category.setName(category.getName());
+            category.setDescription(category.getDescription());
             Category data = categoryService.updateCategory(category);
             return successResponse("Update manufacture.js successfully", data);
         } catch (Exception e) {

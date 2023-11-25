@@ -67,13 +67,6 @@ public class User {
         return this.phone;
     }
 
-    public String getCreateat() {
-        if (createdat == null) {
-            return null;
-        }
-        return createdat.toString().substring(0, 19);
-    }
-
     @PrePersist
     private void setCreatedAt() {
         // Set the createdAt field to the current timestamp when persisting the entity
@@ -112,8 +105,11 @@ public class User {
         this.phone = phone;
     }
 
-    public Timestamp getCreatedat() {
-        return createdat;
+    public String getCreatedat() {
+        if (createdat == null) {
+            return null;
+        }
+        return createdat.toString().substring(0, 19);
     }
 
     public void setCreatedat(Timestamp createdat) {
@@ -133,7 +129,7 @@ public class User {
             ", email='" + getEmail() + "'" +
             ", password='" + getPassword() + "'" +
             ", phone='" + getPhone() + "'" +
-            ", createdat='" + getCreateat()+ "'" +
+            ", createdAt='" + getCreatedat()+ "'" +
             ", status='" + getStatus() + "'" +
             ", token='" + getToken() + "'" +
             "}";

@@ -107,8 +107,9 @@ public class AOrderController extends Controller {
 
     @PostMapping("/{id}/complete")
     @ResponseBody
-    public ResponseEntity<String> completeOrder(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> completeOrder(@PathVariable("id") Integer id,@RequestBody  Map<String, Object> body) {
         try {
+            Integer employeeID = (Integer) body.get("employeeID");
             Order order = orderRepository.findById(id).orElse(null);
             if (order == null) {
                 return errorResponse("Order not found");
@@ -117,6 +118,7 @@ public class AOrderController extends Controller {
                 return errorResponse("Order can not be completed");
             }
             order.setStatus(2);
+            order.setEmployeeID(employeeID);
             orderRepository.save(order);
             return successResponse("Complete order successfully", order);
         } catch (Exception e) {
@@ -139,8 +141,5 @@ public class AOrderController extends Controller {
             return errorResponse(e.getMessage());
         }
     }
-
-
-
 
 }

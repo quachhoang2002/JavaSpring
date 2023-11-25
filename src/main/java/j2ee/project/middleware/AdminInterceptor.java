@@ -30,7 +30,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         boolean isValidToke = (ultils.isValidToken(token));
         if (!isValidToke) {
             response.setStatus(401);
-            return false;
+            return true;
         }
 
         return true;

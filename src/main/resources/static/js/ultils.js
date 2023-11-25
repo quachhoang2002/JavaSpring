@@ -2,14 +2,15 @@ function renderOptionProduct(select = null) {
     let successCallback = (response) => {
         if (select) {
             select.innerHTML = '';
-            select.innerHTML= `<option value="" selected>All</option>`
+            select.innerHTML = `<option value="" selected>All</option>`
             response.data.forEach(item => {
                 select.innerHTML += `<option value="${item.id}">${item.name}</option>`
             });
         }
     };
 
-    let errorCallback = (error) => {};
+    let errorCallback = (error) => {
+    };
 
     getDataFromApi(PRODUCT_URL, successCallback, errorCallback);
 }
@@ -18,14 +19,15 @@ function renderOptionCategory(select = null) {
     let successCallback = (response) => {
         if (select) {
             select.innerHTML = '';
-            select.innerHTML= `<option value="" selected>All</option>`
+            select.innerHTML = `<option value="" selected>All</option>`
             response.data.forEach(item => {
                 select.innerHTML += `<option value="${item.id}">${item.name}</option>`
             });
         }
     };
 
-    let errorCallback = (error) => {};
+    let errorCallback = (error) => {
+    };
 
     getDataFromApi(CATEGORY_URL, successCallback, errorCallback);
 }
@@ -34,28 +36,38 @@ function renderOptionManufacture(select = null) {
     let successCallback = (response) => {
         if (select) {
             select.innerHTML = '';
-            select.innerHTML= `<option value="" selected>All</option>`
+            select.innerHTML = `<option value="" selected>All</option>`
             response.data.forEach(item => {
                 select.innerHTML += `<option value="${item.id}">${item.name}</option>`
             });
         }
     };
 
-    let errorCallback = (error) => {};
+    let errorCallback = (error) => {
+    };
 
     getDataFromApi(MANUFACTURE_URL, successCallback, errorCallback);
 }
 
 function renderOptionStatus(select = null) {
-        if (select) {
-            select.innerHTML = '';
-            select.innerHTML= `<option value="" selected>All</option>`
-            select.innerHTML += `<option value="0">Pending</option>`
-            select.innerHTML += `<option value="1">Approved</option>`
-            select.innerHTML += `<option value="-1">Reject</option>`
-            select.innerHTML += `<option value="2">Complete</option>`
+    if (select) {
+        select.innerHTML = '';
+        select.innerHTML = `<option value="" selected>All</option>`
+        select.innerHTML += `<option value="0">Pending</option>`
+        select.innerHTML += `<option value="1">Approved</option>`
+        select.innerHTML += `<option value="-1">Reject</option>`
+        select.innerHTML += `<option value="2">Complete</option>`
 
-        }
+    }
+}
+
+function renderCustomerStatus(select = null) {
+    if (select) {
+        select.innerHTML = '';
+        select.innerHTML = `<option value="" selected>All</option>`
+        select.innerHTML += `<option value="0">Block</option>`
+        select.innerHTML += `<option value="1">Active</option>`
+    }
 }
 
 
@@ -127,6 +139,9 @@ function setFilterBox(select, type) {
             break;
         case "status":
             renderOptionStatus(select)
+            break;
+        case "CustomerStatus":
+            renderCustomerStatus(select)
         default:
             break;
     }
@@ -251,12 +266,7 @@ function renderLeftMenuItem(name) {
 }
 
 
-
-
-
-
-
-  const SORT_BY = {
+const SORT_BY = {
     NEWEST: "newest",
     OLDEST: "oldest",
     PRICE_HIGH: "price_high",
@@ -265,22 +275,22 @@ function renderLeftMenuItem(name) {
     BRAND_DES: "Z -> A",
     CAT_ASC: "A -> Z",
     CAT_DES: "Z -> A",
-  };
+};
 
-  function getProductById(productId) {
+function getProductById(productId) {
     return products.find((product) => product.id === +productId);
-  }
+}
 
-  function getPaginatedProducts({
-    pageIndex,
-    productsPerPage,
-    sortByPrice,
-    sortByBrand,
-    sortByCategory,
-    sortByDate,
-    searchKey = "",
-    minPrice = "",
-  }) {
+function getPaginatedProducts({
+                                  pageIndex,
+                                  productsPerPage,
+                                  sortByPrice,
+                                  sortByBrand,
+                                  sortByCategory,
+                                  sortByDate,
+                                  searchKey = "",
+                                  minPrice = "",
+                              }) {
     const startIndex = pageIndex * productsPerPage;
     const endIndex = startIndex + productsPerPage;
 
@@ -298,7 +308,7 @@ function renderLeftMenuItem(name) {
 
     // Filter data by search key
     data = data.filter((product) =>
-      product.name.toLowerCase().includes(searchKey.toLowerCase())
+        product.name.toLowerCase().includes(searchKey.toLowerCase())
     );
 
     //Filter data by price
@@ -308,47 +318,47 @@ function renderLeftMenuItem(name) {
 
     // Sort data
     switch (sortByDate) {
-      case SORT_BY.NEWEST:
-        data = [...data].sort((a, b) => a.createdAt - b.createdAt);
-        break;
-      case SORT_BY.OLDEST:
-        data = [...data].sort((a, b) => b.createdAt - a.createdAt);
-        break;
+        case SORT_BY.NEWEST:
+            data = [...data].sort((a, b) => a.createdAt - b.createdAt);
+            break;
+        case SORT_BY.OLDEST:
+            data = [...data].sort((a, b) => b.createdAt - a.createdAt);
+            break;
     }
 
     switch (sortByPrice) {
-      case SORT_BY.PRICE_HIGH:
-        data = [...data].sort((a, b) => a.price - b.price);
-        break;
-      case SORT_BY.PRICE_LOW:
-        data = [...data].sort((a, b) => b.price - a.price);
-        break;
+        case SORT_BY.PRICE_HIGH:
+            data = [...data].sort((a, b) => a.price - b.price);
+            break;
+        case SORT_BY.PRICE_LOW:
+            data = [...data].sort((a, b) => b.price - a.price);
+            break;
     }
 
     switch (sortByBrand) {
-      case SORT_BY.BRAND_ASC:
-        data = [...data].sort((a, b) => (a.brand > b.brand) ? 1 : -1);
-        break;
-      case SORT_BY.BRAND_DESC:
-        data = [...data].sort((a, b) => (a.brand < b.brand) ? 1 : -1);
-        break;
+        case SORT_BY.BRAND_ASC:
+            data = [...data].sort((a, b) => (a.brand > b.brand) ? 1 : -1);
+            break;
+        case SORT_BY.BRAND_DESC:
+            data = [...data].sort((a, b) => (a.brand < b.brand) ? 1 : -1);
+            break;
     }
 
     switch (sortByCategory) {
-      case SORT_BY.BRAND_ASC:
-        data = [...data].sort((a, b) => (a.category.name > b.category.name) ? 1 : -1);
-        break;
-      case SORT_BY.BRAND_DESC:
-        data = [...data].sort((a, b) => (a.category.name < b.category.name) ? 1 : -1);
-        break;
+        case SORT_BY.BRAND_ASC:
+            data = [...data].sort((a, b) => (a.category.name > b.category.name) ? 1 : -1);
+            break;
+        case SORT_BY.BRAND_DESC:
+            data = [...data].sort((a, b) => (a.category.name < b.category.name) ? 1 : -1);
+            break;
     }
 
     // Paginating
     const paginatedData = data.slice(startIndex, endIndex);
 
     return {
-      pageIndex,
-      total: data.length,
-      data: paginatedData,
+        pageIndex,
+        total: data.length,
+        data: paginatedData,
     };
-  }
+}

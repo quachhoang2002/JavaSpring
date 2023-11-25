@@ -51,6 +51,7 @@ public class CategoryService extends BaseService {
     public Category updateCategory(Category category) {
         Category existingCategory = categoryRepository.findById(category.getId()).orElse(null);
         existingCategory.setName(category.getName());
+        existingCategory.setDescription(category.getDescription());
         return categoryRepository.save(existingCategory);
     }
 

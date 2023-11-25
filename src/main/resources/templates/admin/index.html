@@ -11,6 +11,7 @@
 <!--    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet"/>-->
     <link href="/css/admin_page.css" rel="stylesheet"/>
     <link href="/css/admin.css" rel="stylesheet"/>
+    <link href="/css/bootstrap.min.css">
 <!--    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>-->
 </head>
 <body class="sb-nav-fixed">
@@ -87,18 +88,13 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-        crossorigin="anonymous"></script>
 
 <script src="/js/scripts.js"></script>
 <script src="/js/fetch.js"></script>
-<script src="/js/admin/assets/demo/chart-area-demo.js"></script>
-<script src="/js/admin/assets/demo/chart-bar-demo.js"></script>
-<script src="/js/admin/assets/demo/chart-pie-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+<script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/ultils.js"></script>
 <script src="/js/admin/datatables-simple-demo.js"></script>
 <script src="/js/admin/dashboard.js"></script>
@@ -107,7 +103,8 @@
 <script src="/js/admin/product.js"></script>
 <script src="/js/admin/order.js"></script>
 <script src="/js/admin/stock.js"></script>
-<script src="/js/admin/account.js"></script>
+<script src="/js/admin/employee.js"></script>
+<script src="/js/admin/customer.js"></script>
 <script>
     const user = JSON.parse(localStorage.getItem('admin'));
     if (!user  || !user.token) {
@@ -150,15 +147,21 @@
             contentDiv.innerHTML = RenderStockTemplate();
             renderStockItems()
             break;
-        case url.includes('?Account'):
+        case url.includes('?Employee'):
             if (user.role !== 0) {
                 window.location.href = '/admin/login';
             }
-            contentDiv.innerHTML = RenderAccountTemplate();
-            RenderAccountItems()
+            contentDiv.innerHTML = RenderEmployeeTemplate();
+            renderEmployeeItems()
+            break;
+        case url.includes("?Customer"):
+            contentDiv.innerHTML = RenderCustomerTemplate();
+            renderCustomerItems()
             break;
         default:
             contentDiv.innerHTML = RenderDashboard();
+            renderStatistics();
+            break;
     }
 
     //render left menu
@@ -168,10 +171,11 @@
         'Product',
         'Order',
         'Stock',
+        'Customer',
     ]
 
     if(user.role == 0){
-        leftMenuParams = [...leftMenuParams, "Account"];
+        leftMenuParams = [...leftMenuParams, "Employee"];
     }
 
     leftMenu = document.getElementById('left_menu_list');

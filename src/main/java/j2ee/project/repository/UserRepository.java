@@ -15,5 +15,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findById(int id);
 
+    //GET TOTAL USERS
+    @Query(value = "SELECT COUNT(*) FROM users", nativeQuery = true)
+    Long getTotalUsers();
 
 }

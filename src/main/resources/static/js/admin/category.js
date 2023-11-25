@@ -187,7 +187,7 @@ async function addCategory() {
         // closeBtn.click();
         bootstrap.Modal.getInstance(document.querySelector('#addCategory')).hide();
         //get current page
-        renderCategoryItems();
+        window.location.reload()
     }
 
     let errorCallback = (error) => {

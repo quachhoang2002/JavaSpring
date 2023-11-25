@@ -98,6 +98,9 @@
     }
 
     onFailedLogin = (error) => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+
     }
 
     console.log(localStorage.getItem('token'));
@@ -107,9 +110,8 @@
             email: localStorage.getItem('email'),
             password: localStorage.getItem('password'),
         }
-        onTokenLogin = (response) => {
-        }
-        postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
+
+        postDataToApi(loginUrl, data, onSuccessfulLogin, onFailedLogin);
     }
 
     const loginUser = async (event) => {

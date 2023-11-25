@@ -113,7 +113,7 @@ async function renderOrderItems() {
                     <button type="button" class="btn btn-primary btn-sm" onclick="getDetail(${item.id})">Detail</button>
                     <button type="button" class="btn btn-danger btn-sm"  onclick="updateStatus(${item.id},-1)">Cancel</button>
                     <button type="button" class="btn btn-success btn-sm"  onclick="updateStatus(${item.id},2)">Complete</button>`
-                status = `<span class="badge bg-success">Approved</span>`
+                status = `<span class="badge bg-primary">Approved</span>`
             }
 
             if (item.status == -1) {
@@ -123,7 +123,7 @@ async function renderOrderItems() {
 
             if (item.status == 2) {
                 button = `<button type="button" class="btn btn-primary btn-sm" onclick="getDetail(${item.id})">Detail</button>`
-                status = `<span class="badge bg-danger">Complete</span>`
+                status = `<span class="badge bg-success">Complete</span>`
             }
 
             row.innerHTML = `
@@ -173,6 +173,11 @@ function updateStatus(id, status) {
         suffix = "complete";
     }
 
+    employee = JSON.parse(localStorage.getItem('admin'));
+    data = {
+        employeeID: employee.id
+    }
+
     let successCallback = (response) => {
         window.location.reload();
     }
@@ -180,7 +185,7 @@ function updateStatus(id, status) {
     let errorCallback = (error) => {
     }
 
-    postDataToApi(`${ORDER_URL}/${id}/${suffix}`, {}, successCallback, errorCallback);
+    postDataToApi(`${ORDER_URL}/${id}/${suffix}`, data, successCallback, errorCallback);
 }
 
 

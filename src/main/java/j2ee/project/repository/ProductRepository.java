@@ -28,5 +28,20 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findByCategory(Category category);
 
+
+    //query best seller
     Optional<Product> findById(int productId);
+
+    @Query(value = "SELECT od.product_id, SUM(od.quantity) AS total_quantity_sold, p.name " +
+            "FROM order_details od " +
+            "JOIN products p ON od.product_id = p.id " +
+            "GROUP BY p.id, od.product_id " +
+            "ORDER BY total_quantity_sold DESC " +
+            "LIMIT 10",
+            nativeQuery = true)
+    List<Object[]> findBestSeller();
+
+    //getTotalProducts
+    @Query(value = "SELECT COUNT(*) FROM products", nativeQuery = true)
+    Long getTotalProducts();
 }

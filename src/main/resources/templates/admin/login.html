@@ -63,7 +63,7 @@
         <script src="/js/fetch.js"></script>
         <script src="/js/admin/datatables-simple-demo.js"></script>
         <script src="/js/admin/stock.js"></script>
-        <script src="/js/admin/account.js"></script>
+        <script src="/js/admin/employee.js"></script>
 
         <script>
             //buton submit
@@ -80,6 +80,7 @@
                 console.log(data);
                 postDataToApi(loginURL,data,(res) => {
                     let adminData = {
+                        id: res.data.id,
                         email: res.data.email,
                         name: res.data.name,
                         role: res.data.role,

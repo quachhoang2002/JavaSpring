@@ -67,7 +67,7 @@ public class Admin {
         return this.phone;
     }
 
-    public String getCreateat() {
+    public String getCreatedAt() {
         if (createdat == null) {
             return null;
         }
@@ -112,10 +112,6 @@ public class Admin {
         this.phone = phone;
     }
 
-    public Timestamp getCreatedat() {
-        return createdat;
-    }
-
     public void setCreatedat(Timestamp createdat) {
         this.createdat = createdat;
     }
@@ -134,7 +130,7 @@ public class Admin {
                 ", password='" + getPassword() + "'" +
                 ", phone='" + getPhone() + "'" +
                 ", role='" + getRole() + "'" +
-                ", createdAt='" + getCreateat()+ "'" +
+                ", createdAt='" + getCreatedAt()+ "'" +
                 ", token='" + getToken() + "'" +
                 "}";
     }

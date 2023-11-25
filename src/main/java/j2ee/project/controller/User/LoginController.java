@@ -37,6 +37,10 @@ public class LoginController extends Controller {
             if (user != null) {
                 return this.successResponse("Token is valid", null);
             }
+            if (user.getStatus() == 0) {
+                return this.errorResponse("Account is blocked");
+            }
+
             return this.errorResponse("Token is invalid");
         } catch (Exception e) {
             return errorResponse(e.getMessage());
@@ -47,6 +51,7 @@ public class LoginController extends Controller {
     @ResponseBody
     public ResponseEntity<String> register(@RequestBody User user) {
         try {
+            user.setStatus(1);
             userService.register(user);
             return successResponse("Register successfully", null);
         } catch (Exception e) {
@@ -62,6 +67,10 @@ public class LoginController extends Controller {
             if (token != null) {
                 User user = userService.findByToken(token);
                 if (user != null) {
+                    if (user.getStatus() == 0) {
+                        return errorResponse("Account is blocked");
+                    }
+
                     return successResponse("Login successfully", user);
                 }
             }
@@ -71,6 +80,11 @@ public class LoginController extends Controller {
             //if have remember me;
 
             User user = userService.login(email, password);
+            System.out.println(user.getStatus());
+            if (user.getStatus() == 0) {
+                return errorResponse("Account is blocked");
+            }
+
             String newToken = createToken();
             user.setToken(newToken);
             userService.remember(user);
