@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -36,9 +36,11 @@
             text-decoration: none;
             color: black;
         }
+
         .buttons-noti {
             padding: 10px;
         }
+
         .notifications {
             display: flex;
             position: fixed;
@@ -48,6 +50,7 @@
             height: 200px;
             width: 200px;
         }
+
         .toastPopup {
             cursor: pointer;
             position: relative;
@@ -60,12 +63,13 @@
             border-radius: 5px;
             --color: #0abf30;
             background-image: linear-gradient(
-                to right,
-                #0abf3055,
-                #22242f 30%
+                    to right,
+                    #0abf3055,
+                    #22242f 30%
             );
             animation: show 0.3s ease 1 forwards;
         }
+
         .toastPopup i {
             color: var(--color);
             display: flex;
@@ -73,15 +77,18 @@
             align-items: center;
             font-size: x-large;
         }
+
         .toastPopup .title {
             font-size: x-large;
             font-weight: bold;
         }
+
         .toastPopup span,
         .toastPopup i:nth-child(3) {
             color: #fff;
             opacity: 0.6;
         }
+
         @keyframes show {
             0% {
                 transform: translateX(100%);
@@ -96,6 +103,7 @@
                 transform: translateX(-10%);
             }
         }
+
         .toastPopup::before {
             position: absolute;
             bottom: 0;
@@ -107,33 +115,37 @@
             box-shadow: 0 0 10px var(--color);
             animation: timeOut 5s linear 1 forwards;
         }
+
         @keyframes timeOut {
             to {
                 width: 0;
             }
         }
+
         .toastPopup.error {
             --color: #f24d4c;
             background-image: linear-gradient(
-                to right,
-                #f24d4c55,
-                #22242f 30%
+                    to right,
+                    #f24d4c55,
+                    #22242f 30%
             );
         }
+
         .toastPopup.warning {
             --color: #e9bd0c;
             background-image: linear-gradient(
-                to right,
-                #e9bd0c55,
-                #22242f 30%
+                    to right,
+                    #e9bd0c55,
+                    #22242f 30%
             );
         }
+
         .toastPopup.info {
             --color: #3498db;
             background-image: linear-gradient(
-                to right,
-                #3498db55,
-                #22242f 30%
+                    to right,
+                    #3498db55,
+                    #22242f 30%
             );
         }
     </style>
@@ -200,7 +212,9 @@
                             >All Products</a
                             >
                         </li>
-                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
                         <li>
                             <a
                                     class="dropdown-item"
@@ -341,183 +355,17 @@
     </div>
 </section>
 <!-- Related items section-->
-<!--<section class="py-5 bg-light">-->
-<!--    <div class="container px-4 px-lg-5 mt-5">-->
-<!--        <h2 class="fw-bolder mb-4">Related products</h2>-->
-<!--        <div-->
-<!--                class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"-->
-<!--        >-->
-<!--            <div class="col mb-5">-->
-<!--                <div class="card h-100">-->
-<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
-<!--                    <img-->
-<!--                            class="card-img-top"-->
-<!--                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"-->
-<!--                            alt="..."-->
-<!--                    />-->
-<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
-<!--                    <div class="card-body p-4">-->
-<!--                        <div class="text-center">-->
-<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
-<!--                            <h5 class="fw-bolder">Fancy Product</h5>-->
-<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
-<!--                            $40.00 - $80.00-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
-<!--                    <div-->
-<!--                            class="card-footer p-4 pt-0 border-top-0 bg-transparent"-->
-<!--                    >-->
-<!--                        <div class="text-center">-->
-<!--                            <a-->
-<!--                                    class="btn btn-outline-dark mt-auto"-->
-<!--                                    href="#"-->
-<!--                            >View options</a-->
-<!--                            >-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col mb-5">-->
-<!--                <div class="card h-100">-->
-<!--                    &lt;!&ndash; Sale badge&ndash;&gt;-->
-<!--                    <div-->
-<!--                            class="badge bg-dark text-white position-absolute"-->
-<!--                            style="top: 0.5rem; right: 0.5rem"-->
-<!--                    >-->
-<!--                        Sale-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
-<!--                    <img-->
-<!--                            class="card-img-top"-->
-<!--                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"-->
-<!--                            alt="..."-->
-<!--                    />-->
-<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
-<!--                    <div class="card-body p-4">-->
-<!--                        <div class="text-center">-->
-<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
-<!--                            <h5 class="fw-bolder">Special Item</h5>-->
-<!--                            &lt;!&ndash; Product reviews&ndash;&gt;-->
-<!--                            <div-->
-<!--                                    class="d-flex justify-content-center small text-warning mb-2"-->
-<!--                            >-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
-<!--                            <span-->
-<!--                                    class="text-muted text-decoration-line-through"-->
-<!--                            >$20.00</span-->
-<!--                            >-->
-<!--                            $18.00-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
-<!--                    <div-->
-<!--                            class="card-footer p-4 pt-0 border-top-0 bg-transparent"-->
-<!--                    >-->
-<!--                        <div class="text-center">-->
-<!--                            <a-->
-<!--                                    class="btn btn-outline-dark mt-auto"-->
-<!--                                    href="#"-->
-<!--                            >Add to cart</a-->
-<!--                            >-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col mb-5">-->
-<!--                <div class="card h-100">-->
-<!--                    &lt;!&ndash; Sale badge&ndash;&gt;-->
-<!--                    <div-->
-<!--                            class="badge bg-dark text-white position-absolute"-->
-<!--                            style="top: 0.5rem; right: 0.5rem"-->
-<!--                    >-->
-<!--                        Sale-->
-<!--                    </div>-->
-<!--                    /api/warehouse-->
-<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
-<!--                    <img-->
-<!--                            class="card-img-top"-->
-<!--                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"-->
-<!--                            alt="..."-->
-<!--                    />-->
-<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
-<!--                    <div class="card-body p-4">-->
-<!--                        <div class="text-center">-->
-<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
-<!--                            <h5 class="fw-bolder">Sale Item</h5>-->
-<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
-<!--                            <span-->
-<!--                                    class="text-muted text-decoration-line-through"-->
-<!--                            >$50.00</span-->
-<!--                            >-->
-<!--                            $25.00-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
-<!--                    <div-->
-<!--                            class="card-footer p-4 pt-0 border-top-0 bg-transparent"-->
-<!--                    >-->
-<!--                        <div class="text-center">-->
-<!--                            <a-->
-<!--                                    class="btn btn-outline-dark mt-auto"-->
-<!--                                    href="#"-->
-<!--                            >Add to cart</a-->
-<!--                            >-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col mb-5">-->
-<!--                <div class="card h-100">-->
-<!--                    &lt;!&ndash; Product image&ndash;&gt;-->
-<!--                    <img-->
-<!--                            class="card-img-top"-->
-<!--                            src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"-->
-<!--                            alt="..."-->
-<!--                    />-->
-<!--                    &lt;!&ndash; Product details&ndash;&gt;-->
-<!--                    <div class="card-body p-4">-->
-<!--                        <div class="text-center">-->
-<!--                            &lt;!&ndash; Product name&ndash;&gt;-->
-<!--                            <h5 class="fw-bolder">Popular Item</h5>-->
-<!--                            &lt;!&ndash; Product reviews&ndash;&gt;-->
-<!--                            <div-->
-<!--                                    class="d-flex justify-content-center small text-warning mb-2"-->
-<!--                            >-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                                <div class="bi-star-fill"></div>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Product price&ndash;&gt;-->
-<!--                            $40.00-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash; Product actions&ndash;&gt;-->
-<!--                    <div-->
-<!--                            class="card-footer p-4 pt-0 border-top-0 bg-transparent"-->
-<!--                    >-->
-<!--                        <div class="text-center">-->
-<!--                            <a-->
-<!--                                    class="btn btn-outline-dark mt-auto"-->
-<!--                                    href="#"-->
-<!--                            >Add to cart</a-->
-<!--                            >-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
-<!-- Footer-->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Related products</h2>
+        <div
+                class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" ,
+                id="relatedProducts"
+        >
+        </div>
+    </div>
+</section>
+Footer
 <footer class="py-5 bg-dark">
     <div class="container">
         <p class="m-0 text-center text-white">
@@ -542,15 +390,56 @@
 <script src="/js/fetch.js"></script>
 
 <script>
+    //get last part of url
+    const loadRelateProd = (cate_id) => {
+        const productURL = 'http://localhost:8081/api/admin' + '/product?category=' + cate_id + '&limit=6';
+
+        const successGetRP = (res) => {
+            const productsContainer = document.getElementById('relatedProducts');
+            productsContainer.innerHTML = ''; // Clear current content
+            data = res.data;
+            data.forEach(product => {
+                    const productCardHTML = `
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" src="../${product.imagePath}" alt="${product.name}" />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder">${product.name}</h5>
+                                <!-- Product price-->
+                                ${product.price.toLocaleString()} $
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" href="/getItem/${product.id}">View options</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+                    productsContainer.insertAdjacentHTML('beforeend', productCardHTML);
+                }
+            )
+        }
+
+        getDataFromApi(productURL,successGetRP,{})
+    }
+
+
     const token = localStorage.getItem('token');
-    if (token != null){
+    if (token != null) {
         const checkTokenUrl = API_URL + '/auth/check-token' + '?token=' + token;
-        getDataFromApi(checkTokenUrl,() => {
+        getDataFromApi(checkTokenUrl, () => {
         }, () => {
             localStorage.removeItem('user');
             localStorage.removeItem('token');
         })
-    }else{
+    } else {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
     }
@@ -633,6 +522,8 @@
                 document.getElementById(
                     'productDescription'
                 ).textContent = product.data.description;
+
+                loadRelateProd(product.data.category.id);
             })
             .catch((error) => {
                 console.error('Error fetching product data:', error);
@@ -748,7 +639,8 @@
             token: localStorage.getItem('token'),
         };
 
-        onTokenLogin = (response) => {};
+        onTokenLogin = (response) => {
+        };
         postDataToApi(loginUrl, data, onSuccessfulLogin, onTokenLogin);
     } else if (localStorage.getItem('user')) {
     }
@@ -767,7 +659,7 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ token: token }), // Gửi token để xác định người dùng đăng xuất
+            body: JSON.stringify({token: token}), // Gửi token để xác định người dùng đăng xuất
         })
             .then((response) => response.json())
             .then((data) => {
@@ -791,9 +683,11 @@
     document.getElementById('cart-btn').onclick = function () {
         cartEvent();
     };
+
     function cartEvent() {
         window.location.href = '/viewCart';
     }
+
     function loadQuantity() {
         fetch('http://localhost:8081/api/cart/getAll')
             .then((response) => {
@@ -828,12 +722,14 @@
                 console.error('Error fetching cart data:', error);
             });
     }
+
     function formatPrice(price) {
         return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
             currency: 'VND',
         }).format(price);
     }
+
     function convertToVND(priceString) {
         // Remove non-numeric characters and replace ',' with ''
         const numericString = priceString
