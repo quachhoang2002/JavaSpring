@@ -14,7 +14,7 @@ public class BaseService {
     private String uploadDirectory; // Specify your upload directory
 
     public String buildImagePath(MultipartFile imageFile, String from) throws IOException {
-        String uploadDirectory = this.uploadDirectory + "\\" + from;
+        String uploadDirectory = this.uploadDirectory;
         if (imageFile != null && !imageFile.isEmpty()) {
             // Generate a unique file name (you may use a more robust approach)
             String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
@@ -38,7 +38,11 @@ public class BaseService {
             //remove /static
             String imagePathString;
             //remove /static
-            imagePathString = imagePath.toString().replace("static\\", "");
+//            imagePathString = imagePath.toString().replace("static\\", "");
+
+            //add http://t.hoangdeptrai.online to prefix
+            imagePathString = "http://t.hoangdeptrai.online/static/" + imagePath.toString().replace("static\\", "");
+
 
             return imagePathString;
         } else {
