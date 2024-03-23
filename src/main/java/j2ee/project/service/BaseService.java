@@ -41,7 +41,7 @@ public class BaseService {
 //            imagePathString = imagePath.toString().replace("static\\", "");
 
             //add http://t.hoangdeptrai.online to prefix
-            imagePathString = "http://t.hoangdeptrai.online/static/" + imagePath.toString().replace("static\\", "");
+            imagePathString = "http://t.hoangdeptrai.online/" + imagePath.toString().replace("static\\", "");
 
 
             return imagePathString;

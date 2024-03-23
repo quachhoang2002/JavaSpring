@@ -599,7 +599,7 @@ Save changes
         loadData();
     };
     function loadData() {
-        fetch(`http://localhost:8081/api/admin/order/${orderId}/detail`)
+        fetch(`http://t.hoangdeptrai.online/api/admin/order/${orderId}/detail`)
             .then((response) => response.json())
             .then((response) => {
                 let statusText = 'Pending';
@@ -799,7 +799,7 @@ Save changes
         } else {
             if (confirm('Bạn có chắc chắn muốn hủy đơn hàng?')) {
                 fetch(
-                    `http://localhost:8081/api/admin/order/${orderId}/cancel`,
+                    `http://t.hoangdeptrai.online/api/admin/order/${orderId}/cancel`,
                     {
                         method: 'POST',
                     }

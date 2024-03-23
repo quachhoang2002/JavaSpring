@@ -619,7 +619,7 @@
         window.location.href = '/viewCart';
     }
     function loadQuantity() {
-        fetch('http://localhost:8081/api/cart/getAll')
+        fetch('http://t.hoangdeptrai.online/api/cart/getAll')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(

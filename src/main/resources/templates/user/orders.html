@@ -424,7 +424,7 @@
     };
     function getOderById() {
         const user = JSON.parse(localStorage.getItem('user'));
-        fetch(`http://localhost:8081/api/order/getByUserId/${user.id}`)
+        fetch(`http://t.hoangdeptrai.online/api/order/getByUserId/${user.id}`)
             .then((response) => {
                 return response.json();
             })
@@ -569,7 +569,7 @@
 
     function getOrders() {
         const user = JSON.parse(localStorage.getItem('user'));
-        fetch(`http://localhost:8081/api/order/getByUserId/${user.id}`)
+        fetch(`http://t.hoangdeptrai.online/api/order/getByUserId/${user.id}`)
             .then((response) => {
                 return response.json();
             })
