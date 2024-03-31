@@ -1,5 +1,5 @@
-const API_URL = 'http://t.hoangdeptrai.online/api';
-const API_ADMIN_URL = 'http://t.hoangdeptrai.online/api/admin';
+const API_URL = 'https://t.hoangdeptrai.online/api';
+const API_ADMIN_URL = 'https://t.hoangdeptrai.online/api/admin';
 const LIMIT = 10;
 
 function postDataToApi(apiUrl, data, onSuccess, onError) {

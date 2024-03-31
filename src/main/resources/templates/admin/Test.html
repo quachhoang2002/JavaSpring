@@ -34,7 +34,7 @@
 <script>
     // Function to fetch data from the API and populate the table
     function fetchDataAndPopulateTable() {
-        fetch('http://t.hoangdeptrai.online/api/admin/manufacture')
+        fetch('https://t.hoangdeptrai.online/api/admin/manufacture')
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector("#datatablesSimple tbody");

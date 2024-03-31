@@ -21,6 +21,14 @@ public class OrderService {
         return order;
     }
 
+    public void updateOrder(Order order) {
+        orderRepository.save(order);
+    }
+
+    public Order getOrderById(int id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
     public List<Order> getAllOrderByUserId(int user_Id) {
         return orderRepository.findByUser_Id(user_Id);
     }
