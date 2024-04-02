@@ -64,6 +64,7 @@ public class ProductController extends Controller {
         }
     }
 
+
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         List<Product> products = productRepository.findAll();

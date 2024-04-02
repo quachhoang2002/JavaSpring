@@ -3,6 +3,7 @@ package j2ee.project.service;
 import j2ee.project.models.Admin;
 import j2ee.project.models.User;
 import j2ee.project.repository.UserRepository;
+import j2ee.project.ultils;
 import jakarta.persistence.TypedQuery;
 import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,22 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public  User findByTokenAndCheck(String token) {
+//        if (!ultils.isValidToken(token)) {
+//            return null;
+//        }
+        //find by token
+        User user = findByToken(token);
+        if (user == null) {
+            return null;
+        }
+        if (user.getStatus() == 0) {
+            return null;
+        }
+
+        return user;
     }
 
 }

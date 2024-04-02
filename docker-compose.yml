@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  app: # You can name your service whatever you prefer
+    image: 0935413317/java-spring-test
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./static:/app/static/
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+networks:
+  default:
+    name: java-Spring

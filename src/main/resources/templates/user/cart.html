@@ -478,7 +478,7 @@
     let totalPriceForCheckout;
 
     async function renderProductItems() {
-        const url = 'http://localhost:8081/api/cart/getAll';
+        const url = 'https://t.hoangdeptrai.online/api/cart/getAll';
 
         try {
             const response = await fetch(url);
@@ -711,7 +711,7 @@
         }).format(price);
     }
     function updateQuantity(data) {
-        const updateUrl = `http://localhost:8081/api/cart/updateQuantity`;
+        const updateUrl = `https://t.hoangdeptrai.online/api/cart/updateQuantity`;
 
         fetch(updateUrl, {
             method: 'PUT',
@@ -741,7 +741,7 @@
     function calculateTotalPrice() {
         const user = JSON.parse(localStorage.getItem('user'));
         console.log(user.id);
-        const url = `http://localhost:8081/api/cart/getByUserId/${user.id}`;
+        const url = `https://t.hoangdeptrai.online/api/cart/getByUserId/${user.id}`;
 
         fetch(url)
             .then((response) => response.json())
@@ -841,7 +841,7 @@
         console.log(paymentData);
         // Gửi thông tin thanh toán đến máy chủ (backend) bằng một yêu cầu HTTP, ví dụ sử dụng fetch
 
-        fetch('http://localhost:8081/api/order/add', {
+        fetch('https://t.hoangdeptrai.online/api/order/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -948,7 +948,7 @@
         window.location.href = '/viewCart';
     }
     function deleteCartItem(data) {
-        const deleteUrl = `http://localhost:8081/api/cart/deleteItem`;
+        const deleteUrl = `https://t.hoangdeptrai.online/api/cart/deleteItem`;
 
         fetch(deleteUrl, {
             method: 'DELETE',
@@ -992,7 +992,7 @@
         }
     }
     function loadQuantity() {
-        fetch('http://localhost:8081/api/cart/getAll')
+        fetch('https://t.hoangdeptrai.online/api/cart/getAll')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(
