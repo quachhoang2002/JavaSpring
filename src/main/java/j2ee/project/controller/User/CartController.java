@@ -30,6 +30,9 @@ public class CartController extends Controller {
             int productId = cart.getProductId();
             int quantity = cart.getQuantity();
             int user_id = cart.getUser_id();
+            if (cart.getCreatedAt() == null){
+                cart.setCreatedAt(new Date());
+            }
             // Check if the product with the given productId already exists in the cart
             Optional<Cart> existingCartItem = cartService.findCartByProductIdAndUser_Id(productId, user_id);
             Product product = productRepository.findById(productId).get();
