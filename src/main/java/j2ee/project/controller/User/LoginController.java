@@ -153,6 +153,9 @@ public class LoginController extends Controller {
         existedUser.setName(user.getName());
         existedUser.setPhone(user.getPhone());
         existedUser.setEmail(user.getEmail());
+        if (user.getPassword() != null) {
+            existedUser.setPassword(user.getPassword());
+        }
 
         User updateU = userService.updateUserByEmail(user.getId(), existedUser);
         return successResponse("success",updateU);

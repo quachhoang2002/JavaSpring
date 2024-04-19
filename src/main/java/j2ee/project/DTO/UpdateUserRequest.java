@@ -5,6 +5,8 @@ public class UpdateUserRequest {
     private int id;
     private String name;
     private String phone;
+
+    private String password;
     private int status;
 
     // Constructor
@@ -50,5 +52,13 @@ public class UpdateUserRequest {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
