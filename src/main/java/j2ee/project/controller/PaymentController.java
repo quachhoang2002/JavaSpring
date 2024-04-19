@@ -52,7 +52,7 @@ public class PaymentController extends Controller {
 //        }
         int orderTotal = (int) order.getTotal_price();
 
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String baseUrl = "https" + "://" + request.getServerName();
         Response resp = VNPayService.createOrder(orderTotal, orderInfo, baseUrl);
 
         User user = UserService.findByTokenAndCheck(token);

@@ -15,7 +15,7 @@ public class Config {
     public static String vnp_Version = "2.1.0";
     public static String vnp_Command = "pay";
 
-    public static String IPAddress = "127.0.0.1";
+    public static String IPAddress = "https://t.hoangdeptrai.online";
     public static String Concurency = "VND";
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_Returnurl = "/api/payment/confirm";

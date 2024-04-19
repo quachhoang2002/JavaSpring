@@ -48,6 +48,14 @@ public class UserService {
 
     @SuppressWarnings("unused")
     public User register(User user) {
+        if (user.getIsThirdParty()){
+            User existedUser = userRepository.findByEmail(user.getEmail());
+            if (existedUser != null) {
+                return existedUser;
+            }
+
+            return userRepository.save(user);
+        }
         User existedUser = userRepository.findByEmail(user.getEmail());
         if (existedUser != null) {
             throw new RuntimeException("Email existed");
@@ -63,13 +71,6 @@ public class UserService {
             if (user != null && user.getId() != id) {
                 throw new RuntimeException("Email existed");
             }
-
-
-            System.out.println("id: " + id);
-            System.out.println("existingUser.getId(): " + existingUser.getId());
-            System.out.println("existingUser.getEmail(): " + existingUser.getEmail());
-            System.out.println("updatedUser.getEmail(): " + updatedUser.getEmail());
-
 
             existingUser.setName(updatedUser.getName());
             existingUser.setEmail(updatedUser.getEmail());

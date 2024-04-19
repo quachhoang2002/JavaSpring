@@ -1,5 +1,6 @@
 package j2ee.project.controller.User;
 
+import j2ee.project.DTO.UpdateUserRequest;
 import j2ee.project.controller.Controller;
 import j2ee.project.models.Admin;
 import j2ee.project.models.User;
@@ -52,6 +53,7 @@ public class LoginController extends Controller {
     public ResponseEntity<String> register(@RequestBody User user) {
         try {
             user.setStatus(1);
+            user.setIsThirdParty(false);
             userService.register(user);
             return successResponse("Register successfully", null);
         } catch (Exception e) {
@@ -63,6 +65,32 @@ public class LoginController extends Controller {
     @ResponseBody
     public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
         try {
+            if (body.get("isThirdParty") != null) {
+                User user = userService.findByEmail(body.get("email"));
+                if (user == null) {
+                    user = new User();
+                    user.setEmail(body.get("email"));
+                    user.setName(body.get("name"));
+                    user.setPhone(body.get("phone"));
+                    user.setProviderName(body.get("providerName"));
+                    user.setIsThirdParty(true);
+                    user.setPassword(java.util.UUID.randomUUID().toString().substring(0, 8));
+                    user.setToken(createToken());
+                    user.setStatus(1);
+                    userService.register(user);
+                    return successResponse("Login successfully", user);
+                }
+
+                user = userService.findByEmail(body.get("email"));
+                if (user.getStatus() == 0) {
+                    return errorResponse("Account is blocked");
+                }
+                String newToken = createToken();
+                user.setToken(newToken);
+                userService.remember(user);
+                return successResponse("Login successfully", user);
+            }
+
             String token = body.get("token");
             if (token != null) {
                 User user = userService.findByToken(token);
@@ -116,10 +144,20 @@ public class LoginController extends Controller {
 
     @PutMapping("/editUser")
     @ResponseBody
-    public ResponseEntity<?> editUser(@RequestBody User user) {
+    public ResponseEntity<?> editUser(@RequestBody UpdateUserRequest user) {
         User existedUser = userService.findById(user.getId());
-        userService.updateUserByEmail(user.getId(), user);
-        return successResponse("success", userService.updateUserByEmail(user.getId(), user));
+        if (existedUser == null) {
+            return errorResponse("User not found");
+        }
+
+        existedUser.setName(user.getName());
+        existedUser.setPhone(user.getPhone());
+        existedUser.setEmail(user.getEmail());
+
+        User updateU = userService.updateUserByEmail(user.getId(), existedUser);
+        return successResponse("success",updateU);
     }
 
+
+    //random password
 }

@@ -1,4 +1,5 @@
 package j2ee.project.models;
+
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
@@ -33,6 +34,43 @@ public class User {
     //token
     @Column(nullable = true)
     private String token;
+
+    //is third party
+    @Column(nullable = true)
+    private Boolean isThirdParty;
+
+    //provider name
+    @Column(nullable = true)
+    private String providerName;
+
+    //third party token
+    @Column(nullable = true)
+    private String thirdPartyToken;
+
+    public String getThirdPartyToken() {
+        return this.thirdPartyToken;
+    }
+
+    public void setThirdPartyToken(String thirdPartyToken) {
+        this.thirdPartyToken = thirdPartyToken;
+    }
+
+
+    public Boolean getIsThirdParty() {
+        return this.isThirdParty;
+    }
+
+    public void setIsThirdParty(Boolean isThirdParty) {
+        this.isThirdParty = isThirdParty;
+    }
+
+    public String getProviderName() {
+        return this.providerName;
+    }
+
+    public void setProviderName(String providerName) {
+        this.providerName = providerName;
+    }
 
     public User() {
     }
@@ -124,15 +162,15 @@ public class User {
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", name='" + getName() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", password='" + getPassword() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", createdAt='" + getCreatedat()+ "'" +
-            ", status='" + getStatus() + "'" +
-            ", token='" + getToken() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", name='" + getName() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", password='" + getPassword() + "'" +
+                ", phone='" + getPhone() + "'" +
+                ", createdAt='" + getCreatedat() + "'" +
+                ", status='" + getStatus() + "'" +
+                ", token='" + getToken() + "'" +
+                "}";
     }
 
 
