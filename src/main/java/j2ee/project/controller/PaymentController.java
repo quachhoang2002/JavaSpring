@@ -67,7 +67,7 @@ public class PaymentController extends Controller {
         payment.setTransactionID(resp.transactionID);
         payment.setInfo(orderInfo);
         payment.setAmount(orderTotal);
-        payment.setStatus(0);
+        payment.setStatus(1);
         payment.setOrderID(orderID);
         payment.setUserID(user.getId());
         try {
